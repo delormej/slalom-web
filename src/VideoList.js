@@ -15,33 +15,17 @@ export default class VideoList extends React.Component {
       })
   }
 
-  getImageUrl(video) {
-    var baseUrl = 'https://ski-app.azurewebsites.net/api/image?jsonUrl='; 
-    var imageUrl = baseUrl + video.jsonUrl;
-    if (video.ropeLengthM != null && video.ropeLengthM != "0.0") {
-        imageUrl += '&rope=' + video.ropeLengthM;
-    }
-    return imageUrl;
-  }
-
-  getVideoUrl(video) {
-      var baseUrl = './video.html?video=';
-      var videoUrl = baseUrl + video.url;
-      return videoUrl;
-  }
-
-  getThumnailUrl(video) {
-      return video.thumbnailUrl;
-  }
-
   render() {
+    var i = 0;
     return (
         <div>Count: { this.state.videos.length }
             <br/>
             <ul>
                 { /* <!-- https://ski-app.azurewebsites.net/api/image?jsonUrl=https://skivideostorage.blob.core.windows.net/ski/2019-07-11/GOPR1300_ts.json */ }
                 { this.state.videos.map(video => 
-                  <Video video={video} />
+                    <li key={(i++).toString()}>
+                      <Video video={video} videoKey={(i++).toString()} />
+                    </li>
                 )}
             </ul>
         </div>
