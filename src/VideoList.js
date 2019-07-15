@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Video from './Video.js'
 
 export default class VideoList extends React.Component {
   state = {
@@ -34,25 +35,13 @@ export default class VideoList extends React.Component {
   }
 
   render() {
-    var i = 0;
     return (
         <div>Count: { this.state.videos.length }
             <br/>
             <ul>
                 { /* <!-- https://ski-app.azurewebsites.net/api/image?jsonUrl=https://skivideostorage.blob.core.windows.net/ski/2019-07-11/GOPR1300_ts.json */ }
                 { this.state.videos.map(video => 
-                    <li key={(i++).toString()}>
-                        <a href={this.getThumnailUrl(video)} target="_blank">
-                            <img src={this.getThumnailUrl(video)} width="320" height="240"/>    
-                        </a><br/>
-                        <a href={this.getVideoUrl(video)} target="_blank">Video</a><br/>
-                        <a href={this.getImageUrl(video)}>Analysis</a><br/>
-                        <b>Course Name:</b>{video.courseName}<br/>
-                        <b>Speed:</b>{video.boatSpeedMph}<br/>
-                        <b>Skier:</b><input type="text" id="skier"/><br/>
-                        <b>Rope Length:</b><input type="select" id="ropeLengthM"/><br/>
-                        <hr/>
-                    </li> 
+                  <Video video={video} />
                 )}
             </ul>
         </div>
