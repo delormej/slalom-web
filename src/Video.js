@@ -4,12 +4,28 @@ export default class Video extends React.Component {
   constructor(props) {
     super(props);
 
+    this.baseUrl = '';
     this.handleInputChange = this.handleInputChange.bind(this);
     this.state = {
         video: this.props.video,
         ropeLengthM: this.props.video.ropeLengthM || 15,
         skier: this.props.video.skier || ''
       };
+  }
+
+  componentDidMount() {
+    this.setBaseUrl();
+  }
+
+  setBaseUrl() {
+    // sets the appropriate baseurl based on whether we're called via ssl or not (https:// or http://)
+    var imageApiPath = '//ski-app.azurewebsites.net/api/image?jsonUrl='; 
+    if (typeof window !== 'undefined') {
+      this.baseUrl = window.location.protocol + imageApiPath;
+    }
+    else {
+      this.baseUrl = 'http://' + imageApiPath;
+    }
   }
 
   handleInputChange(event) {
@@ -22,8 +38,7 @@ export default class Video extends React.Component {
   }
 
   getImageUrl() {
-    var baseUrl = 'https://ski-app.azurewebsites.net/api/image?jsonUrl='; 
-    var imageUrl = baseUrl + this.state.video.jsonUrl;
+    var imageUrl = this.baseUrl + this.state.video.jsonUrl;
     if (this.state.video.ropeLengthM != null && this.state.ropeLengthM !== "0.0") {
         imageUrl += '&rope=' + this.state.ropeLengthM;
     }
@@ -31,8 +46,8 @@ export default class Video extends React.Component {
   }
 
   getVideoUrl() {
-      var baseUrl = './video.html?video=';
-      var videoUrl = baseUrl + this.state.video.url;
+      var relativeUrl = './video.html?video=';
+      var videoUrl = relativeUrl + this.state.video.url;
       return videoUrl;
   }
 
