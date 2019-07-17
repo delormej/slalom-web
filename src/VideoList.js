@@ -6,7 +6,8 @@ import Util from './Util.js'
 export default class VideoList extends React.Component {
   _isMounted = false;
   state = {
-    videos: []
+    videos: [],
+    error: ''
   }
 
   componentDidMount() {
@@ -20,9 +21,14 @@ export default class VideoList extends React.Component {
       .then(res => {
         const videos = res.data;
         if (this._isMounted) {
-          this.setState({ videos });
+          this.setState({ videos: videos });
         }        
       })
+      .catch((error) => {
+        if (this._isMounted) {
+          this.setState({ error: 'Unable to load videos.'});
+        }        
+      });
   }
 
   componentWillUnmount() {
@@ -33,7 +39,7 @@ export default class VideoList extends React.Component {
     var i = 0;
     var count = this.state.videos.length;
     if (count == 0) {
-      return (<div>Loading...</div>);
+      return (<div>Loading...{this.state.error}</div>);
     }
     else
     {
