@@ -31,8 +31,14 @@ export default class VideoList extends React.Component {
   
   render() {
     var i = 0;
-    return (
-        <div>Count: { this.state.videos.length }
+    var count = this.state.videos.length;
+    if (count == 0) {
+      return (<div>Loading...</div>);
+    }
+    else
+    {
+      return (
+        <div>Count: { count }
             <br/>
             <ul>
                 { this.state.videos.map(video => 
@@ -41,7 +47,7 @@ export default class VideoList extends React.Component {
                     </li>
                 )}
             </ul>
-        </div>
-    )
+      </div>);
+    }
   }
 }
