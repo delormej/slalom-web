@@ -38,7 +38,7 @@ export default class VideoList extends React.Component {
   render() {
     var i = 0;
     var count = this.state.videos.length;
-    if (count == 0) {
+    if (count === 0) {
       return (<div>Loading...{this.state.error}</div>);
     }
     else
