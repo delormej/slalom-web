@@ -4,21 +4,31 @@ import Video from './Video.js'
 import Util from './Util.js'
 
 export default class VideoList extends React.Component {
+  _isMounted = false;
   state = {
     videos: []
   }
 
   componentDidMount() {
+    // Workaround for this: https://www.robinwieruch.de/react-warning-cant-call-setstate-on-an-unmounted-component/
+    this._isMounted = true;
+
     var util = new Util();
     var listUrl = util.getBaseUrl() + '/api/list';    
 
     axios.get(listUrl)
       .then(res => {
         const videos = res.data;
-        this.setState({ videos });
+        if (this._isMounted) {
+          this.setState({ videos });
+        }        
       })
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+  
   render() {
     var i = 0;
     return (
