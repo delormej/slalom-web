@@ -49,19 +49,24 @@ export default class Video extends React.Component {
   render() {
     var video = this.state.video;      
     return (
-      <div>
-          <a href={this.getThumnailUrl()} target="_blank">
-              <img src={this.getThumnailUrl()} width="320" height="240"/>    
-          </a><br/>
-          <a href={this.getVideoUrl()} target="_blank">Video</a><br/>
-          <a href={this.getImageUrl()} target="_blank">Analysis</a><br/>
-          <b>Date:</b>{video.partitionKey}<br/>
-          <b>Course Name:</b>{video.courseName}<br/>
-          <b>Speed:</b>{video.boatSpeedMph}<br/>
-          <b>Skier:</b><input type="text" value={this.state.skier} onChange={this.handleInputChange} name="skier"/><br/>
-          <b>Rope Length:</b><input type="text" value={this.state.ropeLengthM} onChange={this.handleInputChange} name="ropeLengthM"/><br/>
-          <hr/>
-      </div>
+      <table>
+          <tr>
+          <td>
+            <a href={this.getThumnailUrl()} target="_blank">
+                <img src={this.getThumnailUrl()} width="320" height="240"/>    
+            </a>
+          </td>
+          <td>
+            <a href={this.getVideoUrl()} target="_blank">Video</a><br/>
+            <a href={this.getImageUrl()} target="_blank">Analysis</a><br/>
+            <b>Date:</b>{video.partitionKey}<br/>
+            <b>Course Name:</b>{video.courseName}<br/>
+            <b>Speed:</b>{video.boatSpeedMph}<br/>
+            <b>Skier:</b><input type="text" value={this.state.skier} onChange={this.handleInputChange} name="skier"/><br/>
+            <b>Rope Length:</b><input type="text" value={this.state.ropeLengthM} onChange={this.handleInputChange} name="ropeLengthM"/><br/>
+          </td>
+          </tr>
+      </table>
     );
   }
 }
