@@ -5,18 +5,15 @@ export default class Video extends React.Component {
   constructor(props) {
     super(props);
 
-    this.baseUrl = '';
+    var util = new Util();
+    this.baseUrl = util.getBaseUrl() + '/api/image?jsonUrl=';
+
     this.handleInputChange = this.handleInputChange.bind(this);
     this.state = {
         video: this.props.video,
         ropeLengthM: this.props.video.ropeLengthM || 15,
         skier: this.props.video.skier || ''
       };
-  }
-
-  componentDidMount() {
-    var util = new Util();
-    this.baseUrl = util.getBaseUrl() + '/api/image?jsonUrl=';
   }
 
   handleInputChange(event) {
