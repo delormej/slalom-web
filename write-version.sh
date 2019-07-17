@@ -1,0 +1,1 @@
+echo "REACT_APP_VERSION=\${npm_package_version}-$(git rev-parse HEAD | cut -c 1-8)" > .env
