@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Video from './Video.js'
+import Util from './Util.js'
 
 export default class VideoList extends React.Component {
   state = {
@@ -8,7 +9,10 @@ export default class VideoList extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://ski-app.azurewebsites.net/api/list')
+    var util = new Util();
+    var listUrl = util.getBaseUrl() + '/api/list';    
+
+    axios.get(listUrl)
       .then(res => {
         const videos = res.data;
         this.setState({ videos });
@@ -21,7 +25,6 @@ export default class VideoList extends React.Component {
         <div>Count: { this.state.videos.length }
             <br/>
             <ul>
-                { /* <!-- https://ski-app.azurewebsites.net/api/image?jsonUrl=https://skivideostorage.blob.core.windows.net/ski/2019-07-11/GOPR1300_ts.json */ }
                 { this.state.videos.map(video => 
                     <li key={(i++).toString()}>
                       <Video video={video} videoKey={(i++).toString()} />

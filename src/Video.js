@@ -1,4 +1,5 @@
 import React from 'react';
+import Util from './Util.js'
 
 export default class Video extends React.Component {
   constructor(props) {
@@ -14,18 +15,8 @@ export default class Video extends React.Component {
   }
 
   componentDidMount() {
-    this.setBaseUrl();
-  }
-
-  setBaseUrl() {
-    // sets the appropriate baseurl based on whether we're called via ssl or not (https:// or http://)
-    var imageApiPath = '//ski-app.azurewebsites.net/api/image?jsonUrl='; 
-    if (typeof window !== 'undefined') {
-      this.baseUrl = window.location.protocol + imageApiPath;
-    }
-    else {
-      this.baseUrl = 'http://' + imageApiPath;
-    }
+    var util = new Util();
+    this.baseUrl = util.getBaseUrl() + '/api/image?jsonUrl=';
   }
 
   handleInputChange(event) {
