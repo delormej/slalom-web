@@ -14,6 +14,7 @@ export default class Video extends React.Component {
         ropeLengthM: this.props.video.ropeLengthM || 15,
         skier: this.props.video.skier || ''
       };
+    console.log('video:\n' + JSON.stringify(this.state.video));
   }
 
   handleInputChange(event) {
@@ -47,6 +48,7 @@ export default class Video extends React.Component {
     var video = this.state.video;      
     return (
       <table>
+        <tbody>
           <tr>
           <td>
             <a href={this.getThumnailUrl()} target="_blank">
@@ -63,6 +65,7 @@ export default class Video extends React.Component {
             <b>Rope Length:</b><input type="text" value={this.state.ropeLengthM} onChange={this.handleInputChange} name="ropeLengthM"/><br/>
           </td>
           </tr>
+        </tbody>
       </table>
     );
   }
