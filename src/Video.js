@@ -1,33 +1,74 @@
 import React from 'react';
-import Util from './Util.js'
+import Util from './Util.js';
+import axios from 'axios';
 
 export default class Video extends React.Component {
   constructor(props) {
     super(props);
 
-    var util = new Util();
-    this.baseUrl = util.getBaseUrl() + '/api/image?jsonUrl=';
-
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.saveClick = this.saveClick.bind(this);
+
+    var util = new Util();
+    this.baseUrl = util.getBaseUrl();
+    this.imageApiUrl = this.baseUrl + '/api/image?jsonUrl=';
+
     this.state = {
         video: this.props.video,
         ropeLengthM: this.props.video.ropeLengthM || 15,
         skier: this.props.video.skier || ''
       };
-    console.log('video:\n' + JSON.stringify(this.state.video));
   }
 
   handleInputChange(event) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
+
+    if (name === "skier") {
+      this.handleSkierChange(value);
+    }
+    else if (name === "ropeLengthM") {
+      this.handleRopeChange(value);
+    }
+
     this.setState({
-        [name]: value
+      [name]: value
     });
   }
 
+  validRopeLength(length) {
+    return true;
+  }
+
+  handleRopeChange(value) {
+    if (this.validRopeLength(value)) {
+      this.state.video.ropeLengthM = value;
+    }
+  }
+
+  handleSkierChange(value) {
+    this.state.video.skier = value;
+  }
+
+  saveClick(event) {
+    var json = JSON.stringify(this.state.video);
+    var updateUrl = this.baseUrl + '/api/updatevideo';
+    console.log('Saving video' + updateUrl + ':\n' + json);
+
+    axios.post(updateUrl, json)
+      .then(res => {
+        console.log('Updated? ' + res);        
+      })
+      .catch((error) => {
+        if (this._isMounted) {
+          this.setState({ error: 'Unable to update video. ' + error});
+        }        
+      });
+  }
+
   getImageUrl() {
-    var imageUrl = this.baseUrl + this.state.video.jsonUrl;
+    var imageUrl = this.imageApiUrl + this.state.video.jsonUrl;
     if (this.state.video.ropeLengthM != null && this.state.ropeLengthM !== "0.0") {
         imageUrl += '&rope=' + this.state.ropeLengthM;
     }
@@ -63,6 +104,9 @@ export default class Video extends React.Component {
             <b>Speed:</b>{video.boatSpeedMph}<br/>
             <b>Skier:</b><input type="text" value={this.state.skier} onChange={this.handleInputChange} name="skier"/><br/>
             <b>Rope Length:</b><input type="text" value={this.state.ropeLengthM} onChange={this.handleInputChange} name="ropeLengthM"/><br/>
+            <center>
+              <button onClick={this.saveClick}>Save</button><br/>
+            </center>
           </td>
           </tr>
         </tbody>
