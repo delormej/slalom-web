@@ -15,7 +15,7 @@ export default class Video extends React.Component {
 
     this.state = {
         video: this.props.video,
-        ropeLengthM: this.props.video.ropeLengthM || 15,
+        ropeLengthM: this.props.video.ropeLengthM,
         skier: this.props.video.skier || ''
       };
   }
@@ -56,7 +56,7 @@ export default class Video extends React.Component {
     var updateUrl = this.baseUrl + '/api/updatevideo';
     console.log('Saving video' + updateUrl + ':\n' + json);
 
-    axios.post(updateUrl, json)
+    axios.post(updateUrl, json) 
       .then(res => {
         console.log('Updated? ' + res);        
       })
@@ -97,16 +97,30 @@ export default class Video extends React.Component {
             </a>
           </td>
           <td>
-            <a href={this.getVideoUrl()} target="_blank">Video</a><br/>
-            <a href={this.getImageUrl()} target="_blank">Analysis</a><br/>
             <b>Date:</b>{video.partitionKey}<br/>
             <b>Course Name:</b>{video.courseName}<br/>
             <b>Speed:</b>{video.boatSpeedMph}<br/>
             <b>Skier:</b><input type="text" value={this.state.skier} onChange={this.handleInputChange} name="skier"/><br/>
-            <b>Rope Length:</b><input type="text" value={this.state.ropeLengthM} onChange={this.handleInputChange} name="ropeLengthM"/><br/>
+        
+
+            <label>
+              <b>Rope Length:</b>
+              <select name="ropeLengthM" value={this.state.ropeLengthM} onChange={this.handleInputChange}>
+                <option value="15">15' Off</option>
+                <option value="22">22' Off</option>
+                <option value="28">28' Off</option>
+                <option value="32">32' Off</option>
+                <option value="35">35' Off</option>
+                <option value="0">75' Full Rope</option>
+              </select>
+            </label>
+            <hr/>
             <center>
               <button onClick={this.saveClick}>Save</button><br/>
             </center>
+            <hr/>
+            <a href={this.getVideoUrl()} target="_blank">Video</a><br/>
+            <a href={this.getImageUrl()} target="_blank">Analysis</a><br/>            
           </td>
           </tr>
         </tbody>
