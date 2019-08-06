@@ -16,7 +16,8 @@ export default class Video extends React.Component {
     this.state = {
         video: this.props.video,
         ropeLengthM: this.props.video.ropeLengthM,
-        skier: this.props.video.skier || ''
+        skier: this.props.video.skier || '',
+        notes: this.props.video.notes || ''
       };
   }
 
@@ -30,6 +31,9 @@ export default class Video extends React.Component {
     }
     else if (name === "ropeLengthM") {
       this.handleRopeChange(value);
+    }
+    else if (name === "notes") {
+      this.state.video.notes = value;
     }
 
     this.setState({
@@ -96,15 +100,20 @@ export default class Video extends React.Component {
                 <img src={this.getThumnailUrl()} width="320" height="240"/>    
             </a>
           </td>
+          <td valign="top">
+            <label><b>Notes</b></label><br/>
+            <textarea name="notes"
+              rows="10" cols="60"
+              value={this.state.notes} 
+              onChange={this.handleInputChange} />
+          </td>          
           <td>
-            <b>Date:</b>{video.partitionKey}<br/>
-            <b>Course Name:</b>{video.courseName}<br/>
-            <b>Speed:</b>{video.boatSpeedMph}<br/>
-            <b>Skier:</b><input type="text" value={this.state.skier} onChange={this.handleInputChange} name="skier"/><br/>
-        
-
+            <b>Date:&nbsp;</b>{video.partitionKey}<br/>
+            <b>Course Name:&nbsp;</b>{video.courseName}<br/>
+            <b>Speed:&nbsp;</b>{video.boatSpeedMph}<br/>
+            <b>Skier:&nbsp;</b><input type="text" value={this.state.skier} onChange={this.handleInputChange} name="skier"/><br/>
             <label>
-              <b>Rope Length:</b>
+              <b>Rope Length:&nbsp;</b>
               <select name="ropeLengthM" value={this.state.ropeLengthM} onChange={this.handleInputChange}>
                 <option value="15">15' Off</option>
                 <option value="22">22' Off</option>
