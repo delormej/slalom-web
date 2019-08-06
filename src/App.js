@@ -7,7 +7,6 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Video List</h1>
       <VideoList />
       Env: <b>{process.env.NODE_ENV}</b><br/>
       Version: <b>{process.env.REACT_APP_VERSION}</b><br/>
