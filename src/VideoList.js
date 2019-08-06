@@ -25,9 +25,21 @@ export default class VideoList extends React.Component {
     this.todaysVideosOnClick = this.todaysVideosOnClick.bind(this);
   }
 
-  videoListHeader(count) {
+  videoListHeader() {
     var filterLink = '';
     var title = '';
+    var count = this.state.videos.length;
+
+    // Check if there was an error loading the data.
+    if (count == 0 && this.state.error != '') {
+      return (
+        <div>
+          <h3>Error!</h3>
+          {this.state.error}
+        </div>
+      )
+    }
+
     if (this.state.onlyShowToday) {
       filterLink = 'Show All Videos';
       title = 'Today\'s Videos (' + this.getDateString() + ')';
@@ -115,7 +127,7 @@ export default class VideoList extends React.Component {
       })
       .catch((error) => {
         if (this._isMounted) {
-          this.setState({ error: 'Unable to load videos.'});
+          this.setState({ error: 'Unable to load videos.  ' + error});
         }        
       });
   }
@@ -126,24 +138,18 @@ export default class VideoList extends React.Component {
 
   render() {
     var i = 0;
-    var count = this.state.videos.length;
-    const header = this.videoListHeader(count);
-    if (count === 0) {
-      return (<div>Loading...{this.state.error}</div>);
-    }
-    else
-    {
-      return (
-        <div>
-            {header}
-            <ul>
-                { this.state.videos.map(video => 
-                    <li key={(i++).toString()}>
-                      <Video video={video} videoKey={(i++).toString()} />
-                    </li>
-                )}
-            </ul>
-      </div>);
-    }
+    const header = this.videoListHeader();
+
+    return (
+      <div>
+          {header}
+          <ul>
+              { this.state.videos.map(video => 
+                  <li key={(i++).toString()}>
+                    <Video video={video} videoKey={(i++).toString()} />
+                  </li>
+              )}
+          </ul>
+    </div>);
   }
 }
