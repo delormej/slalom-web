@@ -9,6 +9,7 @@
   </head>
 
   <body>
+    <a href="#" class="play-and-fullscreen">Play Fullscreen</a>
     <video id='my-video' class='video-js' controls autoplay='muted' preload='auto' width='1024' height='768'
       data-setup='{ "playbackRates": [0.25, 0.33, 0.5, 1] }'
       poster='https://www.wakehouse.com/product_images/uploaded_images/waterskis-banner.jpg'>
@@ -17,7 +18,6 @@
         <a href='https://videojs.com/html5-video-support/' target='_blank'>supports HTML5 video</a>
       </p>
     </video>
-  
     <script src='https://vjs.zencdn.net/7.5.4/video.js'></script>
     <script>
       var urlParams = new URLSearchParams(window.location.search);
@@ -28,6 +28,15 @@
         type: 'video/mp4',
         src: url
       });  
+      video.ready(function() {
+          this.playbackRate(0.25);
+      });
+      var playAndFullscreen = document.getElementsByClassName('play-and-fullscreen')[0];
+      playAndFullscreen.addEventListener('click', function(e) {
+        e.preventDefault();
+        video.play();
+        video.requestFullscreen();
+      }, false);
     </script>
   </body>
 </html>
