@@ -8,17 +8,22 @@ export default class Video extends React.Component {
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.saveClick = this.saveClick.bind(this);
+    this.deleteClick = this.deleteClick.bind(this);
+    this.DeleteButton = this.DeleteButton.bind(this);
+    this.Thumbnail = this.Thumbnail.bind(this);
 
     var util = new Util();
     this.baseUrl = util.getBaseUrl();
     this.imageApiUrl = this.baseUrl + '/api/image?jsonUrl=';
 
-    this.state = {
-        video: this.props.video,
-        ropeLengthM: this.props.video.ropeLengthM,
-        skier: this.props.video.skier || '',
-        notes: this.props.video.notes || ''
-      };
+    // Set defaults for text values if null.
+    this.props.video.skier = this.props.video.skier || '';
+    this.props.video.notes = this.props.video.notes || '';
+
+    // Using spread operator to promote video object properties to be
+    // shallow properties of state.  React doesn't repaint if deep nested
+    // properties are changed.
+    this.state = { ...this.props.video };
   }
 
   handleInputChange(event) {
@@ -26,37 +31,28 @@ export default class Video extends React.Component {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-    if (name === "skier") {
-      this.handleSkierChange(value);
-    }
-    else if (name === "ropeLengthM") {
-      this.handleRopeChange(value);
-    }
-    else if (name === "notes") {
-      this.state.video.notes = value;
-    }
-
     this.setState({
       [name]: value
     });
   }
 
-  validRopeLength(length) {
-    return true;
-  }
-
-  handleRopeChange(value) {
-    if (this.validRopeLength(value)) {
-      this.state.video.ropeLengthM = value;
-    }
-  }
-
-  handleSkierChange(value) {
-    this.state.video.skier = value;
-  }
-
   saveClick(event) {
-    var json = JSON.stringify(this.state.video);
+    this.save();
+  }
+
+  deleteClick(event) {
+    // this.setState((state) => {
+    //   return {markedForDelete: !state.markedForDelete};
+    // }, this.save());
+    this.setState(
+      {markedForDelete: !this.state.markedForDelete},
+      this.save
+    );
+  }
+
+  save() {
+    const video = this.state;
+    const json = JSON.stringify(video);
     var updateUrl = this.baseUrl + '/api/updatevideo';
     console.log('Saving video' + updateUrl + ':\n' + json);
 
@@ -72,8 +68,8 @@ export default class Video extends React.Component {
   }
 
   getImageUrl() {
-    var imageUrl = this.imageApiUrl + this.state.video.jsonUrl;
-    if (this.state.video.ropeLengthM != null && this.state.ropeLengthM !== "0.0") {
+    var imageUrl = this.imageApiUrl + this.state.jsonUrl;
+    if (this.state.ropeLengthM != null && this.state.ropeLengthM !== "0.0") {
         imageUrl += '&rope=' + this.state.ropeLengthM;
     }
     return imageUrl;
@@ -81,24 +77,38 @@ export default class Video extends React.Component {
 
   getVideoUrl() {
       var relativeUrl = './video.html?video=';
-      var videoUrl = relativeUrl + this.state.video.url;
+      var videoUrl = relativeUrl + this.state.url;
       return videoUrl;
   }
 
   getThumnailUrl() {
-      return this.state.video.thumbnailUrl;
+      return this.state.thumbnailUrl;
+  }
+
+  // Renders a delete button based on current state.
+  DeleteButton(props) {
+    if (props.markedForDelete)
+    return <button onClick={this.deleteClick}>Undo Delete</button>;
+    else
+      return <button onClick={this.deleteClick}>Delete</button>;
+  }
+
+  Thumbnail(props) {
+    return (
+          <a href={this.getThumnailUrl()} target="_blank">
+                <img src={this.getThumnailUrl()} width="320" height="240"/>    
+          </a>
+      );
   }
 
   render() {
-    var video = this.state.video;      
+    const video = this.state;  
     return (
       <table>
         <tbody>
           <tr>
           <td>
-            <a href={this.getThumnailUrl()} target="_blank">
-                <img src={this.getThumnailUrl()} width="320" height="240"/>    
-            </a>
+            <this.Thumbnail />
           </td>
           <td valign="top">
             <label><b>Notes</b></label><br/>
@@ -108,7 +118,7 @@ export default class Video extends React.Component {
               onChange={this.handleInputChange} />
           </td>          
           <td>
-            <b>Date:&nbsp;</b>{video.partitionKey}<br/>
+            <b>Date:&nbsp;</b>{video.recordedTime}<br/>
             <b>Course Name:&nbsp;</b>{video.courseName}<br/>
             <b>Speed:&nbsp;</b>{video.boatSpeedMph}<br/>
             <b>Skier:&nbsp;</b><input type="text" value={this.state.skier} onChange={this.handleInputChange} name="skier"/><br/>
@@ -125,11 +135,12 @@ export default class Video extends React.Component {
             </label>
             <hr/>
             <center>
-              <button onClick={this.saveClick}>Save</button><br/>
+              <button onClick={this.saveClick}>Save</button>&nbsp;
+              <this.DeleteButton markedForDelete={this.state.markedForDelete} />
             </center>
             <hr/>
             <a href={this.getVideoUrl()} target="_blank">Video</a><br/>
-            <a href={this.getImageUrl()} target="_blank">Analysis</a><br/>            
+            <a href={this.getImageUrl()} target="_blank">Analysis</a><br/>       
           </td>
           </tr>
         </tbody>
