@@ -1,6 +1,7 @@
 import React from 'react';
 import Util from './Util.js';
 import axios from 'axios';
+import { thisExpression } from '@babel/types';
 
 export default class Video extends React.Component {
   constructor(props) {
@@ -10,6 +11,7 @@ export default class Video extends React.Component {
     this.saveClick = this.saveClick.bind(this);
     this.deleteClick = this.deleteClick.bind(this);
     this.DeleteButton = this.DeleteButton.bind(this);
+    this.SaveButton = this.SaveButton.bind(this);
     this.Thumbnail = this.Thumbnail.bind(this);
 
     var util = new Util();
@@ -32,18 +34,17 @@ export default class Video extends React.Component {
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
+      dirty: true
     });
   }
 
   saveClick(event) {
     this.save();
+    this.setState({dirty: false});
   }
 
   deleteClick(event) {
-    // this.setState((state) => {
-    //   return {markedForDelete: !state.markedForDelete};
-    // }, this.save());
     this.setState(
       {markedForDelete: !this.state.markedForDelete},
       this.save
@@ -51,7 +52,8 @@ export default class Video extends React.Component {
   }
 
   save() {
-    const video = this.state;
+    var video = this.state;
+    delete video.dirty;     // Remove internal dirty flag from the object.
     const json = JSON.stringify(video);
     var updateUrl = this.baseUrl + '/api/updatevideo';
     console.log('Saving video' + updateUrl + ':\n' + json);
@@ -85,9 +87,16 @@ export default class Video extends React.Component {
       return this.state.thumbnailUrl;
   }
 
+  SaveButton() {
+    if (this.state.dirty)
+      return <button onClick={this.saveClick}>Save</button>;
+    else
+      return <span/>;
+  }
+
   // Renders a delete button based on current state.
-  DeleteButton(props) {
-    if (props.markedForDelete)
+  DeleteButton() {
+    if (this.state.markedForDelete)
     return <button onClick={this.deleteClick}>Undo Delete</button>;
     else
       return <button onClick={this.deleteClick}>Delete</button>;
@@ -135,8 +144,8 @@ export default class Video extends React.Component {
             </label>
             <hr/>
             <center>
-              <button onClick={this.saveClick}>Save</button>&nbsp;
-              <this.DeleteButton markedForDelete={this.state.markedForDelete} />
+              <this.SaveButton />&nbsp;
+              <this.DeleteButton />
             </center>
             <hr/>
             <a href={this.getVideoUrl()} target="_blank">Video</a><br/>
