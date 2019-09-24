@@ -69,17 +69,7 @@ const useStyles = makeStyles(theme => ({
   }));
   
 export default function VideoCard(props) {
-    const video = {
-        recordedTime: '7:04am',
-        recordedDate: 'September 22, 2019',
-        avatarText: '-',
-        notes: 'Nice 1 ball, too far back on ski at 3,5.',
-        courseName: 'Outside',
-        boatSpeedMph: 32.3,
-        skier: 'Jason',
-        ropeLengthM: 15,
-        thumbnailUrl: 'https://skivideostorage.blob.core.windows.net/ski/2019-09-14/GOPR1769.PNG',
-    }
+    const video = props.video;
     const classes = useStyles();
 
     return (
