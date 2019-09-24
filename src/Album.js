@@ -68,38 +68,45 @@ const useStyles = makeStyles(theme => ({
   },  
 }));
 
+const classes = useStyles();
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-export default function Album() {
-  const classes = useStyles();
+function VideoList(props) {
+  return (
+    <Container className={classes.cardGrid} maxWidth="md">
+      <Grid container spacing={4}>
+        {props.videos.map(video => (
+            <VideoCard card={video} />
+        ))}
+      </Grid>
+    </Container>
+  );
+}
 
+function SkiFooter(props) {
+  return (
+    <footer className={classes.footer}>
+      <Typography variant="h6" align="center" gutterBottom>
+        Footer
+      </Typography>
+      <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
+        Env: Development, Version: xxx
+      </Typography>
+      <Copyright />
+    </footer>
+  );
+}
+
+export default function Album() {
   return (
     <React.Fragment>
       <CssBaseline />
       <SkiToolBar />
       <main>
-        {/* Hero unit */}
-        <VideoFilter />
-        <Container className={classes.cardGrid} maxWidth="md">
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {cards.map(card => (
-                <VideoCard card={card} />
-            ))}
-          </Grid>
-        </Container>
+        <VideoFilter videos={cards} />
+        <VideoList videos={cards} />
       </main>
-      {/* Footer */}
-      <footer className={classes.footer}>
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          Something here to give the footer a purpose!
-        </Typography>
-        <Copyright />
-      </footer>
-      {/* End footer */}
+      <SkiFooter />
     </React.Fragment>
   );
 }
