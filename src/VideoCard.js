@@ -15,6 +15,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import { format, parseISO } from 'date-fns'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -67,7 +68,18 @@ const useStyles = makeStyles(theme => ({
       paddingBottom: theme.spacing(3),
     }
   }));
-  
+
+function getDateString(date) {
+  // format: 2019-09-20T17:06:57Z
+  const formattedDate = format(parseISO(date), 'PPP');
+  return formattedDate;
+}
+
+function getTimeString(date) {
+  const formattedDate = format(parseISO(date), 'p');
+  return formattedDate;  
+}
+
 export default function VideoCard(props) {
     const video = props.video;
     const classes = useStyles();
@@ -76,8 +88,8 @@ export default function VideoCard(props) {
         <Grid item key={props.card} xs={12} sm={6} md={4}>
             <Card className={classes.card}>
                 <CardHeader
-                    title={video.recordedTime}
-                    subheader={video.recordedDate}
+                    title={getTimeString(video.recordedTime)}
+                    subheader={getDateString(video.recordedTime)}
                     avatar={
                         <Avatar className={classes.avatar}>
                         {video.avatarText}
