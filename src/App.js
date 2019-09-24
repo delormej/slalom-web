@@ -3,8 +3,6 @@ import './App.css';
 import VideoList from './VideoList.js'
 
 function App() {
-
-
   return (
     <div className="App">
       <VideoList />
