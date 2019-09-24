@@ -14,7 +14,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        IRT, LLC.
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -85,13 +85,16 @@ function VideoList(props) {
 
 function SkiFooter(props) {
   const classes = useStyles();
+  const env = process.env.NODE_ENV;
+  const version = process.env.REACT_APP_VERSION;
+
   return (
     <footer className={classes.footer}>
       <Typography variant="h6" align="center" gutterBottom>
-        Footer
+        South Pond of Lake Cochituate, Natick MA
       </Typography>
       <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-        Env: Development, Version: xxx
+        Env: {env}, Version: {version}
       </Typography>
       <Copyright />
     </footer>
@@ -103,10 +106,8 @@ export default function Album() {
     <React.Fragment>
       <CssBaseline />
       <SkiToolBar />
-      <main>
-        <VideoFilter videos={cards} />
-        <VideoList videos={cards} />
-      </main>
+      <VideoFilter videos={cards} />
+      <VideoList videos={cards} />
       <SkiFooter />
     </React.Fragment>
   );
