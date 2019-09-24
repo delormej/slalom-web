@@ -138,11 +138,14 @@ export default function VideoCard(props) {
                 </CardContent>
                 <CardActions>
                     <Button size="small" color="primary">
-                    View
+                      Save
                     </Button>
-                    <Button size="small" color="primary">
-                    Edit
+                    <Button size="small" color="secondary">
+                      Analysis
                     </Button>
+                    <Button size="small" color="secondary">
+                      Video
+                    </Button>                    
                 </CardActions>
             </Card>
         </Grid>
