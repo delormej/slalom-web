@@ -68,10 +68,10 @@ const useStyles = makeStyles(theme => ({
   },  
 }));
 
-const classes = useStyles();
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function VideoList(props) {
+  const classes = useStyles();
   return (
     <Container className={classes.cardGrid} maxWidth="md">
       <Grid container spacing={4}>
@@ -84,6 +84,7 @@ function VideoList(props) {
 }
 
 function SkiFooter(props) {
+  const classes = useStyles();
   return (
     <footer className={classes.footer}>
       <Typography variant="h6" align="center" gutterBottom>
