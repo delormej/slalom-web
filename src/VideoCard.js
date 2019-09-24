@@ -2,10 +2,6 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import CardHeader from '@material-ui/core/CardHeader';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -15,7 +11,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import { format, parseISO } from 'date-fns'
+import VideoHeader from './VideoHeader';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -71,57 +67,6 @@ const useStyles = makeStyles(theme => ({
       paddingBottom: theme.spacing(3),
     }
   }));
-
-function getDateString(date) {
-  // format: 2019-09-20T17:06:57Z
-  const formattedDate = format(parseISO(date), 'PPP');
-  return formattedDate;
-}
-
-function getTimeString(date) {
-  const formattedDate = format(parseISO(date), 'p');
-  return formattedDate;  
-}
-
-function SkierAvatar(props) {
-  const classes = useStyles();
-  const skier = props.skier;
-  var avatarStyle, avatarText;
-  if (skier != null && skier.length >= 2) {
-    avatarStyle = classes.avatar;
-    avatarText = skier.slice(0,2);
-  } 
-  else {
-    avatarStyle = classes.avatarMissing;
-    avatarText = '-';
-  }
-
-  return (
-    <Avatar className={avatarStyle}>
-      {avatarText}
-    </Avatar>  
-  );
-}
-
-function VideoHeader(props) {
-  const video = props.video;
-
-  return (
-    <CardHeader
-      title={getTimeString(video.recordedTime)}
-      subheader={getDateString(video.recordedTime)}
-      avatar={
-          <SkierAvatar skier={video.skier} />
-      }                    
-      action={
-          <IconButton aria-label="delete">
-              <DeleteIcon />
-          </IconButton>
-      }>                    
-    ]
-  </CardHeader>  
-  );
-}
 
 export default function VideoCard(props) {
     const video = props.video;
