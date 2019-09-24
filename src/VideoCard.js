@@ -59,8 +59,11 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(2),
     },
     avatar: {
-      backgroundColor: 'lightgrey',
+      backgroundColor: 'green',
     },  
+    avatarMissing: {
+      backgroundColor: 'lightgrey',
+    },      
     filter: {
       paddingTop: theme.spacing(6),
     },
@@ -80,6 +83,46 @@ function getTimeString(date) {
   return formattedDate;  
 }
 
+function SkierAvatar(props) {
+  const classes = useStyles();
+  const skier = props.skier;
+  var avatarStyle, avatarText;
+  if (skier != null && skier.length >= 2) {
+    avatarStyle = classes.avatar;
+    avatarText = skier.slice(0,2);
+  } 
+  else {
+    avatarStyle = classes.avatarMissing;
+    avatarText = '-';
+  }
+
+  return (
+    <Avatar className={avatarStyle}>
+      {avatarText}
+    </Avatar>  
+  );
+}
+
+function VideoHeader(props) {
+  const video = props.video;
+
+  return (
+    <CardHeader
+      title={getTimeString(video.recordedTime)}
+      subheader={getDateString(video.recordedTime)}
+      avatar={
+          <SkierAvatar skier={video.skier} />
+      }                    
+      action={
+          <IconButton aria-label="delete">
+              <DeleteIcon />
+          </IconButton>
+      }>                    
+    ]
+  </CardHeader>  
+  );
+}
+
 export default function VideoCard(props) {
     const video = props.video;
     const classes = useStyles();
@@ -87,21 +130,7 @@ export default function VideoCard(props) {
     return (
         <Grid item key={props.card} xs={12} sm={6} md={4}>
             <Card className={classes.card}>
-                <CardHeader
-                    title={getTimeString(video.recordedTime)}
-                    subheader={getDateString(video.recordedTime)}
-                    avatar={
-                        <Avatar className={classes.avatar}>
-                        {video.avatarText}
-                        </Avatar>
-                    }                    
-                    action={
-                        <IconButton aria-label="delete">
-                            <DeleteIcon />
-                        </IconButton>
-                    }>                    
-                ]                  
-                </CardHeader>                    
+                <VideoHeader video={video} />
                 <CardMedia
                     className={classes.cardMedia}
                     image={video.thumbnailUrl}
