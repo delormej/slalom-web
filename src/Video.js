@@ -231,6 +231,7 @@ class Video extends React.Component {
                   <Grid item xs={24} sm={12}>
                       <TextField
                           id="notes"
+                          name="notes"
                           label="Notes"
                           fullWidth
                           multiline
