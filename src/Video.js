@@ -69,6 +69,10 @@ const styles = theme => ({
   },
   courseAndSpeed: {
     paddingBottom: theme.spacing(3),
+  },
+  playButton: {
+    display: 'flex',
+    marginLeft: 'auto'
   }
 });
 
@@ -190,10 +194,6 @@ class Video extends React.Component {
               image={video.thumbnailUrl}
               title="Video Thumbnail"
           />                
-          <IconButton aria-label="play/pause"
-            onClick={() => window.open(this.getVideoUrl())}>
-            <PlayArrowIcon className={classes.playIcon} />
-          </IconButton>
           <CardContent className={classes.cardContent}>
               <Grid container spacing={0} className={classes.courseAndSpeed}>
                   <Grid item xs={9}>
@@ -259,6 +259,10 @@ class Video extends React.Component {
                 onClick={() => window.open(this.getImageUrl())}>
                 Analysis
               </Button>
+              <IconButton aria-label="play/pause" title="Play Video" className={classes.playButton}
+                onClick={() => window.open(this.getVideoUrl())}>
+                  <PlayArrowIcon />
+              </IconButton>
           </CardActions>
       </Card>
     </Grid>

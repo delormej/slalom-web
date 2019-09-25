@@ -114,7 +114,7 @@ export default function VideoHeader(props) {
           <SkierAvatar skier={video.skier} deleted={video.markedForDelete} />
       }                    
       action={
-        <IconButton aria-label={label} onClick={() => props.onDeleteClick()}>
+        <IconButton aria-label={label} onClick={() => props.onDeleteClick()} title={label}>
           {deleted ? <RestoreFromTrashIcon /> : <DeleteIcon /> }
         </IconButton>
       }>                    
