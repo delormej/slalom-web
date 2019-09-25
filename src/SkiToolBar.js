@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Album() {
+export default function SkiToolBar() {
   const classes = useStyles();
   
   return (  
@@ -28,7 +28,10 @@ export default function Album() {
             3 Season Ski Club
           </Typography>
           <span className={classes.toolbarButtons}>
-            <Button className={classes.donateButton} color="inherit">Donate</Button>
+            <Button className={classes.donateButton} color="inherit"
+                onClick={() => window.open('http://www.threeseasonski.com/About_Us.html')}>
+              Donate
+            </Button>
           </span>
         </Toolbar>
       </AppBar>
