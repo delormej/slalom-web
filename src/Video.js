@@ -158,7 +158,11 @@ class Video extends React.Component {
 
   SaveButton() {
     if (this.state.dirty)
-      return <button onClick={this.saveClick}>Save</button>;
+      return (
+        <Button onClick={this.saveClick} 
+          variant="contained" color="primary">
+          Save
+      </Button>);
     else
       return <span/>;
   }
@@ -244,9 +248,7 @@ class Video extends React.Component {
               </Grid>
           </CardContent>
           <CardActions>
-              <Button size="small" color="primary" onClick={this.saveClick}>
-                Save
-              </Button>
+              <this.SaveButton />
               <Button size="small" color="secondary">
                 Analysis
               </Button>
