@@ -232,7 +232,7 @@ class Video extends React.Component {
                           <MenuItem value={38}>38' Off</MenuItem>
                       </Select>
                   </Grid>
-                  <Grid item xs={24} sm={12}>
+                  <Grid item xs={12} sm={12}>
                       <TextField
                           id="notes"
                           name="notes"

@@ -23,7 +23,7 @@ export default function SkierPicker() {
 
     return (
         <div className={classes.main}>
-            <Grid container spacing={1} justify="left">
+            <Grid container spacing={1} >
                 <Grid item>
                     <Chip label="John" onDelete={onDelete} onClick={onDelete} className={classes.chip} color="primary" />
                 </Grid>

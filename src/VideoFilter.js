@@ -26,7 +26,7 @@ export default function Album() {
                     <Grid item xs={6}><DatePicker /></Grid>
                     <Grid item xs={6}><SkierPicker /></Grid>
                     <Grid item xs={12}>
-                        <Typography variant="h7" color="textSecondary" className={classes.videoCount}>
+                        <Typography variant="caption" color="textSecondary" className={classes.videoCount}>
                             655 Videos
                         </Typography>
                     </Grid>                    

@@ -52,7 +52,7 @@ export default function DatePicker() {
         </Grid>
         <Grid item zeroMinWidth> 
             <IconButton onClick={onDelete}>
-                <HighlightOffOutlineIcon fontSize="medium" className={classes.deleteFilter} />
+                <HighlightOffOutlineIcon className={classes.deleteFilter} />
             </IconButton>
         </Grid>        
       </Grid>
