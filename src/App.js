@@ -83,7 +83,7 @@ function VideoList(props) {
     <Container className={classes.cardGrid} maxWidth="md">
       <Grid container spacing={4}>
         {props.videos.map(video => (
-            <VideoCard video={video} key={i++} />
+            <Video video={video} key={i++} />
         ))}
       </Grid>
     </Container>

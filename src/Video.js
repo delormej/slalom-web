@@ -3,7 +3,7 @@ import Util from './Util.js';
 import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -15,10 +15,67 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import VideoHeader from './VideoHeader';
 
-export default class Video extends React.Component { 
+const styles = theme => ({
+  root: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+  },    
+  icon: {
+    marginRight: theme.spacing(2),
+  },
+  heroContent: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(8, 0, 6),
+  },
+  heroButtons: {
+    marginTop: theme.spacing(4),
+  },
+  cardGrid: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
+  },
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  cardMedia: {
+    paddingTop: '56.25%', // 16:9
+  },
+  cardContent: {
+    flexGrow: 1,
+  },
+  footer: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6),
+  },
+  section1: {
+    margin: theme.spacing(3, 2),
+  },  
+  section2: {
+    margin: theme.spacing(2),
+  },
+  avatar: {
+    backgroundColor: 'green',
+  },  
+  avatarMissing: {
+    backgroundColor: 'lightgrey',
+  },      
+  filter: {
+    paddingTop: theme.spacing(6),
+  },
+  courseAndSpeed: {
+    paddingBottom: theme.spacing(3),
+  }
+});
+
+class Video extends React.Component { 
 
   constructor(props) {
     super(props);
+    const { classes } = props;
+    this.classes = classes;
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.saveClick = this.saveClick.bind(this);
@@ -115,62 +172,8 @@ export default class Video extends React.Component {
   }
   
   render() {
-    const classes = makeStyles(theme => ({
-      root: {
-        width: '100%',
-        maxWidth: 360,
-        backgroundColor: theme.palette.background.paper,
-      },    
-      icon: {
-        marginRight: theme.spacing(2),
-      },
-      heroContent: {
-        backgroundColor: theme.palette.background.paper,
-        padding: theme.spacing(8, 0, 6),
-      },
-      heroButtons: {
-        marginTop: theme.spacing(4),
-      },
-      cardGrid: {
-        paddingTop: theme.spacing(8),
-        paddingBottom: theme.spacing(8),
-      },
-      card: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-      },
-      cardMedia: {
-        paddingTop: '56.25%', // 16:9
-      },
-      cardContent: {
-        flexGrow: 1,
-      },
-      footer: {
-        backgroundColor: theme.palette.background.paper,
-        padding: theme.spacing(6),
-      },
-      section1: {
-        margin: theme.spacing(3, 2),
-      },  
-      section2: {
-        margin: theme.spacing(2),
-      },
-      avatar: {
-        backgroundColor: 'green',
-      },  
-      avatarMissing: {
-        backgroundColor: 'lightgrey',
-      },      
-      filter: {
-        paddingTop: theme.spacing(6),
-      },
-      courseAndSpeed: {
-        paddingBottom: theme.spacing(3),
-      }
-    }));    
-
     const video = this.state;  
+    const classes = this.classes;
 
     return (
       <Grid item xs={12} sm={6} md={4}>
@@ -240,7 +243,7 @@ export default class Video extends React.Component {
               </Grid>
           </CardContent>
           <CardActions>
-              <Button size="small" color="primary">
+              <Button size="small" color="primary" onClick={this.saveClick}>
                 Save
               </Button>
               <Button size="small" color="secondary">
@@ -255,4 +258,5 @@ export default class Video extends React.Component {
     );
   }
 }
-  
+
+export default withStyles(styles)(Video);
