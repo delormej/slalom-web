@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import SkiToolBar from './SkiToolBar';
-import VideoCard from './VideoCard';
 import VideoFilter from './VideoFilter';
 import Video from './Video';
 
