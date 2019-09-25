@@ -2,16 +2,28 @@ import React from 'react';
 import axios from 'axios';
 import Video from './Video.js'
 import Util from './Util.js'
+import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
 import { throwStatement } from '@babel/types';
-
+import { withStyles } from '@material-ui/core/styles';
+import VideoFilter from './VideoFilter';
   
-export default class VideoList extends React.Component {
+const styles = theme => ({
+  cardGrid: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
+  },
+});
+
+class VideoList extends React.Component {
   constructor(props) {
     super(props);
+    const { classes } = props;
+    this.classes = classes;
       
     // State which does not force render()
     this._isMounted = false;
-    this.onlyShowToday = true;
+    this.onlyShowToday = false;
     this.videos = [];
 
     // Changing any of this state through setState forces re-render()
@@ -139,17 +151,18 @@ export default class VideoList extends React.Component {
   render() {
     var i = 0;
     const header = this.videoListHeader();
+    const classes = this.classes;
 
     return (
-      <div>
-          {header}
-          <ul>
-              { this.state.videos.map(video => 
-                  <li key={(i++).toString()}>
-                    <Video video={video} videoKey={(i++).toString()} />
-                  </li>
-              )}
-          </ul>
-    </div>);
+      <Container className={classes.cardGrid} maxWidth="md">
+        <Grid container spacing={4}>
+          { this.state.videos.map(video => (
+              <Video video={video} key={i++} />
+          ))}
+        </Grid>
+      </Container>
+    );
   }
 }
+
+export default withStyles(styles)(VideoList);
