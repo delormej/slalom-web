@@ -8,6 +8,7 @@ import Link from '@material-ui/core/Link';
 import SkiToolBar from './SkiToolBar';
 import VideoCard from './VideoCard';
 import VideoFilter from './VideoFilter';
+import Video from './Video';
 
 function Copyright() {
   return (
@@ -77,11 +78,12 @@ const cards = getVideos();
 
 function VideoList(props) {
   const classes = useStyles();
+  let i = 0;
   return (
     <Container className={classes.cardGrid} maxWidth="md">
       <Grid container spacing={4}>
         {props.videos.map(video => (
-            <VideoCard video={video} />
+            <VideoCard video={video} key={i++} />
         ))}
       </Grid>
     </Container>
