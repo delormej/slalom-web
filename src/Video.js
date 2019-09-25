@@ -14,6 +14,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import VideoHeader from './VideoHeader';
+import IconButton from '@material-ui/core/IconButton';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
 const styles = theme => ({
   root: {
@@ -188,6 +190,10 @@ class Video extends React.Component {
               image={video.thumbnailUrl}
               title="Video Thumbnail"
           />                
+          <IconButton aria-label="play/pause"
+            onClick={() => window.open(this.getVideoUrl())}>
+            <PlayArrowIcon className={classes.playIcon} />
+          </IconButton>
           <CardContent className={classes.cardContent}>
               <Grid container spacing={0} className={classes.courseAndSpeed}>
                   <Grid item xs={9}>
@@ -249,12 +255,10 @@ class Video extends React.Component {
           </CardContent>
           <CardActions>
               <this.SaveButton />
-              <Button size="small" color="secondary">
+              <Button size="small" color="secondary"
+                onClick={() => window.open(this.getImageUrl())}>
                 Analysis
               </Button>
-              <Button size="small" color="secondary">
-                Video
-              </Button>                    
           </CardActions>
       </Card>
     </Grid>
