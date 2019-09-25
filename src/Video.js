@@ -41,12 +41,20 @@ const styles = theme => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    position: 'relative',
   },
   cardMedia: {
     paddingTop: '56.25%', // 16:9
   },
   cardContent: {
     flexGrow: 1,
+  },
+  overlay: {
+    position: 'absolute',
+      top: '75px',
+      right: '7px',
+      color: 'black',
+      backgroundColor: 'white'    
   },
   footer: {
     backgroundColor: theme.palette.background.paper,
@@ -70,7 +78,7 @@ const styles = theme => ({
   courseAndSpeed: {
     paddingBottom: theme.spacing(3),
   },
-  playButton: {
+  analysisButton: {
     display: 'flex',
     marginLeft: 'auto'
   }
@@ -189,11 +197,15 @@ class Video extends React.Component {
       <Grid item xs={12} sm={6} md={4}>
         <Card className={classes.card}>
           <VideoHeader video={video} onDeleteClick={this.deleteClick} />
-          <CardMedia
-              className={classes.cardMedia}
-              image={video.thumbnailUrl}
-              title="Video Thumbnail"
-          />                
+            <CardMedia
+                className={classes.cardMedia}
+                image={video.thumbnailUrl}
+                title="Video Thumbnail"
+            />
+            <IconButton className={classes.overlay} title="Play Video"
+              onClick={() => window.open(this.getVideoUrl())}>
+              <PlayArrowIcon />
+            </IconButton>
           <CardContent className={classes.cardContent}>
               <Grid container spacing={0} className={classes.courseAndSpeed}>
                   <Grid item xs={9}>
@@ -255,14 +267,10 @@ class Video extends React.Component {
           </CardContent>
           <CardActions>
               <this.SaveButton />
-              <Button size="small" color="secondary"
+              <Button size="small" color="secondary" className={classes.analysisButton}
                 onClick={() => window.open(this.getImageUrl())}>
                 Analysis
               </Button>
-              <IconButton aria-label="play/pause" title="Play Video" className={classes.playButton}
-                onClick={() => window.open(this.getVideoUrl())}>
-                  <PlayArrowIcon />
-              </IconButton>
           </CardActions>
       </Card>
     </Grid>
