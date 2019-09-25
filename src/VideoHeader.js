@@ -53,7 +53,10 @@ const useStyles = makeStyles(theme => ({
     },  
     avatarMissing: {
       backgroundColor: 'lightgrey',
-    },      
+    },
+    avatarDeleted: {
+        backgroundColor: 'red',
+    },
     filter: {
       paddingTop: theme.spacing(6),
     },
@@ -76,7 +79,9 @@ function getTimeString(date) {
 function SkierAvatar(props) {
   const classes = useStyles();
   const skier = props.skier;
+  const deleted = props.deleted;
   var avatarStyle, avatarText;
+
   if (skier != null && skier.length >= 2) {
     avatarStyle = classes.avatar;
     avatarText = skier.slice(0,2);
@@ -84,6 +89,9 @@ function SkierAvatar(props) {
   else {
     avatarStyle = classes.avatarMissing;
     avatarText = '-';
+  }
+  if (deleted) {
+      avatarStyle = classes.avatarDeleted;
   }
 
   return (
@@ -103,7 +111,7 @@ export default function VideoHeader(props) {
       title={getTimeString(video.recordedTime)}
       subheader={getDateString(video.recordedTime)}
       avatar={
-          <SkierAvatar skier={video.skier} />
+          <SkierAvatar skier={video.skier} deleted={video.markedForDelete} />
       }                    
       action={
         <IconButton aria-label={label} onClick={() => props.onDeleteClick()}>
