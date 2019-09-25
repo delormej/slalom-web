@@ -182,7 +182,7 @@ class Video extends React.Component {
     return (
       <Grid item xs={12} sm={6} md={4}>
         <Card className={classes.card}>
-          <VideoHeader video={video} />
+          <VideoHeader video={video} onDeleteClick={this.deleteClick} />
           <CardMedia
               className={classes.cardMedia}
               image={video.thumbnailUrl}

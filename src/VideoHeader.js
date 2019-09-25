@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CardHeader from '@material-ui/core/CardHeader';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import RestoreFromTrashIcon from '@material-ui/icons/RestoreFromTrash';
 import Avatar from '@material-ui/core/Avatar';
 import { format, parseISO } from 'date-fns'
 
@@ -94,6 +95,8 @@ function SkierAvatar(props) {
 
 export default function VideoHeader(props) {
   const video = props.video;
+  const deleted = props.video.markedForDelete;
+  const label = deleted ? "undo delete" : "delete";
 
   return (
     <CardHeader
@@ -103,9 +106,9 @@ export default function VideoHeader(props) {
           <SkierAvatar skier={video.skier} />
       }                    
       action={
-          <IconButton aria-label="delete">
-              <DeleteIcon />
-          </IconButton>
+        <IconButton aria-label={label} onClick={() => props.onDeleteClick()}>
+          {deleted ? <RestoreFromTrashIcon /> : <DeleteIcon /> }
+        </IconButton>
       }>                    
     ]
   </CardHeader>  
