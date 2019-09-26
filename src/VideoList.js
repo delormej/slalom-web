@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
 import VideoFilter from './VideoFilter';
+import { Typography } from '@material-ui/core';
   
 const styles = theme => ({
   cardGrid: {
@@ -57,16 +58,17 @@ class VideoList extends React.Component {
     filters: { date: new Date(), skiers: [ 'Jason', 'John' ] }
   */
   filterVideos(filters) {
-    console.log('filtering videos: ' + filters.date + ' skiers: ' + filters.skiers);
     var filtered = [];
 
-    if (filters != null && filters.date != null) {
+    if (filters != undefined && filters != null && filters.date != null) {
       const date = this.getDateString(filters.date);
       filtered = this.videos.filter(v => v.partitionKey === date);
       console.log('filtering videos by date: ' + date + ' count is: ' + filtered.length);
     }
     else {
       filtered = this.videos;
+      filters = { date: null, skiers: [] };
+      console.log('filtered has: ' + filtered.length);
     }
 
     this.setState( {
@@ -87,7 +89,7 @@ class VideoList extends React.Component {
       .then(res => {
         this.videos = res.data;
         if (this._isMounted) {
-          this.filterVideos();              
+          this.filterVideos(null);              
         }
       })
       .catch((error) => {
@@ -111,10 +113,11 @@ class VideoList extends React.Component {
     return (
       <React.Fragment>
         <VideoFilter videos={this.state.videos} filterCallback={this.filterVideos} />
+        <Typography variant="h5" color="error">{this.state.error}</Typography>
         <Container className={classes.cardGrid} maxWidth="md">
           <Grid container spacing={4}>
             { this.state.videos.map(video => (
-                <Video video={video} key={video.eTag} />
+                <Video video={video} key={video.eTag+video.rowKey} />
             ))}
           </Grid>
         </Container>
