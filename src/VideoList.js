@@ -53,6 +53,11 @@ class VideoList extends React.Component {
     return formatted;
   }
 
+  getLatestDate(videos) {
+    const latest = new Date(Math.max(...videos.map(videos=> new Date(videos.recordedTime))));
+    return latest;
+  }
+
   /*
     Example of filters object:
     filters: { date: new Date(), skiers: [ 'Jason', 'John' ] }
@@ -60,7 +65,11 @@ class VideoList extends React.Component {
   filterVideos(filters) {
     var filtered = [];
 
-    if (filters != undefined && filters != null && filters.date != null) {
+    if (filters === undefined) {
+      filters = { date: this.getLatestDate(this.videos), skiers: [] };
+    }
+    
+    if (filters != null && filters.date != null) {
       const date = this.getDateString(filters.date);
       filtered = this.videos.filter(v => v.partitionKey === date);
       console.log('filtering videos by date: ' + date + ' count is: ' + filtered.length);
@@ -89,7 +98,7 @@ class VideoList extends React.Component {
       .then(res => {
         this.videos = res.data;
         if (this._isMounted) {
-          this.filterVideos(null);              
+          this.filterVideos();              
         }
       })
       .catch((error) => {

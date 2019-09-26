@@ -1,5 +1,5 @@
 import 'date-fns';
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -24,7 +24,7 @@ export default function DatePicker(props) {
     console.log("Latest date is: " + date);
   }
 
-  const [selectedDate, setSelectedDate] = React.useState(date);
+  const [selectedDate, setSelectedDate] = useState(date);
 
   const useStyles = makeStyles(theme => ({
     deleteFilter: {
@@ -39,7 +39,7 @@ export default function DatePicker(props) {
   }
 
   function onDelete() {
-
+    handleDateChange(null);
   }
 
   const classes = useStyles();
