@@ -25,7 +25,7 @@ export default function SkiToolBar() {
         <Toolbar className={classes.appBar}>
           <img src="waterskiierd2.png" alt="3 Season Ski logo" width="60" height="60" className={classes.icon} />
           <Typography variant="h6" color="inherit" noWrap>
-            Waterski Video Log
+            Water Ski Video Log
           </Typography>
           <span className={classes.toolbarButtons}>
             <Button className={classes.donateButton} color="inherit"

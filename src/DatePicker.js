@@ -17,6 +17,8 @@ function getLatestDate(videos) {
 
 export default function DatePicker(props) {
   let date = null;
+  const filterCallback = props.filterCallback;
+
   if (props.videos != null && props.videos.length > 0) {
     date = getLatestDate(props.videos);
     console.log("Latest date is: " + date);
@@ -33,6 +35,7 @@ export default function DatePicker(props) {
 
   function handleDateChange(date) {
     setSelectedDate(date);
+    filterCallback(date);
   }
 
   function onDelete() {

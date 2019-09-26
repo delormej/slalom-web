@@ -16,14 +16,34 @@ const useStyles = makeStyles(theme => ({
       },    
 }));      
 
+var filterCallback = null;
+
+function filterByDate(date) {
+    console.log('filtering by date: ' + date);
+    if (filterCallback != null) {
+        filterCallback( { date: date } );
+    }
+}
+
+function filterBySkiers(skiers) {
+    var count = skiers != null ? skiers.length : 0;
+    console.log('filtering by skiiers: ' + count);
+}
+
 export default function VideoFilter(props) {
+    
+    // TODO:
+    // Lift state (date, skiers) from filter components to be stored here.
+    //
+    
     const classes = useStyles();
+    filterCallback = props.filterCallback;
   
     return (
         <Container maxWidth="md" className={classes.filter}>
             <Paper>
                 <Grid container spacing={2}>
-                    <Grid item xs={6}><DatePicker videos={props.videos} /></Grid>
+                    <Grid item xs={6}><DatePicker videos={props.videos} filterCallback={filterByDate} /></Grid>
                     <Grid item xs={6}><SkierPicker videos={props.videos} /></Grid>
                     <Grid item xs={12}>
                         <Typography variant="caption" color="textSecondary" className={classes.videoCount}>

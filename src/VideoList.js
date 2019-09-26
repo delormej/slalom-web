@@ -4,7 +4,6 @@ import Video from './Video.js'
 import Util from './Util.js'
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import { throwStatement } from '@babel/types';
 import { withStyles } from '@material-ui/core/styles';
 import VideoFilter from './VideoFilter';
   
@@ -20,70 +19,26 @@ class VideoList extends React.Component {
     super(props);
     const { classes } = props;
     this.classes = classes;
-      
+     
+    this.filterVideos = this.filterVideos.bind(this);
+
     // State which does not force render()
     this._isMounted = false;
-    this.onlyShowToday = false;
     this.videos = [];
 
     // Changing any of this state through setState forces re-render()
     this.state = {
       videos: [],
-      skiers: [],
-      onlyShowToday: this.onlyShowToday,
+      dateFilter: null,
+      skiersFilter: [],
       error: ''
     }
-
-    this.todaysVideosOnClick = this.todaysVideosOnClick.bind(this);
   }
 
-  videoListHeader() {
-    var filterLink = '';
-    var title = '';
-    var count = this.state.videos.length;
-
-    // Check if there was an error loading the data.
-    if (count == 0 && this.state.error != '') {
-      return (
-        <div>
-          <h3>Error!</h3>
-          {this.state.error}
-        </div>
-      )
-    }
-
-    if (this.state.onlyShowToday) {
-      filterLink = 'Show All Videos';
-      title = 'Today\'s Videos (' + this.getDateString() + ')';
-    } 
-    else {
-      filterLink = 'Show Only Today\'s Videos';
-      title = 'All Videos';
-    }
-
-    return (
-      <div>
-        <h1>
-        {title}
-        </h1>
-        <h3>
-        Count: { count }, <a href="#" onClick={this.todaysVideosOnClick}>{filterLink}</a>
-        <br/>
-      </h3>        
-      </div>
-    )
-  }
-
-  // getDistinctSkiers(videos) {
-  //   // TODO: Get this dynamically from the list.
-  //   this.setState({ skiers: ['Jason', 'John', 'Chet', 'Karl', 'Jack'] });
-  // }
-
-  getDateString() {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear();
+  getDateString(dateToFormat) {
+    var dd = dateToFormat.getDate();
+    var mm = dateToFormat.getMonth()+1; //January is 0!
+    var yyyy = dateToFormat.getFullYear();
     
     if(dd<10) {
         dd = '0'+dd
@@ -93,34 +48,32 @@ class VideoList extends React.Component {
         mm = '0'+mm
     } 
     
-    today = yyyy + '-' + mm + '-' + dd;
-    return today;
+    const formatted = yyyy + '-' + mm + '-' + dd;
+    return formatted;
   }
 
-  filterVideos() {
-    console.log('filtering videos, onlyShowToday==' + this.onlyShowToday)
+  /*
+    Example of filters object:
+    filters: { date: new Date(), skiers: [ 'Jason', 'John' ] }
+  */
+  filterVideos(filters) {
+    console.log('filtering videos: ' + filters)
     var filtered = [];
 
-    if (this.onlyShowToday) {
-      const date = this.getDateString();
+    if (filters != null && filters.date != null) {
+      const date = this.getDateString(filters.date);
       filtered = this.videos.filter(v => v.partitionKey === date);
+      console.log('filtering videos by date: ' + date + ' count is: ' + filtered.length);
     }
     else {
       filtered = this.videos;
     }
 
     this.setState( {
-      onlyShowToday: this.onlyShowToday,
+      dateFilter: filters.date,
+      skiersFilter: filters.skiers,
       videos: filtered
     } );
-  }
-
-  todaysVideosOnClick() {
-    console.log('todaysVideosOnClick, onlyShowToday==' + this.state.onlyShowToday);
-    // Toggle state.
-    this.onlyShowToday = !this.onlyShowToday;
-    // Refresh list.
-    this.filterVideos();
   }
 
   componentDidMount() {
@@ -150,12 +103,11 @@ class VideoList extends React.Component {
 
   render() {
     var i = 0;
-    const header = this.videoListHeader();
     const classes = this.classes;
 
     return (
       <React.Fragment>
-        <VideoFilter videos={this.state.videos} />
+        <VideoFilter videos={this.state.videos} filterCallback={this.filterVideos} />
         <Container className={classes.cardGrid} maxWidth="md">
           <Grid container spacing={4}>
             { this.state.videos.map(video => (
