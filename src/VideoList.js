@@ -121,7 +121,11 @@ class VideoList extends React.Component {
 
     return (
       <React.Fragment>
-        <VideoFilter videos={this.state.videos} filterCallback={this.filterVideos} />
+        <VideoFilter videos={this.state.videos} 
+          date={this.state.dateFilter} 
+          skiers={this.state.skiersFilter}
+          filterCallback={this.filterVideos} 
+          />
         <Typography variant="h5" color="error">{this.state.error}</Typography>
         <Container className={classes.cardGrid} maxWidth="md">
           <Grid container spacing={4}>

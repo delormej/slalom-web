@@ -10,21 +10,10 @@ import HighlightOffOutlineIcon from '@material-ui/icons/HighlightOffOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 
-function getLatestDate(videos) {
-  const latest = new Date(Math.max(...videos.map(videos=> new Date(videos.recordedTime))));
-  return latest;
-}
-
 export default function DatePicker(props) {
-  let date = null;
+  console.log('Setting date to: ' + props.date);
   const filterCallback = props.filterCallback;
-
-  if (props.videos != null && props.videos.length > 0) {
-    date = getLatestDate(props.videos);
-    console.log("Latest date is: " + date);
-  }
-
-  const [selectedDate, setSelectedDate] = useState(date);
+  const [selectedDate, setSelectedDate] = useState(props.date);
 
   const useStyles = makeStyles(theme => ({
     deleteFilter: {

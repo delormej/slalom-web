@@ -43,8 +43,8 @@ export default function VideoFilter(props) {
         <Container maxWidth="md" className={classes.filter}>
             <Paper>
                 <Grid container spacing={2}>
-                    <Grid item xs={6}><DatePicker videos={props.videos} filterCallback={filterByDate} /></Grid>
-                    <Grid item xs={6}><SkierPicker videos={props.videos} /></Grid>
+                    <Grid item xs={6}><DatePicker date={props.date} videos={props.videos} filterCallback={filterByDate} /></Grid>
+                    <Grid item xs={6}><SkierPicker skiers={props.skiers} videos={props.videos} /></Grid>
                     <Grid item xs={12}>
                         <Typography variant="caption" color="textSecondary" className={classes.videoCount}>
                             655 Videos
