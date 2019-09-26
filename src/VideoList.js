@@ -57,7 +57,7 @@ class VideoList extends React.Component {
     filters: { date: new Date(), skiers: [ 'Jason', 'John' ] }
   */
   filterVideos(filters) {
-    console.log('filtering videos: ' + filters)
+    console.log('filtering videos: ' + filters.date + ' skiers: ' + filters.skiers);
     var filtered = [];
 
     if (filters != null && filters.date != null) {
@@ -102,8 +102,11 @@ class VideoList extends React.Component {
   }
 
   render() {
-    var i = 0;
     const classes = this.classes;
+    var filteredCount = this.state.videos != null ? this.state.videos.length : 0;
+    var totalCount = this.videos != null ? this.videos.length : 0;
+    var countString = 'Showing: ' + filteredCount + ' of ' + totalCount;
+    console.log('render... ' + countString);
 
     return (
       <React.Fragment>
@@ -111,7 +114,7 @@ class VideoList extends React.Component {
         <Container className={classes.cardGrid} maxWidth="md">
           <Grid container spacing={4}>
             { this.state.videos.map(video => (
-                <Video video={video} key={i++} />
+                <Video video={video} key={video.eTag} />
             ))}
           </Grid>
         </Container>

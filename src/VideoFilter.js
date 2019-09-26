@@ -21,7 +21,7 @@ var filterCallback = null;
 function filterByDate(date) {
     console.log('filtering by date: ' + date);
     if (filterCallback != null) {
-        filterCallback( { date: date } );
+        filterCallback( { date: date, skiers: [] } );
     }
 }
 
