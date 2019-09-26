@@ -16,15 +16,15 @@ const useStyles = makeStyles(theme => ({
       },    
 }));      
 
-export default function Album() {
+export default function VideoFilter(props) {
     const classes = useStyles();
   
     return (
         <Container maxWidth="md" className={classes.filter}>
             <Paper>
                 <Grid container spacing={2}>
-                    <Grid item xs={6}><DatePicker /></Grid>
-                    <Grid item xs={6}><SkierPicker /></Grid>
+                    <Grid item xs={6}><DatePicker videos={props.videos} /></Grid>
+                    <Grid item xs={6}><SkierPicker videos={props.videos} /></Grid>
                     <Grid item xs={12}>
                         <Typography variant="caption" color="textSecondary" className={classes.videoCount}>
                             655 Videos

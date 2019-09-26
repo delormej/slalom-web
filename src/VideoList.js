@@ -154,13 +154,16 @@ class VideoList extends React.Component {
     const classes = this.classes;
 
     return (
-      <Container className={classes.cardGrid} maxWidth="md">
-        <Grid container spacing={4}>
-          { this.state.videos.map(video => (
-              <Video video={video} key={i++} />
-          ))}
-        </Grid>
-      </Container>
+      <React.Fragment>
+        <VideoFilter videos={this.state.videos} />
+        <Container className={classes.cardGrid} maxWidth="md">
+          <Grid container spacing={4}>
+            { this.state.videos.map(video => (
+                <Video video={video} key={i++} />
+            ))}
+          </Grid>
+        </Container>
+      </React.Fragment>
     );
   }
 }
