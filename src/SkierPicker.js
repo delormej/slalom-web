@@ -18,36 +18,25 @@ const useStyles = makeStyles(theme => ({
     }
 })); 
 
-export default function SkierPicker() {
+
+
+export default function SkierPicker(props) {
     const classes = useStyles();
+    let i = 0;
+    if (props.skiers === undefined || props.skiers == null)
+        return <div/>;
+
+    // onDelete={onDelete} onClick={onDelete} 
+    // color="primary"
 
     return (
         <div className={classes.main}>
             <Grid container spacing={1} >
-                <Grid item>
-                    <Chip label="John" onDelete={onDelete} onClick={onDelete} className={classes.chip} color="primary" />
-                </Grid>
-                <Grid item>
-                    <Chip label="Kenny" onDelete={onDelete} onClick={onDelete} className={classes.chip} color="primary" />
-                </Grid>
-                <Grid item>
-                    <Chip label="Jason" onDelete={onDelete} onClick={onDelete} className={classes.chip} color="primary" />
-                </Grid>
-                <Grid item>
-                    <Chip label="Chet" onClick={onDelete} className={classes.chip} color="default" />
-                </Grid>
-                <Grid item>
-                    <Chip label="John" onDelete={onDelete} onClick={onDelete} className={classes.chip} color="primary" />
-                </Grid>
-                <Grid item>
-                    <Chip label="Kenny" onDelete={onDelete} onClick={onDelete} className={classes.chip} color="primary" />
-                </Grid>
-                <Grid item>
-                    <Chip label="Jason" onDelete={onDelete} onClick={onDelete} className={classes.chip} color="primary" />
-                </Grid>
-                <Grid item>
-                    <Chip label="Chet" onClick={onDelete} className={classes.chip} color="default" />
-                </Grid>                
+                { props.skiers.map(skier => (
+                    <Grid item key={i++}>
+                        <Chip label={skier} className={classes.chip} color="default" />
+                    </Grid>                    
+                ))}
             </Grid>
         </div>
     );

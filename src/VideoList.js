@@ -58,6 +58,17 @@ class VideoList extends React.Component {
     return latest;
   }
 
+  getSkiers(videos) {
+    const distinctSkiers = [...new Set(videos.map(function(v) {
+      if (v.skier != null && v.skier.trim().length > 0)
+        return v.skier;
+      else
+        return 'Not Tagged';
+    }))];
+    console.log("skiers: " + distinctSkiers.length);
+    return distinctSkiers;
+  }
+
   /*
     Example of filters object:
     filters: { date: new Date(), skiers: [ 'Jason', 'John' ] }
@@ -68,6 +79,12 @@ class VideoList extends React.Component {
     if (filters === undefined) {
       filters = { date: this.getLatestDate(this.videos), skiers: [] };
     }
+
+    filters.skiers = this.getSkiers(this.videos);
+    let i = 0;
+    filters.skiers.map(s => {
+      console.log(i++ + ': ' + s);
+    })
     
     if (filters != null && filters.date != null) {
       const date = this.getDateString(filters.date);
