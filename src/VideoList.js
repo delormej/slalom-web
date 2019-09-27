@@ -60,13 +60,17 @@ class VideoList extends React.Component {
 
   getSkiers(videos) {
     const distinctSkiers = [...new Set(videos.map(function(v) {
+      let skier = '';
       if (v.skier != null && v.skier.trim().length > 0)
-        return v.skier.trim();
+        skier = v.skier.trim();  
       else
-        return 'Not Tagged';
+        skier = 'Not Tagged';
+      return skier;  
     }))];
-    console.log("skiers: " + distinctSkiers.length);
-    return distinctSkiers;
+
+    const skiersFilter = distinctSkiers.map(s => ({ skier: s, selected: false }));
+    console.log("skiers: " + skiersFilter.length);
+    return skiersFilter;
   }
 
   /*

@@ -39,9 +39,9 @@ export default function SkierPicker(props) {
                 labelPlacement="end"
                 />            
             <Grid container spacing={1} >
-                { props.skiers.map(skier => (
+                { props.skiers.map(s => (
                     <Grid item key={i++}>
-                        <Chip label={skier} onClick={() => filterBySkier(skier) } className={classes.chip} color="default" />
+                        <Chip label={s.skier} onClick={() => filterBySkier(s.skier) } className={classes.chip} color="default" />
                     </Grid>
                     ))}
             </Grid>
