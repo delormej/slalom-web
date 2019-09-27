@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Chip from '@material-ui/core/Chip';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import { makeStyles } from '@material-ui/core/styles';
-
-function onDelete() {
-}
 
 const useStyles = makeStyles(theme => ({
     main: {
@@ -18,25 +17,33 @@ const useStyles = makeStyles(theme => ({
     }
 })); 
 
-
-
 export default function SkierPicker(props) {
     const classes = useStyles();
+    const [allSkiers, setAllSkiers] = useState(true);
+    const filterBySkier = props.filterCallback;
     let i = 0;
-    if (props.skiers === undefined || props.skiers == null)
-        return <div/>;
-
     // onDelete={onDelete} onClick={onDelete} 
     // color="primary"
 
     return (
         <div className={classes.main}>
+            <FormControlLabel
+                value="start"
+                control={
+                    <Switch color="primary" 
+                        onClick={() => setAllSkiers(!allSkiers)}
+                    />
+                }
+                checked={allSkiers}
+                label="All Skiers"
+                labelPlacement="end"
+                />            
             <Grid container spacing={1} >
                 { props.skiers.map(skier => (
                     <Grid item key={i++}>
-                        <Chip label={skier} className={classes.chip} color="default" />
-                    </Grid>                    
-                ))}
+                        <Chip label={skier} onClick={() => filterBySkier(skier) } className={classes.chip} color="default" />
+                    </Grid>
+                    ))}
             </Grid>
         </div>
     );

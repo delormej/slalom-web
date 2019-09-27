@@ -61,7 +61,7 @@ class VideoList extends React.Component {
   getSkiers(videos) {
     const distinctSkiers = [...new Set(videos.map(function(v) {
       if (v.skier != null && v.skier.trim().length > 0)
-        return v.skier;
+        return v.skier.trim();
       else
         return 'Not Tagged';
     }))];
@@ -77,14 +77,12 @@ class VideoList extends React.Component {
     var filtered = [];
 
     if (filters === undefined) {
-      filters = { date: this.getLatestDate(this.videos), skiers: [] };
+      filters = { 
+        date: this.getLatestDate(this.videos), 
+        skiers: this.getSkiers(this.videos) 
+      };
+      console.log('filters were undefined');
     }
-
-    filters.skiers = this.getSkiers(this.videos);
-    let i = 0;
-    filters.skiers.map(s => {
-      console.log(i++ + ': ' + s);
-    })
     
     if (filters != null && filters.date != null) {
       const date = this.getDateString(filters.date);
@@ -135,6 +133,7 @@ class VideoList extends React.Component {
     var totalCount = this.videos != null ? this.videos.length : 0;
     var countString = 'Showing: ' + filteredCount + ' of ' + totalCount;
     console.log('render... ' + countString);
+    console.log('skiers count... ' + this.state.skiersFilter.length);
 
     return (
       <React.Fragment>
