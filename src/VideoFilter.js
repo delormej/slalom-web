@@ -47,7 +47,7 @@ export default function VideoFilter(props) {
                     <Grid item xs={6}><SkierPicker skiers={props.skiers} videos={props.videos} /></Grid>
                     <Grid item xs={12}>
                         <Typography variant="caption" color="textSecondary" className={classes.videoCount}>
-                            655 Videos
+                            Showing {props.filteredVideos} of {props.totalVideos} Video
                         </Typography>
                     </Grid>                    
                 </Grid>

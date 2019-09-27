@@ -125,6 +125,8 @@ class VideoList extends React.Component {
           date={this.state.dateFilter} 
           skiers={this.state.skiersFilter}
           filterCallback={this.filterVideos} 
+          totalVideos={this.videos != null ? this.videos.length : 0}
+          filteredVideos={this.state.videos != null ? this.state.videos.length : 0}
           />
         <Typography variant="h5" color="error">{this.state.error}</Typography>
         <Container className={classes.cardGrid} maxWidth="md">
