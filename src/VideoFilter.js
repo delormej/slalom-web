@@ -28,6 +28,9 @@ function filterByDate(date) {
 function filterBySkiers(skiers) {
     var count = skiers != null ? skiers.length : 0;
     console.log('filtering by skiiers: ' + count);
+    if (filterCallback != null) {
+        filterCallback( { date: null, skiers: skiers } );
+    }    
 }
 
 export default function VideoFilter(props) {
@@ -44,7 +47,7 @@ export default function VideoFilter(props) {
             <Paper>
                 <Grid container spacing={2}>
                     <Grid item xs={6}><DatePicker date={props.date} videos={props.videos} filterCallback={filterByDate} /></Grid>
-                    <Grid item xs={6}><SkierPicker skiers={props.skiers} videos={props.videos} /></Grid>
+                    <Grid item xs={6}><SkierPicker skiers={props.skiers} videos={props.videos} filterCallback={filterBySkiers} /></Grid>
                     <Grid item xs={12}>
                         <Typography variant="caption" color="textSecondary" className={classes.videoCount}>
                             Showing {props.filteredVideos} of {props.totalVideos} Videos
