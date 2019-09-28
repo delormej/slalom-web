@@ -99,13 +99,12 @@ class VideoList extends React.Component {
   filterVideos(date, skiers) {
     var filtered = [];
 
-    if (date == null)
-      date = this.getLatestDate(this.videos);
-    if (skiers == null)
-      skiers = this.getSkiers(this.videos); 
-    
-    const formattedDate = this.getDateString(date);
-    filtered = this.videos.filter(v => v.partitionKey === formattedDate);
+    if (date != null) {
+      const formattedDate = this.getDateString(date);
+      filtered = this.videos.filter(v => v.partitionKey === formattedDate);
+    }
+    else
+      filtered = this.videos;
     
     console.log('filtering videos by date: ' + date + ' count is: ' + filtered.length);
 
@@ -127,8 +126,10 @@ class VideoList extends React.Component {
       .then(res => {
         this.videos = res.data;
         if (this._isMounted) {
-          this.filterVideos(null, null);              
-        }
+          this.filterVideos(
+            this.getLatestDate(this.videos), 
+            this.getSkiers(this.videos) 
+        )}
       })
       .catch((error) => {
         if (this._isMounted) {

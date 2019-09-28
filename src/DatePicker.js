@@ -13,7 +13,6 @@ import IconButton from '@material-ui/core/IconButton';
 export default function DatePicker(props) {
   console.log('Setting date to: ' + props.date);
   const filterCallback = props.filterCallback;
-  const [selectedDate, setSelectedDate] = useState(props.date);
 
   const useStyles = makeStyles(theme => ({
     deleteFilter: {
@@ -23,7 +22,6 @@ export default function DatePicker(props) {
   }));    
 
   function handleDateChange(date) {
-    setSelectedDate(date);
     filterCallback(date);
   }
 
@@ -44,7 +42,7 @@ export default function DatePicker(props) {
                 margin="normal"
                 id="date-picker-inline"
                 label=""
-                value={selectedDate}
+                value={props.date}
                 onChange={handleDateChange}
                 KeyboardButtonProps={{
                     'aria-label': 'change date',
