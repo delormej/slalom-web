@@ -14,22 +14,12 @@ export default function DatePicker(props) {
   console.log('Setting date to: ' + props.date);
   const filterCallback = props.filterCallback;
 
-  const useStyles = makeStyles(theme => ({
+  const classes = makeStyles(theme => ({
     deleteFilter: {
         margin: '8px 0 0 0',
         color: 'rgba(0, 0, 0, 0.54)',
     },    
   }));    
-
-  function handleDateChange(date) {
-    filterCallback(date);
-  }
-
-  function onDelete() {
-    filterCallback(null);
-  }
-
-  const classes = useStyles();
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -43,14 +33,14 @@ export default function DatePicker(props) {
                 id="date-picker-inline"
                 label=""
                 value={props.date}
-                onChange={handleDateChange}
+                onChange={filterCallback}
                 KeyboardButtonProps={{
                     'aria-label': 'change date',
                 }}
             />
         </Grid>
         <Grid item zeroMinWidth> 
-            <IconButton onClick={onDelete}>
+            <IconButton onClick={() => filterCallback(null)}>
                 <HighlightOffOutlineIcon className={classes.deleteFilter} />
             </IconButton>
         </Grid>        
