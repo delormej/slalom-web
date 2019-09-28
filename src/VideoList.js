@@ -58,6 +58,7 @@ class VideoList extends React.Component {
   getLatestDate(videos) {
     const latest = new Date(Math.max(...videos.map(
       videos=> new Date(videos.recordedTime))));
+    console.log('Latest date: ' + latest);
     return latest;
   }
 
@@ -78,50 +79,39 @@ class VideoList extends React.Component {
 
   filterByDate(date) {
     console.log('filtering by date: ' + date);
-    this.filterVideos( { date: date, skiers: [] } );
+    this.filterVideos(date, this.state.skiersFilter);
   }
 
   filterBySkier(skier) {
     // var count = skiers != null ? skiers.length : 0;
     console.log('filtering by skier: ' + skier);
     const i = this.state.skiersFilter.findIndex(s => s.skier === skier);
-    const filter = [...this.state.skiersFilter];
-    filter[i].selected = !filter[i].selected;
+    const skierFilter = [...this.state.skiersFilter];
+    skierFilter[i].selected = !skierFilter[i].selected;
 
-    this.setState( {
-      skiersFilter: filter
-    });
+    this.filterVideos(this.state.dateFilter, skierFilter);
   }
 
   /*
-    Example of filters object:
-    filters: { date: new Date(), skiers: [ 'Jason', 'John' ] }
+    date = new Date()
+    skiers = [ {skier: 'foo', selected:true}, ... ]
   */
-  filterVideos(filters) {
+  filterVideos(date, skiers) {
     var filtered = [];
 
-    if (filters === undefined) {
-      filters = { 
-        date: this.getLatestDate(this.videos), 
-        skiers: this.getSkiers(this.videos) 
-      };
-      console.log('filters were undefined');
-    }
+    if (date == null)
+      date = this.getLatestDate(this.videos);
+    if (skiers == null)
+      skiers = this.getSkiers(this.videos); 
     
-    if (filters != null && filters.date != null) {
-      const date = this.getDateString(filters.date);
-      filtered = this.videos.filter(v => v.partitionKey === date);
-      console.log('filtering videos by date: ' + date + ' count is: ' + filtered.length);
-    }
-    else {
-      filtered = this.videos;
-      filters = { date: null, skiers: [] };
-      console.log('filtered has: ' + filtered.length);
-    }
+    const formattedDate = this.getDateString(date);
+    filtered = this.videos.filter(v => v.partitionKey === formattedDate);
+    
+    console.log('filtering videos by date: ' + date + ' count is: ' + filtered.length);
 
     this.setState( {
-      dateFilter: filters.date,
-      skiersFilter: filters.skiers,
+      dateFilter: date,
+      skiersFilter: skiers,
       videos: filtered
     } );
   }
@@ -137,7 +127,7 @@ class VideoList extends React.Component {
       .then(res => {
         this.videos = res.data;
         if (this._isMounted) {
-          this.filterVideos();              
+          this.filterVideos(null, null);              
         }
       })
       .catch((error) => {
