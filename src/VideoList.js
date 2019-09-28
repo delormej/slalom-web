@@ -98,15 +98,30 @@ class VideoList extends React.Component {
   */
   filterVideos(date, skiers) {
     var filtered = [];
-
+    
+    // Filter by date first.
     if (date != null) {
       const formattedDate = this.getDateString(date);
       filtered = this.videos.filter(v => v.partitionKey === formattedDate);
     }
-    else
+    else {
       filtered = this.videos;
+    }
     
-    console.log('filtering videos by date: ' + date + ' count is: ' + filtered.length);
+    // Then filter for selected skiers.
+    const skiersFilter = skiers.filter(s => s.selected);
+    if (skiersFilter.length > 0) {
+      filtered = filtered.filter(function(v) {
+        var filterIn = false;
+        skiersFilter.forEach(s => {
+          if (s.skier === v.skier) {
+            filterIn = true;
+            return;
+          }
+        });
+        return filterIn;
+      });
+    }
 
     this.setState( {
       dateFilter: date,
