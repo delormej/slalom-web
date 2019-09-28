@@ -1,5 +1,5 @@
 import 'date-fns';
-import React, { useState } from 'react';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -26,7 +26,7 @@ export default function DatePicker(props) {
   }
 
   function onDelete() {
-    handleDateChange(null);
+    filterCallback(null);
   }
 
   const classes = useStyles();
