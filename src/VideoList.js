@@ -22,6 +22,8 @@ class VideoList extends React.Component {
     this.classes = classes;
      
     this.filterVideos = this.filterVideos.bind(this);
+    this.filterBySkier = this.filterBySkier.bind(this);
+    this.filterByDate = this.filterByDate.bind(this);
 
     // State which does not force render()
     this._isMounted = false;
@@ -54,7 +56,8 @@ class VideoList extends React.Component {
   }
 
   getLatestDate(videos) {
-    const latest = new Date(Math.max(...videos.map(videos=> new Date(videos.recordedTime))));
+    const latest = new Date(Math.max(...videos.map(
+      videos=> new Date(videos.recordedTime))));
     return latest;
   }
 
@@ -71,6 +74,22 @@ class VideoList extends React.Component {
     const skiersFilter = distinctSkiers.map(s => ({ skier: s, selected: false }));
     console.log("skiers: " + skiersFilter.length);
     return skiersFilter;
+  }
+
+  filterByDate(date) {
+    console.log('filtering by date: ' + date);
+    this.filterVideos( { date: date, skiers: [] } );
+  }
+
+  filterBySkier(skier) {
+    // var count = skiers != null ? skiers.length : 0;
+    console.log('filtering by skier: ' + skier);
+    const i = this.state.skiersFilter.findIndex(s => s.skier === skier);
+    this.state.skiersFilter[i].selected = !this.state.skiersFilter[i].selected;
+
+    this.setState( {
+      skiersFilter: [...this.state.skiersFilter]
+    });
   }
 
   /*
@@ -144,7 +163,8 @@ class VideoList extends React.Component {
         <VideoFilter videos={this.state.videos} 
           date={this.state.dateFilter} 
           skiers={this.state.skiersFilter}
-          filterCallback={this.filterVideos} 
+          filterDateCallback={this.filterByDate}
+          filterSkierCallback={this.filterBySkier} 
           totalVideos={this.videos != null ? this.videos.length : 0}
           filteredVideos={this.state.videos != null ? this.state.videos.length : 0}
           />
