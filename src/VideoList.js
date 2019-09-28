@@ -15,6 +15,8 @@ const styles = theme => ({
   },
 });
 
+const NOT_TAGGED = 'Not Tagged';
+
 class VideoList extends React.Component {
   constructor(props) {
     super(props);
@@ -68,7 +70,7 @@ class VideoList extends React.Component {
       if (v.skier != null && v.skier.trim().length > 0)
         skier = v.skier.trim();  
       else
-        skier = 'Not Tagged';
+        skier = NOT_TAGGED;
       return skier;  
     }))];
 
@@ -118,7 +120,9 @@ class VideoList extends React.Component {
       filtered = filtered.filter(function(v) {
         var filterIn = false;
         skiersFilter.forEach(s => {
-          if (s.skier === v.skier) {
+          console.log("filter: " + s.skier + ' skier: ' + v.skier);
+          if (s.skier === v.skier || 
+              (s.skier === NOT_TAGGED && v.skier === '')) {
             filterIn = true;
             return;
           }
