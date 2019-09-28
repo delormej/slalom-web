@@ -21,9 +21,20 @@ export default function SkierPicker(props) {
     const classes = useStyles();
     const [allSkiers, setAllSkiers] = useState(true);
     const filterBySkier = props.filterCallback;
-    let i = 0;
-    // onDelete={onDelete} onClick={onDelete} 
-    // color="primary"
+    let i = 0; 
+        
+    function onSkierClick(skier) {
+        if (allSkiers)
+            setAllSkiers(false);
+        filterBySkier(skier);
+    }
+
+    function onSelectAllSkiersClick() {
+        if (!allSkiers) 
+            filterBySkier(null); 
+        setAllSkiers(!allSkiers);
+    }
+
 
     return (
         <div className={classes.main}>
@@ -31,7 +42,7 @@ export default function SkierPicker(props) {
                 value="start"
                 control={
                     <Switch color="primary" 
-                        onClick={() => setAllSkiers(!allSkiers)}
+                        onClick={onSelectAllSkiersClick}
                     />
                 }
                 checked={allSkiers}
@@ -42,7 +53,7 @@ export default function SkierPicker(props) {
                 { props.skiers.map(s => (
                     <Grid item key={i++}>
                         <Chip label={s.skier} 
-                            onClick={() => filterBySkier(s.skier)} 
+                            onClick={() => onSkierClick(s.skier)} 
                             className={classes.chip} color={s.selected ? "primary" : "default"} />
                     </Grid>
                     ))}

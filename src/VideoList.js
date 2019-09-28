@@ -83,12 +83,16 @@ class VideoList extends React.Component {
   }
 
   filterBySkier(skier) {
-    // var count = skiers != null ? skiers.length : 0;
-    console.log('filtering by skier: ' + skier);
-    const i = this.state.skiersFilter.findIndex(s => s.skier === skier);
     const skierFilter = [...this.state.skiersFilter];
-    skierFilter[i].selected = !skierFilter[i].selected;
-
+    if (skier != null) {
+      console.log('filtering by skier: ' + skier);
+      const i = skierFilter.findIndex(s => s.skier === skier);
+      skierFilter[i].selected = !skierFilter[i].selected;
+    }
+    else {
+      // Deselect all
+      skierFilter.map(s => s.selected = false);
+    }
     this.filterVideos(this.state.dateFilter, skierFilter);
   }
 
