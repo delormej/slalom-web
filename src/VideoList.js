@@ -85,10 +85,11 @@ class VideoList extends React.Component {
     // var count = skiers != null ? skiers.length : 0;
     console.log('filtering by skier: ' + skier);
     const i = this.state.skiersFilter.findIndex(s => s.skier === skier);
-    this.state.skiersFilter[i].selected = !this.state.skiersFilter[i].selected;
+    const filter = [...this.state.skiersFilter];
+    filter[i].selected = !filter[i].selected;
 
     this.setState( {
-      skiersFilter: [...this.state.skiersFilter]
+      skiersFilter: filter
     });
   }
 
