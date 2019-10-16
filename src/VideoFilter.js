@@ -12,21 +12,17 @@ const useStyles = makeStyles(theme => ({
     filter: {
         paddingTop: theme.spacing(6),
       },
-      videoCount: {
+    videoCount: {
         marginLeft: '30px',
-      },    
-      loading: {
-        margin: 'auto',
-        width: '50%'
-      }
+    },
 }));      
 
-function ShowProgressBar(props) {
+function ShowVideoCount(props) {
     const classes = useStyles();
 
-    if (props.show === true) {
+    if (props.loading === true) {
       return (
-        <div className={classes.loading}>
+        <div className={classes.videoCount}>
             <CircularProgress />
             <Typography variant="caption" 
                     color="textSecondary" 
@@ -37,7 +33,13 @@ function ShowProgressBar(props) {
       )
     }  
     else {
-      return <div/>
+      return (
+        <Typography variant="caption" 
+                color="textSecondary" 
+                className={classes.videoCount}>
+            Showing {props.filteredVideos} of {props.totalVideos} Videos
+        </Typography>          
+      )
     }
 }
 
@@ -61,14 +63,9 @@ export default function VideoFilter(props) {
                             />
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography variant="caption" 
-                                color="textSecondary" 
-                                className={classes.videoCount}>
-                            Showing {props.filteredVideos} of {props.totalVideos} Videos
-                        </Typography>
-                    </Grid>   
-                    <Grid item xs={12}>
-                        <ShowProgressBar show={props.loading} />
+                        <ShowVideoCount loading={props.loading} 
+                            filteredVideos={props.filteredVideos} 
+                            totalVideos={props.totalVideos} />
                     </Grid>
                 </Grid>
             </Paper>
