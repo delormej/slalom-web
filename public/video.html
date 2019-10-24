@@ -22,11 +22,13 @@
     <script>
       var urlParams = new URLSearchParams(window.location.search);
       var url = urlParams.get('video'); 
-      console.log("video:" + url);
+      var preview = url.replace('_ts.MP4', '.PNG');
+      console.log("video:" + url + '\npreview:' + preview);
       var video = videojs("my-video");
+      video.poster(preview);
       video.src({
         type: 'video/mp4',
-        src: url
+        src: url,
       });  
       video.ready(function() {
           this.playbackRate(0.25);

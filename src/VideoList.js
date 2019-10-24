@@ -36,10 +36,11 @@ class VideoList extends React.Component {
       videos: [],
       dateFilter: null,
       skiersFilter: [],
+      loading: false,
       error: ''
     }
   }
-
+  
   getDateString(dateToFormat) {
     var dd = dateToFormat.getDate();
     var mm = dateToFormat.getMonth()+1; //January is 0!
@@ -134,7 +135,8 @@ class VideoList extends React.Component {
     this.setState( {
       dateFilter: date,
       skiersFilter: skiers,
-      videos: filtered
+      videos: filtered,
+      loading: false
     } );
   }
 
@@ -144,6 +146,8 @@ class VideoList extends React.Component {
 
     var util = new Util();
     var listUrl = util.getBaseUrl() + '/api/list';    
+
+    this.setState({loading: true});
 
     axios.get(listUrl)
       .then(res => {
@@ -156,7 +160,11 @@ class VideoList extends React.Component {
       })
       .catch((error) => {
         if (this._isMounted) {
-          this.setState({ error: 'Unable to load videos.  ' + error});
+          this.setState(
+            { 
+              error: 'Unable to load videos.  ' + error,
+              loading: false 
+            });
         }        
       });
   }
@@ -182,6 +190,7 @@ class VideoList extends React.Component {
           filterSkierCallback={this.filterBySkier} 
           totalVideos={this.videos != null ? this.videos.length : 0}
           filteredVideos={this.state.videos != null ? this.state.videos.length : 0}
+          loading={this.state.loading}
           />
         <Typography variant="h5" color="error">{this.state.error}</Typography>
         <Container className={classes.cardGrid} maxWidth="md">
