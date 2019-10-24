@@ -72,7 +72,7 @@ function getDateString(date) {
 }
 
 function getTimeString(date) {
-  const formattedDate = format(parseISO(date), 'p');
+  const formattedDate = format(parseISO(date), 'H:MM a');
   return formattedDate;  
 }
 
