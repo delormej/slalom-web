@@ -162,12 +162,17 @@ class Video extends React.Component {
 
   getVideoUrl() {
       var relativeUrl = './video.html?video=';
-      var videoUrl = relativeUrl + this.state.url;
+      var videoUrl = relativeUrl + (this.state.hotUrl || this.state.url);
       return videoUrl;
   }
 
   getThumnailUrl() {
       return this.state.thumbnailUrl;
+  }
+
+  getImageFilename(url) {
+    var lastSlash = url.lastIndexOf('/') + 1;
+    return url.substring(lastSlash);
   }
 
   SaveButton() {
@@ -200,7 +205,7 @@ class Video extends React.Component {
             <CardMedia
                 className={classes.cardMedia}
                 image={video.thumbnailUrl}
-                title="Video Thumbnail"
+                title={"Video Thumbnail: " + this.getImageFilename(video.thumbnailUrl)}
             />
             <IconButton className={classes.overlay} title="Play Video"
               onClick={() => window.open(this.getVideoUrl())}>
