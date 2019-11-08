@@ -20,6 +20,15 @@ const useStyles = makeStyles(theme => ({
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
   },
+  logText: {
+    whiteSpace: 'pre-line',
+    whiteSpace: 'pre-wrap',
+    fontSize: theme.typography.pxToRem(12),
+    fontFamily: 'Courier New,Courier',
+    color: 'white',
+    backgroundColor: 'black'
+    
+  }
 }));
 
 export default function ContainerLogs() {
@@ -47,6 +56,7 @@ export default function ContainerLogs() {
 
     function getLogs() {
         setLogs("loading...");
+        console.log("Loading logs for " + props.name);
 
         const logsUrl = "http://dev-ski-jobs.azurewebsites.net/aci/logs?container=" + props.name;
         axios.get(logsUrl)
@@ -75,8 +85,7 @@ export default function ContainerLogs() {
       <Typography className={classes.secondaryHeading}>{props.video}</Typography>
     </ExpansionPanelSummary>
     <ExpansionPanelDetails>
-    <Typography variant="body1"
-          style={{whiteSpace: 'pre-line'},{whiteSpace: 'pre-wrap'}}>
+    <Typography className={classes.logText}>
         Image used:{props.image}<br/>
         {logs}
       </Typography>
