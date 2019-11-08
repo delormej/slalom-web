@@ -13,7 +13,12 @@ const useStyles = makeStyles(theme => ({
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
+    flexBasis: '33.33%',
+    flexShrink: 0,
+  },
+  secondaryHeading: {
+    fontSize: theme.typography.pxToRem(15),
+    color: theme.palette.text.secondary,
   },
 }));
 
@@ -41,12 +46,18 @@ export default function ContainerLogs() {
     const [logs, setLogs] = useState("");
 
     function getLogs() {
-      setLogs("loading...");
-      setTimeout(() => {
-        var logs = "logs for " + props.container;
-        setLogs(logs);
-      }, 2000);
-    }
+        setLogs("loading...");
+
+        const logsUrl = "http://dev-ski-jobs.azurewebsites.net/aci/logs?container=" + props.container;
+        axios.get(logsUrl)
+          .then(res => {
+            setLogs(res.data);
+          })
+          .catch((error) => {
+            console.log("getLogs error: " + error);
+          });
+      }      
+
   
     function onExpansionChange()
     {
@@ -61,6 +72,7 @@ export default function ContainerLogs() {
       expandIcon={<ExpandMoreIcon />}
     >
       <Typography className={classes.heading}>{props.container}</Typography>
+      <Typography className={classes.secondaryHeading}>{props.video}</Typography>
     </ExpansionPanelSummary>
     <ExpansionPanelDetails>
       <Typography>
@@ -71,7 +83,7 @@ export default function ContainerLogs() {
     );
   }
 
-  var panels = containers.map( (k) => <Panel key={k.name} container={k.name} /> );
+  var panels = containers.map( (v) => <Panel key={v.name} container={v.name} video={v.video} /> );
 
   return (
     <div className={classes.root}>
