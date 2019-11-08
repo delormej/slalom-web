@@ -1,9 +1,9 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import SkiMenu from './SkiMenu';
 
 const useStyles = makeStyles(theme => ({
       toolbarButtons: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SkiToolBar() {
+export default function SkiToolBar(props) {
   const classes = useStyles();
   
   return (  
@@ -27,12 +27,7 @@ export default function SkiToolBar() {
           <Typography variant="h6" color="inherit" noWrap>
             Water Ski Video Log
           </Typography>
-          <span className={classes.toolbarButtons}>
-            <Button className={classes.donateButton} color="inherit"
-                onClick={() => window.open('http://www.threeseasonski.com/About_Us.html')}>
-              Donate
-            </Button>
-          </span>
+          <SkiMenu {...props} />              
         </Toolbar>
       </AppBar>
   )

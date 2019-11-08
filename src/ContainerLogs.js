@@ -100,6 +100,7 @@ export default function ContainerLogs() {
 
   return (
     <div className={classes.root}>
+      <Typography className={classes.heading}>Count: {containers.length} of 100</Typography>
       {panels}
     </div>
   );
