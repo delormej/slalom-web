@@ -48,7 +48,7 @@ export default function ContainerLogs() {
     function getLogs() {
         setLogs("loading...");
 
-        const logsUrl = "http://dev-ski-jobs.azurewebsites.net/aci/logs?container=" + props.container;
+        const logsUrl = "http://dev-ski-jobs.azurewebsites.net/aci/logs?container=" + props.name;
         axios.get(logsUrl)
           .then(res => {
             setLogs(res.data);
@@ -71,19 +71,23 @@ export default function ContainerLogs() {
     <ExpansionPanelSummary
       expandIcon={<ExpandMoreIcon />}
     >
-      <Typography className={classes.heading}>{props.container}</Typography>
+      <Typography className={classes.heading}>{props.name}</Typography>
       <Typography className={classes.secondaryHeading}>{props.video}</Typography>
     </ExpansionPanelSummary>
     <ExpansionPanelDetails>
-      <Typography>
-        {props.container + "... " + logs}
+    <Typography variant="body1"
+          style={{whiteSpace: 'pre-line'},{whiteSpace: 'pre-wrap'}}>
+        Image used:{props.image}<br/>
+        {logs}
       </Typography>
     </ExpansionPanelDetails>
   </ExpansionPanel>
     );
   }
 
-  var panels = containers.map( (v) => <Panel key={v.name} container={v.name} video={v.video} /> );
+  var panels = containers.map( (video) => 
+    <Panel key={video.name} {...video} /> 
+  );
 
   return (
     <div className={classes.root}>
