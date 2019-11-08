@@ -5,6 +5,7 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,10 +24,15 @@ export default function ContainerLogs() {
     getContainers();
 
   function getContainers() {
-    setTimeout(() => {
-      var c = [ {name: 'aci-2'}, {name: 'aci-3'}, {name: 'aci-4'}];
-      setContainers(c);
-    }, 1400);
+
+    const listUrl = "http://dev-ski-jobs.azurewebsites.net/aci/list";
+    axios.get(listUrl)
+      .then(res => {
+        setContainers(res.data);
+      })
+      .catch((error) => {
+        console.log("getContainers error: " + error);
+      });
   }
 
   function Panel(props) {
