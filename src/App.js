@@ -6,6 +6,7 @@ import Link from '@material-ui/core/Link';
 import SkiToolBar from './SkiToolBar';
 import VideoList from './VideoList';
 import AdminConsole from './AdminConsole';
+import Login from './Login';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -94,6 +95,7 @@ export default function App() {
     <React.Fragment>
       <CssBaseline />
       <SkiToolBar navigate={setPage} currentPage={page} />
+      <Login />
       <ShowPage page={page} />
       <Footer />  
     </React.Fragment>
