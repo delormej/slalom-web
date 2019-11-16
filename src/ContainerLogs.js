@@ -39,8 +39,11 @@ export default function ContainerLogs() {
 
   function getContainers() {
 
-    const listUrl = "http://dev-ski-jobs.azurewebsites.net/aci/list";
-    axios.get(listUrl)
+    //const listUrl = "http://dev-ski-jobs.azurewebsites.net/aci/list";
+    var accessToken = "";
+    const AuthStr = 'Bearer '.concat(accessToken);
+    const listUrl = "http://localhost:5000/aci/list";
+    axios.get(listUrl,  { headers: { Authorization: AuthStr } })
       .then(res => {
         setContainers(res.data);
       })
@@ -58,7 +61,7 @@ export default function ContainerLogs() {
         setLogs("loading...");
         console.log("Loading logs for " + props.name);
 
-        const logsUrl = "http://dev-ski-jobs.azurewebsites.net/aci/logs?container=" + props.name;
+        const logsUrl = "https://dev-ski-jobs.azurewebsites.net/aci/logs?container=" + props.name;
         axios.get(logsUrl)
           .then(res => {
             setLogs(res.data);
