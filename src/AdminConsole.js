@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     },
   }));
 
-export default function AdminConsole() {
+export default function AdminConsole(props) {
     const classes = useStyles();
 
     return (
@@ -21,7 +21,7 @@ export default function AdminConsole() {
             <Button variant="contained" color="secondary" className={classes.button}>
                 Delete All
             </Button>
-            <ContainerLogs />
+            <ContainerLogs accessToken={props.accessToken} />
         </Paper>
     );
 }

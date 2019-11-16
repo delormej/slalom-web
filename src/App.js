@@ -85,18 +85,28 @@ function ShowPage(props) {
   if (page === "default")
     return <VideoList />
   else if (page === "admin")
-    return <AdminConsole />
+    return <AdminConsole accessToken={props.accessToken} />
 }
 
 export default function App() {
   const [page, setPage] = useState("default");
+  const [userId, setUserId] = useState("");
+  const [accessToken, setAccessToken] = useState("");
+
+  function OnAuthenticate(response) {
+    console.log("OnAuthenticate: " + response.userID);
+    if (response.userID && response.accessToken) {
+      setUserId(response.userID);
+      setAccessToken(response.accessToken);
+    }
+  }
 
   return (
     <React.Fragment>
       <CssBaseline />
-      <SkiToolBar navigate={setPage} currentPage={page} />
-      <Login />
-      <ShowPage page={page} />
+      <SkiToolBar navigate={setPage} currentPage={page} userId={userId} />
+      <Login OnAuthenticate={OnAuthenticate} />
+      <ShowPage page={page} accessToken={accessToken} />
       <Footer />  
     </React.Fragment>
   );
