@@ -31,19 +31,23 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ContainerLogs() {
+export default function ContainerLogs(props) {
   const classes = useStyles();
   const [containers, setContainers] = useState([]);
   if (containers.length == 0)
     getContainers();
 
-  function getContainers() {
+  function getHttpContent(urlPath) {
+    const baseUrl = "https://dev-ski-jobs.azurewebsites.net/aci/";
+    const url = baseUrl + urlPath;
+    const bearerToken = 'Bearer '.concat(props.accessToken);
 
-    //const listUrl = "http://dev-ski-jobs.azurewebsites.net/aci/list";
-    var accessToken = "";
-    const AuthStr = 'Bearer '.concat(accessToken);
-    const listUrl = "http://localhost:5000/aci/list";
-    axios.get(listUrl,  { headers: { Authorization: AuthStr } })
+    return axios.get(url, { headers: { Authorization: bearerToken } });
+  }
+    
+  function getContainers() {
+    const urlPath = "list";
+    getHttpContent(urlPath)
       .then(res => {
         setContainers(res.data);
       })
@@ -58,20 +62,19 @@ export default function ContainerLogs() {
     const [logs, setLogs] = useState("");
 
     function getLogs() {
-        setLogs("loading...");
-        console.log("Loading logs for " + props.name);
+      setLogs("loading...");
+      console.log("Loading logs for " + props.name);
 
-        const logsUrl = "https://dev-ski-jobs.azurewebsites.net/aci/logs?container=" + props.name;
-        axios.get(logsUrl)
-          .then(res => {
-            setLogs(res.data);
-          })
-          .catch((error) => {
-            console.log("getLogs error: " + error);
-          });
-      }      
+      const logsUrl = "logs?container=" + props.name;
+      getHttpContent(logsUrl)
+        .then(res => {
+          setLogs(res.data);
+        })
+        .catch((error) => {
+          console.log("getLogs error: " + error);
+        });
+    }      
 
-  
     function onExpansionChange()
     {
       setExpanded(!expanded);
