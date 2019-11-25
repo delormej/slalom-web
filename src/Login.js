@@ -16,6 +16,7 @@ export default function Login(props) {
       icon="fa-facebook"
       version="5.0"
       reAuthenticate={true}
+      size="metro"
       />
     )
 }

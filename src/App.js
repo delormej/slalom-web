@@ -89,6 +89,7 @@ function ShowPage(props) {
 }
 
 export default function App() {
+  const classes = useStyles();
   const [page, setPage] = useState("default");
   const [userId, setUserId] = useState("");
   const [accessToken, setAccessToken] = useState("");
@@ -105,9 +106,9 @@ export default function App() {
     <React.Fragment>
       <CssBaseline />
       <SkiToolBar navigate={setPage} currentPage={page} userId={userId} />
-      <Login OnAuthenticate={OnAuthenticate} />
       <ShowPage page={page} accessToken={accessToken} />
       <Footer />  
+      <Login OnAuthenticate={OnAuthenticate} />
     </React.Fragment>
   );
 }
