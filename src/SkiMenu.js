@@ -45,9 +45,10 @@ export default function SkiMenu(props) {
     window.open('http://www.threeseasonski.com/About_Us.html');      
   }
 
-  function AdminMenuItems() {
+  function AdminMenuItems(props) {
     var items;
-    if (!props.userID) 
+    console.log("AdminMenuItem::" + props.userId);
+    if (!props.userId) 
       return <div />;
     if (props.currentPage === "default")
       return <MenuItem onClick={handleAdmin}>Admin Console</MenuItem>;
@@ -68,7 +69,7 @@ export default function SkiMenu(props) {
         onClose={handleClose}
       >
         <MenuItem onClick={handleDonate}>Donate</MenuItem>
-        <AdminMenuItems />
+        <AdminMenuItems userId={props.userId} currentPage={props.currentPage} />
       </Menu>
     </span>
   );

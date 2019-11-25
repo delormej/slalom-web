@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function SkiToolBar(props) {
   const classes = useStyles();
-  
+  console.log("SkiToolBar:: " + props.userId);
   return (  
       <AppBar position="static">
         <Toolbar className={classes.appBar}>
