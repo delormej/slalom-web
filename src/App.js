@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 import SkiToolBar from './SkiToolBar';
 import VideoList from './VideoList';
+import AdminConsole from './AdminConsole';
+import Login from './Login';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,32 +54,61 @@ const useStyles = makeStyles(theme => ({
   },  
 }));
 
-export default function App() {
+function Footer() {
   const classes = useStyles();
   const env = process.env.NODE_ENV;
   const version = process.env.REACT_APP_VERSION;
 
   return (
+    <footer className={classes.footer}>
+        <Typography variant="h6" align="center" gutterBottom>
+          South Pond of Lake Cochituate, Natick MA
+        </Typography>
+        <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
+          Env: {env}, Version: {version}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" align="center">
+          {'Copyright © '}
+          <Link color="inherit" href="https://http://threeseasonski.com/">
+            Three Season Ski Club
+          </Link>{' '}
+          {new Date().getFullYear()}
+          {'.'}
+        </Typography>
+    </footer>    
+  );
+}
+
+function ShowPage(props) {
+  const page = props.page;
+
+  if (page === "default")
+    return <VideoList />
+  else if (page === "admin")
+    return <AdminConsole accessToken={props.accessToken} />
+}
+
+export default function App() {
+  const classes = useStyles();
+  const [page, setPage] = useState("default");
+  const [userId, setUserId] = useState("");
+  const [accessToken, setAccessToken] = useState("");
+
+  function OnAuthenticate(response) {
+    console.log("OnAuthenticate: " + response.userID);
+    if (response.userID && response.accessToken) {
+      setUserId(response.userID);
+      setAccessToken(response.accessToken);
+    }
+  }
+
+  return (
     <React.Fragment>
       <CssBaseline />
-      <SkiToolBar />
-      <VideoList  />
-      <footer className={classes.footer}>
-      <Typography variant="h6" align="center" gutterBottom>
-        South Pond of Lake Cochituate, Natick MA
-      </Typography>
-      <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-        Env: {env}, Version: {version}
-      </Typography>
-      <Typography variant="body2" color="textSecondary" align="center">
-        {'Copyright © '}
-        <Link color="inherit" href="https://http://threeseasonski.com/">
-          Three Season Ski Club
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-   </footer>
+      <SkiToolBar navigate={setPage} currentPage={page} userId={userId} />
+      <ShowPage page={page} accessToken={accessToken} />
+      <Footer />  
+      <Login OnAuthenticate={OnAuthenticate} />
     </React.Fragment>
   );
 }
