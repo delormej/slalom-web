@@ -7,6 +7,7 @@ import SkiToolBar from './SkiToolBar';
 import VideoList from './VideoList';
 import AdminConsole from './AdminConsole';
 import Login from './Login';
+import ErrorBoundry from './ErrorBoundry';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -106,9 +107,11 @@ export default function App() {
     <React.Fragment>
       <CssBaseline />
       <SkiToolBar navigate={setPage} currentPage={page} userId={userId} />
-      <ShowPage page={page} accessToken={accessToken} />
-      <Footer />  
-      <Login OnAuthenticate={OnAuthenticate} />
+      <ErrorBoundry>      
+        <ShowPage page={page} accessToken={accessToken} />
+        <Footer />  
+        <Login OnAuthenticate={OnAuthenticate} />
+      </ErrorBoundry>
     </React.Fragment>
   );
 }
