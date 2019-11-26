@@ -97,6 +97,7 @@ export default function App() {
 
   function OnAuthenticate(response) {
     console.log("OnAuthenticate: " + response.userID);
+    console.log("OnAuthenticate: " + response.accessToken);
     if (response.userID && response.accessToken) {
       setUserId(response.userID);
       setAccessToken(response.accessToken);
