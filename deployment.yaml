@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skiweb
+  labels:
+    app: skiweb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: skiweb
+  template:
+    metadata:
+      labels:
+        app: skiweb
+    spec:
+      containers:
+      - name: skiweb
+        image: jasondelacr.azurecr.io/skiweb:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: skiweb-service
+spec:
+  selector:
+    app: skiweb
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP        
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: skiweb-ingress
+spec:
+  rules:
+  - host: skiweb.40.71.233.111.nip.io
+    http:
+      paths:
+      - backend:
+          serviceName: skiweb-service
+          servicePort: 80
+        path: /
