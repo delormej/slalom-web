@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.secondary,
   },
   logText: {
-    whiteSpace: 'pre-line',
+    /*whiteSpace: 'pre-line',*/
     whiteSpace: 'pre-wrap',
     fontSize: theme.typography.pxToRem(12),
     fontFamily: 'Courier New,Courier',
@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 export default function ContainerLogs(props) {
   const classes = useStyles();
   const [containers, setContainers] = useState([]);
-  if (containers.length == 0)
+  if (containers.length === 0)
     getContainers();
 
   function getHttpContent(urlPath) {

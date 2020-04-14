@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
@@ -46,7 +45,6 @@ export default function SkiMenu(props) {
   }
 
   function AdminMenuItems(props) {
-    var items;
     console.log("AdminMenuItem::" + props.userId);
     if (!props.userId) 
       return <div />;
