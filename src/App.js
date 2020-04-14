@@ -70,7 +70,7 @@ function Footer() {
         </Typography>
         <Typography variant="body2" color="textSecondary" align="center">
           {'Copyright © '}
-          <Link color="inherit" href="https://http://threeseasonski.com/">
+          <Link color="inherit" href="http://www.threeseasonski.com/">
             Three Season Ski Club
           </Link>{' '}
           {new Date().getFullYear()}

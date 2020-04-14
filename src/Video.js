@@ -156,6 +156,7 @@ class Video extends React.Component {
     var imageUrl = this.imageApiUrl + this.state.jsonUrl;
     if (this.state.ropeLengthM != null && this.state.ropeLengthM !== "0.0") {
         imageUrl += '&rope=' + this.state.ropeLengthM;
+        imageUrl += '&cl=' + this.state.centerLineDegreeOffset;
     }
     return imageUrl;
   }
