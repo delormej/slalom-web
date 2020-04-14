@@ -16,9 +16,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 import VideoHeader from './VideoHeader';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import StarIcon from '@material-ui/icons/Star';
 import InsertChartIcon from '@material-ui/icons/InsertChart';
-import NotInterestedIcon from '@material-ui/icons/NotInterested';
 
 const styles = theme => ({
   root: {
@@ -81,9 +80,10 @@ const styles = theme => ({
   courseAndSpeed: {
     paddingBottom: theme.spacing(3),
   },
-  analysisButton: {
-    display: 'flex',
-    marginLeft: 'auto'
+  starredVideo: {
+    color: 'yellow',
+  },
+  unStarredVideo: {
   }
 });
 
@@ -97,6 +97,7 @@ class Video extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.saveClick = this.saveClick.bind(this);
     this.deleteClick = this.deleteClick.bind(this);
+    this.starClick = this.starClick.bind(this);
     this.DeleteButton = this.DeleteButton.bind(this);
     this.SaveButton = this.SaveButton.bind(this);
 
@@ -135,6 +136,13 @@ class Video extends React.Component {
       {markedForDelete: !this.state.markedForDelete},
       this.save
     );
+  }
+
+  starClick(event) {
+    this.setState(
+      {starred: !this.state.starred},
+      this.save
+    );    
   }
 
   save() {
@@ -232,7 +240,7 @@ class Video extends React.Component {
                   <Grid item xs={12} sm={6}>
                       <TextField
                           required
-                          id="skier"
+                          id={this.state.rowKey}
                           name="skier"
                           label="Skier name"
                           fullWidth
@@ -276,11 +284,11 @@ class Video extends React.Component {
           </CardContent>
           <CardActions>
               <this.SaveButton />
-              <IconButton onClick={() => window.open(this.getImageUrl())}>
+              <IconButton aria-label="Analysis" title="Analysis" onClick={() => window.open(this.getImageUrl())}>
                 <InsertChartIcon />
               </IconButton>
-              <IconButton onClick={() => null}>
-                { /* insert code here if already favorite */ false ? <FavoriteIcon /> : <NotInterestedIcon /> }
+              <IconButton aria-label="Starred" title="Starred" onClick={() => this.starClick()}>
+                <StarIcon className={this.state.starred ? classes.starredVideo : classes.unStarredVideo} />
               </IconButton>
           </CardActions>
       </Card>
