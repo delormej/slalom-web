@@ -116,7 +116,7 @@ class VideoList extends React.Component {
 
     // Filter by starred.
     if (starred)
-      filtered = this.videos.filter(v => v.starred == true);
+      filtered = this.videos.filter(v => v.starred === true);
     else 
       filtered = this.videos;
 
@@ -158,6 +158,7 @@ class VideoList extends React.Component {
 
     var util = new Util();
     var listUrl = util.getBaseUrl() + '/api/list';    
+    console.log("Getting videos from: " + listUrl);
 
     this.setState({loading: true});
 

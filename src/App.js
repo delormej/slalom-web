@@ -10,48 +10,9 @@ import Login from './Login';
 import ErrorBoundry from './ErrorBoundry';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%',
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-  },    
-  icon: {
-    marginRight: theme.spacing(2),
-  },
-  heroContent: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
-  },
-  heroButtons: {
-    marginTop: theme.spacing(4),
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
   footer: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
-  },
-  section1: {
-    margin: theme.spacing(3, 2),
-  },  
-  section2: {
-    margin: theme.spacing(2),
-  },
-  avatar: {
-    backgroundColor: 'lightgrey',
   },  
 }));
 
@@ -90,7 +51,6 @@ function ShowPage(props) {
 }
 
 export default function App() {
-  const classes = useStyles();
   const [page, setPage] = useState("default");
   const [userId, setUserId] = useState("");
   const [accessToken, setAccessToken] = useState("");

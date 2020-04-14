@@ -2,14 +2,14 @@ export default class Util {
 
   getBaseUrl() {
     // sets the appropriate baseurl based on whether we're called via ssl or not (https:// or http://)
-    var imageApiPath = '//ski-app.azurewebsites.net'; 
+    const defaultApiHostname = process.env.REACT_APP_SKIAPI_HOST || 'ski-app.azurewebsites.net'; 
     var baseUrl = '';
     
     if (typeof window !== 'undefined') {
-      baseUrl = window.location.protocol + imageApiPath;
+      baseUrl = window.location.protocol + '//' + defaultApiHostname;
     }
     else {
-      baseUrl = 'http://' + imageApiPath;
+      baseUrl = 'http://' + defaultApiHostname;
     }
     return baseUrl;
   }

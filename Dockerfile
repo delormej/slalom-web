@@ -1,11 +1,14 @@
-FROM node:10
-ENV PORT 8080
-EXPOSE 8080
+FROM node:lts AS build
+ARG default_port=8080
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-COPY package.json .
-RUN npm install
-COPY . .
+COPY . /src/
+WORKDIR /src/
+RUN npm install && npm run build
 
-CMD ["npm", "start"]
+FROM node:lts-slim AS runtime
+ENV PORT=${default_port}
+
+COPY --from=build /src/build /slalom-web
+RUN npm install -g serve
+
+ENTRYPOINT /usr/local/bin/serve -s /slalom-web -l ${PORT}
