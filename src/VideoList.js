@@ -26,6 +26,7 @@ class VideoList extends React.Component {
     this.filterVideos = this.filterVideos.bind(this);
     this.filterBySkier = this.filterBySkier.bind(this);
     this.filterByDate = this.filterByDate.bind(this);
+    this.filterByStarred = this.filterByStarred.bind(this);
 
     // State which does not force render()
     this._isMounted = false;
@@ -36,6 +37,7 @@ class VideoList extends React.Component {
       videos: [],
       dateFilter: null,
       skiersFilter: [],
+      starredFilter: false,
       loading: false,
       error: ''
     }
@@ -80,9 +82,13 @@ class VideoList extends React.Component {
     return skiersFilter;
   }
 
+  filterByStarred() {
+    this.filterVideos(this.state.dateFilter, this.state.skiersFilter, !this.state.starredFilter);
+  }
+
   filterByDate(date) {
     console.log('filtering by date: ' + date);
-    this.filterVideos(date, this.state.skiersFilter);
+    this.filterVideos(date, this.state.skiersFilter, this.state.starredFilter);
   }
 
   filterBySkier(skier) {
@@ -96,23 +102,28 @@ class VideoList extends React.Component {
       // Deselect all
       skierFilter.map(s => s.selected = false);
     }
-    this.filterVideos(this.state.dateFilter, skierFilter);
+    this.filterVideos(this.state.dateFilter, skierFilter, this.state.starredFilter);
   }
 
   /*
     date = new Date()
     skiers = [ {skier: 'foo', selected:true}, ... ]
   */
-  filterVideos(date, skiers) {
+  filterVideos(date, skiers, starred) {
     var filtered = [];
     
-    // Filter by date first.
+    console.log("Filtering... starredFilter:" + this.state.starredFilter);
+
+    // Filter by starred.
+    if (starred)
+      filtered = this.videos.filter(v => v.starred == true);
+    else 
+      filtered = this.videos;
+
+    // Filter by date.
     if (date != null) {
       const formattedDate = this.getDateString(date);
-      filtered = this.videos.filter(v => v.partitionKey === formattedDate);
-    }
-    else {
-      filtered = this.videos;
+      filtered = filtered.filter(v => v.partitionKey === formattedDate);
     }
     
     // Then filter for selected skiers.
@@ -136,6 +147,7 @@ class VideoList extends React.Component {
       dateFilter: date,
       skiersFilter: skiers,
       videos: filtered,
+      starredFilter: starred,
       loading: false
     } );
   }
@@ -180,14 +192,17 @@ class VideoList extends React.Component {
     var countString = 'Showing: ' + filteredCount + ' of ' + totalCount;
     console.log('render... ' + countString);
     console.log('skiers count... ' + this.state.skiersFilter.length);
+    console.log('starredFilter... ' + this.state.starredFilter);
 
     return (
       <React.Fragment>
         <VideoFilter videos={this.state.videos} 
           date={this.state.dateFilter} 
           skiers={this.state.skiersFilter}
+          starred={this.state.starredFilter}
           filterDateCallback={this.filterByDate}
           filterSkierCallback={this.filterBySkier} 
+          filterStarredCallback={this.filterByStarred}
           totalVideos={this.videos != null ? this.videos.length : 0}
           filteredVideos={this.state.videos != null ? this.state.videos.length : 0}
           loading={this.state.loading}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
 import DatePicker from './DatePicker';
 import SkierPicker from './SkierPicker';
@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 const useStyles = makeStyles(theme => ({
     filter: {
@@ -45,16 +47,28 @@ function ShowVideoCount(props) {
 
 export default function VideoFilter(props) {
     const classes = useStyles();
+    const [starredFilter, setStarredFilter] = useState(props.starredFilter);
   
     return (
         <Container maxWidth="md" className={classes.filter}>
             <Paper>
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
+                        <FormControlLabel className={classes.videoCount}
+                                value="start"
+                                control={
+                                    <Switch color="primary" 
+                                        onClick={props.filterStarredCallback}
+                                    />
+                                }                               
+                                checked={starredFilter}
+                                label="Starred"
+                                labelPlacement="start"
+                        />                                    
                         <DatePicker date={props.date} 
                             videos={props.videos} 
                             filterCallback={props.filterDateCallback} 
-                        />
+                        />                        
                     </Grid>
                     <Grid item xs={6}>
                         <SkierPicker skiers={props.skiers} 
