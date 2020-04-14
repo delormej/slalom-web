@@ -16,6 +16,9 @@ import CardMedia from '@material-ui/core/CardMedia';
 import VideoHeader from './VideoHeader';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import InsertChartIcon from '@material-ui/icons/InsertChart';
+import NotInterestedIcon from '@material-ui/icons/NotInterested';
 
 const styles = theme => ({
   root: {
@@ -273,10 +276,12 @@ class Video extends React.Component {
           </CardContent>
           <CardActions>
               <this.SaveButton />
-              <Button size="small" color="secondary" className={classes.analysisButton}
-                onClick={() => window.open(this.getImageUrl())}>
-                Analysis
-              </Button>
+              <IconButton onClick={() => window.open(this.getImageUrl())}>
+                <InsertChartIcon />
+              </IconButton>
+              <IconButton onClick={() => null}>
+                { /* insert code here if already favorite */ false ? <FavoriteIcon /> : <NotInterestedIcon /> }
+              </IconButton>
           </CardActions>
       </Card>
     </Grid>
