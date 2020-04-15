@@ -5,7 +5,7 @@ metadata:
   labels:
     app: skiweb
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: skiweb
@@ -16,9 +16,12 @@ spec:
     spec:
       containers:
       - name: skiweb
-        image: jasondelacr.azurecr.io/skiweb:latest
+        image: wthacr.azurecr.io/skiweb:v1.1.0
+        env:
+        - name: PORT
+          value: "3000"        
         ports:
-        - containerPort: 8080
+        - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
@@ -29,8 +32,8 @@ spec:
     app: skiweb
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 8080
+      port: 3000
+      targetPort: 3000
   type: ClusterIP        
 ---
 apiVersion: extensions/v1beta1
@@ -39,10 +42,10 @@ metadata:
   name: skiweb-ingress
 spec:
   rules:
-  - host: skiweb.40.71.233.111.nip.io
+  - host: web.ski.jasondel.com
     http:
       paths:
       - backend:
           serviceName: skiweb-service
-          servicePort: 80
+          servicePort: 3000
         path: /
