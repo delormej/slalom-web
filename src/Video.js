@@ -18,6 +18,8 @@ import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import InsertChartIcon from '@material-ui/icons/InsertChart';
 import ReactPlayer from 'react-player';
+import { findDOMNode } from 'react-dom';
+import screenfull from 'screenfull';
 
 const styles = theme => ({
   root: {
@@ -94,6 +96,7 @@ class Video extends React.Component {
     super(props);
     const { classes } = props;
     this.classes = classes;
+    this.videoRef = React.createRef();
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.saveClick = this.saveClick.bind(this);
@@ -101,6 +104,7 @@ class Video extends React.Component {
     this.starClick = this.starClick.bind(this);
     this.DeleteButton = this.DeleteButton.bind(this);
     this.SaveButton = this.SaveButton.bind(this);
+    this.handleClickFullscreen = this.handleClickFullscreen.bind(this);
 
     var util = new Util();
     this.baseUrl = util.getBaseUrl();
@@ -113,7 +117,7 @@ class Video extends React.Component {
     // Using spread operator to promote video object properties to be
     // shallow properties of state.  React doesn't repaint if deep nested
     // properties are changed.
-    this.state = { ...this.props.video, isFull: false };
+    this.state = { ...this.props.video };
   }
 
   handleInputChange(event) {
@@ -205,8 +209,9 @@ class Video extends React.Component {
       return <button onClick={this.deleteClick}>Delete</button>;
   }
 
-  goFull = () => {
-    this.setState({ isFull: true });
+  handleClickFullscreen = () => {
+    if (!screenfull.isFullscreen)
+      screenfull.request(findDOMNode(this.videoRef.current))
   }
   
   render() {
@@ -220,8 +225,8 @@ class Video extends React.Component {
           <CardMedia
               className={classes.cardMedia}
               title={"Video Thumbnail: " + this.getImageFilename(video.thumbnailUrl)}>
-            <ReactPlayer url={this.getVideoUrl()} controls="true" playing="true" 
-                light={video.thumbnailUrl} 
+            <ReactPlayer url={this.getVideoUrl()} controls="true" playing="true" ref={this.videoRef}
+                light={video.thumbnailUrl} onClick={this.handleClickFullscreen}
                 volume="0" muted="true" width="100%" height="100%" playbackRate={0.25} />
           </CardMedia>
           <CardContent className={classes.cardContent}>
