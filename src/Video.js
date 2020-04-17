@@ -20,6 +20,7 @@ import InsertChartIcon from '@material-ui/icons/InsertChart';
 import ReactPlayer from 'react-player';
 import { findDOMNode } from 'react-dom';
 import screenfull from 'screenfull';
+import Drawer from '@material-ui/core/Drawer';
 
 const styles = theme => ({
   root: {
@@ -87,6 +88,9 @@ const styles = theme => ({
     color: 'yellow',
   },
   unStarredVideo: {
+  },
+  drawer: {
+    backgroundColor: "black",
   }
 });
 
@@ -105,6 +109,8 @@ class Video extends React.Component {
     this.DeleteButton = this.DeleteButton.bind(this);
     this.SaveButton = this.SaveButton.bind(this);
     this.handleClickFullscreen = this.handleClickFullscreen.bind(this);
+    this.openChartDrawer = this.openChartDrawer.bind(this);
+    this.closeChartDrawer = this.closeChartDrawer.bind(this);
 
     var util = new Util();
     this.baseUrl = util.getBaseUrl();
@@ -117,7 +123,7 @@ class Video extends React.Component {
     // Using spread operator to promote video object properties to be
     // shallow properties of state.  React doesn't repaint if deep nested
     // properties are changed.
-    this.state = { ...this.props.video };
+    this.state = { ...this.props.video, isChartDrawerOpen: false };
   }
 
   handleInputChange(event) {
@@ -213,6 +219,14 @@ class Video extends React.Component {
     if (!screenfull.isFullscreen)
       screenfull.request(findDOMNode(this.videoRef.current))
   }
+
+  openChartDrawer() {
+    this.setState({isChartDrawerOpen: true});
+  }
+  closeChartDrawer() {
+    this.setState({isChartDrawerOpen: false});
+    console.log("Closed drawer");
+  }
   
   render() {
     const video = this.state;  
@@ -225,9 +239,9 @@ class Video extends React.Component {
           <CardMedia
               className={classes.cardMedia}
               title={"Video Thumbnail: " + this.getImageFilename(video.thumbnailUrl)}>
-            <ReactPlayer url={this.getVideoUrl()} controls="true" playing="true" ref={this.videoRef}
+            <ReactPlayer url={this.getVideoUrl()} controls={true} playing={true} ref={this.videoRef}
                 light={video.thumbnailUrl} onClick={this.handleClickFullscreen}
-                volume="0" muted="true" width="100%" height="100%" playbackRate={0.25} />
+                volume={0} muted={true} width="100%" height="100%" playbackRate={0.25} />
           </CardMedia>
           <CardContent className={classes.cardContent}>
               <Grid container spacing={0} className={classes.courseAndSpeed}>
@@ -288,10 +302,14 @@ class Video extends React.Component {
                   </Grid>
               </Grid>
           </CardContent>
+          <Drawer anchor='right' open={this.state.isChartDrawerOpen} onClose={this.closeChartDrawer}>
+              <img className={classes.drawer} src={this.getImageUrl()} />
+          </Drawer>          
           <CardActions>
               <this.SaveButton />
-              <IconButton aria-label="Analysis" title="Analysis" onClick={() => window.open(this.getImageUrl())}>
-                <InsertChartIcon />
+              <IconButton aria-label="Analysis" title="Analysis" onClick={() => this.openChartDrawer()}>
+                <InsertChartIcon>
+                </InsertChartIcon>
               </IconButton>
               <IconButton aria-label="Starred" title="Starred" onClick={() => this.starClick()}>
                 <StarIcon className={this.state.starred ? classes.starredVideo : classes.unStarredVideo} />
