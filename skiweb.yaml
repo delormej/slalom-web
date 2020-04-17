@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: skiweb
-        image: wthacr.azurecr.io/skiweb:v1.2.0
+        image: wthacr.azurecr.io/skiweb:v1.2.1
         env:
         - name: PORT
           value: "3000"        
@@ -41,8 +41,12 @@ kind: Ingress
 metadata:
   name: skiweb-ingress
 spec:
+  tls:
+  - hosts:
+    - '*.jasondel.com'
+    secretName: jasondel-com-tls
   rules:
-  - host: web.ski.jasondel.com
+  - host: ski.jasondel.com
     http:
       paths:
       - backend:

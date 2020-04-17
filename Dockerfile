@@ -1,6 +1,6 @@
 FROM node:lts AS build
 ARG default_port=3000
-ARG skiapi_host=api.ski.jasondel.com
+ARG skiapi_host
 ENV REACT_APP_SKIAPI_HOST=${skiapi_host}
 
 COPY . /src/
