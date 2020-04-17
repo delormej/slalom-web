@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: skiweb
-        image: wthacr.azurecr.io/skiweb:v1.1.0
+        image: wthacr.azurecr.io/skiweb:v1.2.0
         env:
         - name: PORT
           value: "3000"        

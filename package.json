@@ -23,7 +23,7 @@
     "build": "./write-version.sh && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "clean": "rm -rf node_modules"
+    "clean": "rm -rf node_modules && rm -rf build"
   },
   "eslintConfig": {
     "extends": "react-app"
