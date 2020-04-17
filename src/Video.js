@@ -15,9 +15,9 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import VideoHeader from './VideoHeader';
 import IconButton from '@material-ui/core/IconButton';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StarIcon from '@material-ui/icons/Star';
 import InsertChartIcon from '@material-ui/icons/InsertChart';
+import ReactPlayer from 'react-player';
 
 const styles = theme => ({
   root: {
@@ -46,7 +46,8 @@ const styles = theme => ({
     position: 'relative',
   },
   cardMedia: {
-    paddingTop: '56.25%', // 16:9
+    paddingTop: '0', // 16:9
+    height: '160px'
   },
   cardContent: {
     flexGrow: 1,
@@ -112,7 +113,7 @@ class Video extends React.Component {
     // Using spread operator to promote video object properties to be
     // shallow properties of state.  React doesn't repaint if deep nested
     // properties are changed.
-    this.state = { ...this.props.video };
+    this.state = { ...this.props.video, isFull: false };
   }
 
   handleInputChange(event) {
@@ -173,9 +174,7 @@ class Video extends React.Component {
   }
 
   getVideoUrl() {
-      var relativeUrl = './video.html?video=';
-      var videoUrl = relativeUrl + (this.state.hotUrl || this.state.url);
-      return videoUrl;
+      return this.state.hotUrl || this.state.url;
   }
 
   getThumnailUrl() {
@@ -205,6 +204,10 @@ class Video extends React.Component {
     else
       return <button onClick={this.deleteClick}>Delete</button>;
   }
+
+  goFull = () => {
+    this.setState({ isFull: true });
+  }
   
   render() {
     const video = this.state;  
@@ -214,15 +217,13 @@ class Video extends React.Component {
       <Grid item xs={12} sm={6} md={4}>
         <Card className={classes.card}>
           <VideoHeader video={video} onDeleteClick={this.deleteClick} />
-            <CardMedia
-                className={classes.cardMedia}
-                image={video.thumbnailUrl}
-                title={"Video Thumbnail: " + this.getImageFilename(video.thumbnailUrl)}
-            />
-            <IconButton className={classes.overlay} title="Play Video"
-              onClick={() => window.open(this.getVideoUrl())}>
-              <PlayArrowIcon />
-            </IconButton>
+          <CardMedia
+              className={classes.cardMedia}
+              title={"Video Thumbnail: " + this.getImageFilename(video.thumbnailUrl)}>
+            <ReactPlayer url={this.getVideoUrl()} controls="true" playing="true" 
+                light={video.thumbnailUrl} 
+                volume="0" muted="true" width="100%" height="100%" playbackRate={0.25} />
+          </CardMedia>
           <CardContent className={classes.cardContent}>
               <Grid container spacing={0} className={classes.courseAndSpeed}>
                   <Grid item xs={9}>
