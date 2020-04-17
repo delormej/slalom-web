@@ -71,7 +71,7 @@ export default function App() {
       <ErrorBoundry>      
         <ShowPage page={page} accessToken={accessToken} />
         <Footer />  
-        <Login OnAuthenticate={OnAuthenticate} />
+        {/* <Login OnAuthenticate={OnAuthenticate} /> */}
       </ErrorBoundry>
     </React.Fragment>
   );
