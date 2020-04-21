@@ -232,6 +232,9 @@ class Video extends React.Component {
     const video = this.state;  
     const classes = this.classes;
 
+    if (video.thumbnailUrl === null || video.jsonUrl === null)
+      return null;
+
     return (
       <Grid item xs={12} sm={6} md={4}>
         <Card className={classes.card}>
