@@ -21,6 +21,7 @@ import ReactPlayer from 'react-player';
 import { findDOMNode } from 'react-dom';
 import screenfull from 'screenfull';
 import Drawer from '@material-ui/core/Drawer';
+import VideoNotes from './VideoNotes';
 
 const styles = theme => ({
   root: {
@@ -123,7 +124,7 @@ class Video extends React.Component {
     // Using spread operator to promote video object properties to be
     // shallow properties of state.  React doesn't repaint if deep nested
     // properties are changed.
-    this.state = { ...this.props.video, isChartDrawerOpen: false };
+    this.state = { ...this.props.video, isChartDrawerOpen: false, dirty: false };
   }
 
   handleInputChange(event) {
@@ -216,8 +217,10 @@ class Video extends React.Component {
   }
 
   handleClickFullscreen = () => {
-    if (!screenfull.isFullscreen)
+    if (!screenfull.isFullscreen) 
       screenfull.request(findDOMNode(this.videoRef.current))
+    else
+      this.setState({dirty:true})
   }
 
   openChartDrawer() {
@@ -239,12 +242,21 @@ class Video extends React.Component {
       <Grid item xs={12} sm={6} md={4}>
         <Card className={classes.card}>
           <VideoHeader video={video} onDeleteClick={this.deleteClick} />
-          <CardMedia
+          <CardMedia 
               className={classes.cardMedia}
               title={"Video Thumbnail: " + this.getImageFilename(video.thumbnailUrl)}>
-            <ReactPlayer url={this.getVideoUrl()} controls={true} playing={true} ref={this.videoRef}
-                light={video.thumbnailUrl} onClick={this.handleClickFullscreen}
-                volume={0} muted={true} width="100%" height="100%" playbackRate={0.25} />
+            <React.Fragment >
+            <ReactPlayer url={this.getVideoUrl()} controls={true} playing={true} ref={this.videoRef} onClick={this.handleClickFullscreen}
+                light={video.thumbnailUrl} 
+                volume={0} muted={true} width="100%" height="100%" playbackRate={0.25}
+                config={{ file: {
+                  tracks: [
+                    {kind: 'subtitles', src: 'http://localhost:3001/notes.vtt', default:true},
+                  ]
+                }}}
+              />
+              {this.state.dirty ? <VideoNotes openMe={this.state.dirty} /> : null}
+              </React.Fragment>
           </CardMedia>
           <CardContent className={classes.cardContent}>
               <Grid container spacing={0} className={classes.courseAndSpeed}>
@@ -306,7 +318,7 @@ class Video extends React.Component {
               </Grid>
           </CardContent>
           <Drawer anchor='right' open={this.state.isChartDrawerOpen} onClose={this.closeChartDrawer}>
-              <img className={classes.drawer} src={this.getImageUrl()} />
+              <img alt="Chart" className={classes.drawer} src={this.getImageUrl()} />
           </Drawer>          
           <CardActions>
               <this.SaveButton />

@@ -1,7 +1,7 @@
 VERSION=v$(node -p "require('./package.json').version")
 SKIAPI_HOST=ski.jasondel.com
 
-npm run clean
+#npm run clean
 docker build -t skiweb:$VERSION --build-arg skiapi_host=$SKIAPI_HOST -f Dockerfile . 
 docker run --rm --name skiweb1 -e PORT=3000 -p 3000:3000 skiweb:$VERSION
 
