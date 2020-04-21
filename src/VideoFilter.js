@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import StarIconOutlined from '@material-ui/icons/StarOutlined';
 
 const useStyles = makeStyles(theme => ({
     filter: {
@@ -17,6 +18,9 @@ const useStyles = makeStyles(theme => ({
     videoCount: {
         marginLeft: '30px',
     },
+    star: { 
+        fill: '#e1ad01',
+    }
 }));      
 
 function ShowVideoCount(props) {
@@ -54,12 +58,16 @@ export default function VideoFilter(props) {
             <Paper>
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
+                        
                         <FormControlLabel className={classes.videoCount}
                                 value="start"
                                 control={
+                                    <React.Fragment>
+                                    <StarIconOutlined variant="ouline" className={classes.star} />
                                     <Switch color="primary" 
                                         onClick={props.filterStarredCallback}
                                     />
+                                    </React.Fragment>
                                 }                               
                                 checked={starredFilter}
                                 label="Starred"
