@@ -85,7 +85,7 @@ const styles = theme => ({
     paddingBottom: theme.spacing(3),
   },
   starredVideo: {
-    color: 'yellow',
+    color: '#e1ad01',
   },
   unStarredVideo: {
   },
