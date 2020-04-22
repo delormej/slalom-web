@@ -255,7 +255,7 @@ class Video extends React.Component {
                   ]
                 }}}
               />
-              {this.state.dirty ? <VideoNotes openMe={this.state.dirty} /> : null}
+              {this.state.dirty ? <VideoNotes openMe={this.state.dirty} thumbnailUrl={video.thumbnailUrl} videoUrl={this.getVideoUrl()} /> : null}
               </React.Fragment>
           </CardMedia>
           <CardContent className={classes.cardContent}>
