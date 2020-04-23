@@ -5,11 +5,9 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import ReactPlayer from 'react-player';
 import VideoSpeedSlider from './VideoSpeedSlider';
-import Grid from '@material-ui/core/Grid';
+import {isMobile} from 'react-device-detect';
 
 const styles = theme => ({
   form: {
@@ -112,9 +110,11 @@ class VideoNotes extends React.Component {
                   ]
                 }}}
            />
+           { !isMobile ? 
           <VideoSpeedSlider 
             value={this.state.videoSpeed}
-            onChange={this.handleSpeedChange} />
+            onChange={this.handleSpeedChange} /> : null }
+          { !isMobile ? 
           <TextField
             autoFocus
             margin="dense"
@@ -127,15 +127,18 @@ class VideoNotes extends React.Component {
             className={classes.textField}
             value={this.state.notes}
             onChange={this.handleNotesChange}
-          />
+          /> 
+          : null }
         </DialogContent>
         <DialogActions>
           <Button id="cancelButton" onClick={(e) => this.handleClose("cancel", e)} color="primary">
-            Cancel
+            { !isMobile ? "Cancel" : "Close" }
           </Button>
+          { !isMobile ? 
           <Button id="saveButton" onClick={(e) => this.handleClose("save", e)} color="primary" variant="contained">
             Save
           </Button>
+          : null }
         </DialogActions>
       </Dialog>
   );
