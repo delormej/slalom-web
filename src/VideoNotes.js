@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,7 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import ReactPlayer from 'react-player';
 
-const useStyles = makeStyles((theme) => ({
+const styles = theme => ({
   form: {
     display: 'flex',
     flexDirection: 'column',
@@ -28,33 +28,45 @@ const useStyles = makeStyles((theme) => ({
   formControlLabel: {
     marginTop: theme.spacing(1),
   },
-}));
+});
 
-export default function VideoNotes(props) {
-  const classes = useStyles();
-  const [open, setOpen] = useState(true);
-  const [videoSpeed, setVideoSpeed] = useState(0.25);
-  const [videoNotes, setVideoNotes] = useState("");
+class VideoNotes extends React.Component {
+  constructor(props) {
+    super(props);
+    const { classes } = props;
+    this.classes = classes;
 
-  let videoSeconds = 0;
+    this.state = {
+      videoSpeed: 0.25,
+      videoSeconds: 0,
+      videoNotes: "",
+      open: true,
+    }
 
-  const handleNotesChange = (event) => {
-    setVideoNotes(event.target.value);
+    this.handleNotesChange = this.handleNotesChange.bind(this);
+    this.onVideoProgress = this.onVideoProgress.bind(this);
+    this.setCaretPosition = this.setCaretPosition.bind(this);
+    this.onVideoPaused = this.onVideoPaused.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+  }
+
+  handleNotesChange(event) {
+    this.setState({ videoNotes: event.target.value });
   };
 
-  const handleSpeedChange = (event) => {
-    setVideoSpeed(event.target.value);
+  handleSpeedChange(event) {
+    this.setState({ videoSpeed: event.target.value });
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  handleClose() {
+    this.setState( {open: false} );
   };
 
-  const onVideoProgress = (progress) => {
-    videoSeconds = progress.playedSeconds;
+  onVideoProgress(progress) {
+    this.setState({videoSeconds: progress.playedSeconds});
   };
 
-  const setCaretPosition = (elemId, caretPos) => {
+  setCaretPosition(elemId, caretPos) {
     var elem = document.getElementById(elemId);
 
     if(elem != null) {
@@ -74,25 +86,27 @@ export default function VideoNotes(props) {
     }
   }
 
-  const onVideoPaused = () => {
-    console.log("Paused at: " + videoSeconds);
-    console.log("Notes were..." + videoNotes);
-    var notes = videoNotes + "\n@" + videoSeconds + " --> ";
-    setVideoNotes(notes);
-    setCaretPosition("videoNotes", notes.length - 1);
+  onVideoPaused() {
+    console.log("onVideoPaused() notes: " + this.state.videoNotes);
+    console.log("onVideoPaused() seconds: " + this.state.videoSeconds);
+    var notes = this.state.videoNotes + "\n@" + this.state.videoSeconds + " --> ";
+    this.setState( {videoNotes: notes} );
+    this.setCaretPosition("videoNotes", notes.length);
   };
 
-  return (
+  render() {
+    const classes = this.classes;
+    return (
     <div>
-      <Dialog fullWidth={true} maxWidth='xl' open={open} onClose={handleClose} 
+      <Dialog fullWidth={true} maxWidth='xl' open={this.state.open} onClose={this.handleClose} 
           aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add Video Notes</DialogTitle>
         <DialogContent>
           <ReactPlayer 
-                playbackRate={videoSpeed}
-                url={props.videoUrl} 
-                onProgress={onVideoProgress}
-                onPause={onVideoPaused}
+                playbackRate={this.state.videoSpeed}
+                url={this.props.videoUrl} 
+                onProgress={this.onVideoProgress}
+                onPause={this.onVideoPaused}
                 volume={0} muted={true} width="100%" height="100%" 
                 controls={true} playing={true} 
                 config={{ file: {
@@ -106,8 +120,8 @@ export default function VideoNotes(props) {
               <InputLabel htmlFor="video-speed">Video Speed</InputLabel>
               <Select
                 autoFocus
-                value={videoSpeed}
-                onChange={handleSpeedChange}
+                value={this.state.videoSpeed}
+                onChange={this.handleSpeedChange}
                 inputProps={{
                   name: 'video-speed',
                   id: 'video-speed',
@@ -129,15 +143,15 @@ export default function VideoNotes(props) {
             multiline
             rows="8"            
             className={classes.textField}
-            value={videoNotes}
-            onChange={handleNotesChange}
+            value={this.state.videoNotes}
+            onChange={this.handleNotesChange}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={this.handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={this.handleClose} color="primary">
             Save
           </Button>
         </DialogActions>
@@ -145,3 +159,5 @@ export default function VideoNotes(props) {
     </div>
   );
 }
+}
+export default withStyles(styles)(VideoNotes);
