@@ -124,7 +124,7 @@ class Video extends React.Component {
     // Using spread operator to promote video object properties to be
     // shallow properties of state.  React doesn't repaint if deep nested
     // properties are changed.
-    this.state = { ...this.props.video, isChartDrawerOpen: false, dirty: false };
+    this.state = { ...this.props.video, isChartDrawerOpen: false, isVideoNotesOpen: false, dirty: false };
   }
 
   handleInputChange(event) {
@@ -226,6 +226,7 @@ class Video extends React.Component {
   openChartDrawer() {
     this.setState({isChartDrawerOpen: true});
   }
+
   closeChartDrawer() {
     this.setState({isChartDrawerOpen: false});
     console.log("Closed drawer");
@@ -245,19 +246,11 @@ class Video extends React.Component {
           <CardMedia 
               className={classes.cardMedia}
               title={"Video Thumbnail: " + this.getImageFilename(video.thumbnailUrl)}>
-            <React.Fragment >
-            <ReactPlayer url={this.getVideoUrl()} controls={true} playing={true} ref={this.videoRef} onClick={this.handleClickFullscreen}
-                light={video.thumbnailUrl} 
-                volume={0} muted={true} width="100%" height="100%" playbackRate={0.25}
-                config={{ file: {
-                  tracks: [
-                    {kind: 'subtitles', src: 'http://localhost:3001/notes.vtt', default:true},
-                  ]
-                }}}
-              />
-              {this.state.dirty ? <VideoNotes openMe={this.state.dirty} thumbnailUrl={video.thumbnailUrl} videoUrl={this.getVideoUrl()} /> : null}
-              </React.Fragment>
-          </CardMedia>
+            <VideoNotes 
+              notes={this.state.notes} 
+              open={this.state.isChartDrawerOpen} 
+              videoUrl={this.getVideoUrl()} /> 
+          </CardMedia> 
           <CardContent className={classes.cardContent}>
               <Grid container spacing={0} className={classes.courseAndSpeed}>
                   <Grid item xs={9}>

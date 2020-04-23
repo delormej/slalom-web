@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -36,14 +36,10 @@ class VideoNotes extends React.Component {
     const { classes } = props;
     this.classes = classes;
 
-    this.state = {
-      videoSpeed: 0.25,
-      videoSeconds: 0,
-      videoNotes: "",
-      open: true,
-    }
+    this.state = { ...this.props, videoSpeed: 0.25, videoSeconds: 0 };
 
     this.handleNotesChange = this.handleNotesChange.bind(this);
+    this.handleSpeedChange = this.handleSpeedChange.bind(this);
     this.onVideoProgress = this.onVideoProgress.bind(this);
     this.setCaretPosition = this.setCaretPosition.bind(this);
     this.onVideoPaused = this.onVideoPaused.bind(this);
@@ -51,7 +47,7 @@ class VideoNotes extends React.Component {
   }
 
   handleNotesChange(event) {
-    this.setState({ videoNotes: event.target.value });
+    this.setState({ notes: event.target.value });
   };
 
   handleSpeedChange(event) {
@@ -87,24 +83,25 @@ class VideoNotes extends React.Component {
   }
 
   onVideoPaused() {
-    console.log("onVideoPaused() notes: " + this.state.videoNotes);
+    console.log("onVideoPaused() notes: " + this.state.notes);
     console.log("onVideoPaused() seconds: " + this.state.videoSeconds);
-    var notes = this.state.videoNotes + "\n@" + this.state.videoSeconds + " --> ";
-    this.setState( {videoNotes: notes} );
+    var seconds = this.state.videoSeconds.toFixed(1);
+    var notes = this.state.notes + "\n[@" + seconds + " seconds] ";
+    this.setState( {notes: notes} );
     this.setCaretPosition("videoNotes", notes.length);
   };
 
   render() {
     const classes = this.classes;
+
     return (
-    <div>
-      <Dialog fullWidth={true} maxWidth='xl' open={this.state.open} onClose={this.handleClose} 
+      <Dialog fullWidth={true} maxWidth='xl' open={this.props.open} onClose={this.handleClose} 
           aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add Video Notes</DialogTitle>
         <DialogContent>
           <ReactPlayer 
                 playbackRate={this.state.videoSpeed}
-                url={this.props.videoUrl} 
+                url={this.state.videoUrl} 
                 onProgress={this.onVideoProgress}
                 onPause={this.onVideoPaused}
                 volume={0} muted={true} width="100%" height="100%" 
@@ -143,7 +140,7 @@ class VideoNotes extends React.Component {
             multiline
             rows="8"            
             className={classes.textField}
-            value={this.state.videoNotes}
+            value={this.state.notes}
             onChange={this.handleNotesChange}
           />
         </DialogContent>
@@ -156,7 +153,6 @@ class VideoNotes extends React.Component {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
   );
 }
 }
