@@ -98,7 +98,6 @@ class VideoNotes extends React.Component {
     return (
       <Dialog fullWidth={true} maxWidth='xl' open={this.state.open??false}  
           aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add Video Notes</DialogTitle>
         <DialogContent>
           <ReactPlayer 
                 playbackRate={this.state.videoSpeed}
