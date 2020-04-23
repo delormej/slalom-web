@@ -47,7 +47,6 @@ class VideoNotes extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("Getting props ... " + nextProps.open);
     this.setState({open: nextProps.open});
     this.setState({notes: nextProps.notes});
   }
