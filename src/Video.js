@@ -179,7 +179,7 @@ class Video extends React.Component {
 
     axios.post(updateUrl, json) 
       .then(res => {
-        console.log('Updated? ' + res);        
+        console.log('Updated');
       })
       .catch((error) => {
         if (this._isMounted) {
