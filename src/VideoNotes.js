@@ -47,9 +47,8 @@ class VideoNotes extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("open: " + nextProps.open + ", " + this.state.open);
     this.setState({open: nextProps.open});
-    //this.open = this.state.open;
+    this.setState({notes: nextProps.notes});
   }
 
   handleNotesChange(event) {
@@ -62,6 +61,7 @@ class VideoNotes extends React.Component {
 
   handleClose() {
     this.setState( {open: false} );
+    this.state.onClose(this.state.notes);
   };
 
   onVideoProgress(progress) {
@@ -89,8 +89,6 @@ class VideoNotes extends React.Component {
   }
 
   onVideoPaused() {
-    console.log("onVideoPaused() notes: " + this.state.notes);
-    console.log("onVideoPaused() seconds: " + this.state.videoSeconds);
     var seconds = this.state.videoSeconds.toFixed(1);
     var notes = this.state.notes + "\n[@" + seconds + " seconds] ";
     this.setState( {notes: notes} );

@@ -102,6 +102,7 @@ class Video extends React.Component {
     this.videoRef = React.createRef();
 
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleVideoNotesClose = this.handleVideoNotesClose.bind(this);
     this.saveClick = this.saveClick.bind(this);
     this.deleteClick = this.deleteClick.bind(this);
     this.starClick = this.starClick.bind(this);
@@ -109,7 +110,7 @@ class Video extends React.Component {
     this.SaveButton = this.SaveButton.bind(this);
     this.openChartDrawer = this.openChartDrawer.bind(this);
     this.closeChartDrawer = this.closeChartDrawer.bind(this);
-
+    
     var util = new Util();
     this.baseUrl = util.getBaseUrl();
     this.imageApiUrl = this.baseUrl + '/api/image?jsonUrl=';
@@ -134,6 +135,12 @@ class Video extends React.Component {
       dirty: true
     });
   }
+
+  handleVideoNotesClose(notes) {
+    console.log("Closed called with: " + notes);
+    if (notes != this.state.notes)
+      this.setState({isVideoNotesOpen: false, notes: notes, dirty: true});
+  };
 
   saveClick(event) {
     this.save();
@@ -244,7 +251,8 @@ class Video extends React.Component {
             <VideoNotes 
               notes={this.state.notes} 
               open={this.state.isVideoNotesOpen} 
-              videoUrl={this.getVideoUrl()} /> 
+              videoUrl={this.getVideoUrl()}
+              onClose={this.handleVideoNotesClose} /> 
           </CardMedia> 
           <CardContent className={classes.cardContent}>
               <Grid container spacing={0} className={classes.courseAndSpeed}>
