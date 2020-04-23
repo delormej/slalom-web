@@ -47,6 +47,7 @@ class VideoNotes extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log("Getting props ... " + nextProps.open);
     this.setState({open: nextProps.open});
     this.setState({notes: nextProps.notes});
   }
@@ -59,9 +60,9 @@ class VideoNotes extends React.Component {
     this.setState({ videoSpeed: event.target.value });
   };
 
-  handleClose() {
+  handleClose(id, event) {
     this.setState( {open: false} );
-    this.state.onClose(this.state.notes);
+    this.state.onClose(this.state.notes, (id == "cancel"));
   };
 
   onVideoProgress(progress) {
@@ -99,7 +100,7 @@ class VideoNotes extends React.Component {
     const classes = this.classes;
 
     return (
-      <Dialog fullWidth={true} maxWidth='xl' open={this.state.open} onClose={this.handleClose} 
+      <Dialog fullWidth={true} maxWidth='xl' open={this.state.open??false}  
           aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add Video Notes</DialogTitle>
         <DialogContent>
@@ -149,10 +150,10 @@ class VideoNotes extends React.Component {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
+          <Button id="cancelButton" onClick={(e) => this.handleClose("cancel", e)} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.handleClose} color="primary">
+          <Button id="saveButton" onClick={(e) => this.handleClose("save", e)} color="primary" variant="contained">
             Save
           </Button>
         </DialogActions>
