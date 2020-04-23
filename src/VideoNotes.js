@@ -36,7 +36,7 @@ class VideoNotes extends React.Component {
     const { classes } = props;
     this.classes = classes;
 
-    this.state = { ...this.props, videoSpeed: 0.25, videoSeconds: 0 };
+    this.state = { ...this.props, open: this.props.open, videoSpeed: 0.25, videoSeconds: 0 };
 
     this.handleNotesChange = this.handleNotesChange.bind(this);
     this.handleSpeedChange = this.handleSpeedChange.bind(this);
@@ -44,6 +44,12 @@ class VideoNotes extends React.Component {
     this.setCaretPosition = this.setCaretPosition.bind(this);
     this.onVideoPaused = this.onVideoPaused.bind(this);
     this.handleClose = this.handleClose.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("open: " + nextProps.open + ", " + this.state.open);
+    this.setState({open: nextProps.open});
+    //this.open = this.state.open;
   }
 
   handleNotesChange(event) {
@@ -94,8 +100,10 @@ class VideoNotes extends React.Component {
   render() {
     const classes = this.classes;
 
+    console.log("render(): " + this.props.open + ", " + this.state.open);
+
     return (
-      <Dialog fullWidth={true} maxWidth='xl' open={this.props.open} onClose={this.handleClose} 
+      <Dialog fullWidth={true} maxWidth='xl' open={this.state.open} onClose={this.handleClose} 
           aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add Video Notes</DialogTitle>
         <DialogContent>

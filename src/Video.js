@@ -17,9 +17,7 @@ import VideoHeader from './VideoHeader';
 import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import InsertChartIcon from '@material-ui/icons/InsertChart';
-import ReactPlayer from 'react-player';
-import { findDOMNode } from 'react-dom';
-import screenfull from 'screenfull';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Drawer from '@material-ui/core/Drawer';
 import VideoNotes from './VideoNotes';
 
@@ -109,7 +107,6 @@ class Video extends React.Component {
     this.starClick = this.starClick.bind(this);
     this.DeleteButton = this.DeleteButton.bind(this);
     this.SaveButton = this.SaveButton.bind(this);
-    this.handleClickFullscreen = this.handleClickFullscreen.bind(this);
     this.openChartDrawer = this.openChartDrawer.bind(this);
     this.closeChartDrawer = this.closeChartDrawer.bind(this);
 
@@ -216,13 +213,6 @@ class Video extends React.Component {
       return <button onClick={this.deleteClick}>Delete</button>;
   }
 
-  handleClickFullscreen = () => {
-    if (!screenfull.isFullscreen) 
-      screenfull.request(findDOMNode(this.videoRef.current))
-    else
-      this.setState({dirty:true})
-  }
-
   openChartDrawer() {
     this.setState({isChartDrawerOpen: true});
   }
@@ -245,10 +235,15 @@ class Video extends React.Component {
           <VideoHeader video={video} onDeleteClick={this.deleteClick} />
           <CardMedia 
               className={classes.cardMedia}
+              image={video.thumbnailUrl}
               title={"Video Thumbnail: " + this.getImageFilename(video.thumbnailUrl)}>
+            <IconButton className={classes.overlay} title="Play Video"
+              onClick={() => this.setState({isVideoNotesOpen: true})}>
+              <PlayArrowIcon />
+            </IconButton>
             <VideoNotes 
               notes={this.state.notes} 
-              open={this.state.isChartDrawerOpen} 
+              open={this.state.isVideoNotesOpen} 
               videoUrl={this.getVideoUrl()} /> 
           </CardMedia> 
           <CardContent className={classes.cardContent}>
