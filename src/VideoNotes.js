@@ -98,8 +98,6 @@ class VideoNotes extends React.Component {
   render() {
     const classes = this.classes;
 
-    console.log("render(): " + this.props.open + ", " + this.state.open);
-
     return (
       <Dialog fullWidth={true} maxWidth='xl' open={this.state.open} onClose={this.handleClose} 
           aria-labelledby="form-dialog-title">

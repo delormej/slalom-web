@@ -138,8 +138,10 @@ class Video extends React.Component {
 
   handleVideoNotesClose(notes) {
     console.log("Closed called with: " + notes);
-    if (notes != this.state.notes)
-      this.setState({isVideoNotesOpen: false, notes: notes, dirty: true});
+    if (notes != this.state.notes) {
+      this.setState({isVideoNotesOpen: false, dirty: false, notes: notes}, 
+        this.save);
+    }
   };
 
   saveClick(event) {
@@ -162,8 +164,13 @@ class Video extends React.Component {
   }
 
   save() {
+    
+    // todo this needs to be refactored
     var video = this.state;
     delete video.dirty;     // Remove internal dirty flag from the object.
+    delete video.isVideoNotesOpen;
+    delete video.isVideoNotesOpen;
+
     const json = JSON.stringify(video);
     var updateUrl = this.baseUrl + '/api/updatevideo';
     console.log('Saving video' + updateUrl + ':\n' + json);
