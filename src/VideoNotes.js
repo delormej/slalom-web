@@ -7,12 +7,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
 import ReactPlayer from 'react-player';
+import VideoSpeedSlider from './VideoSpeedSlider';
+import Grid from '@material-ui/core/Grid';
 
 const styles = theme => ({
   form: {
@@ -55,8 +52,8 @@ class VideoNotes extends React.Component {
     this.setState({ notes: event.target.value });
   };
 
-  handleSpeedChange(event) {
-    this.setState({ videoSpeed: event.target.value });
+  handleSpeedChange(newValue) {
+    this.setState({ videoSpeed: newValue });
   };
 
   handleClose(id, event) {
@@ -116,24 +113,9 @@ class VideoNotes extends React.Component {
                   ]
                 }}}
            />
-          <form className={classes.form} noValidate>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="video-speed">Video Speed</InputLabel>
-              <Select
-                autoFocus
-                value={this.state.videoSpeed}
-                onChange={this.handleSpeedChange}
-                inputProps={{
-                  name: 'video-speed',
-                  id: 'video-speed',
-                }}
-              >
-                <MenuItem value={0.25}>0.25</MenuItem>
-                <MenuItem value={0.5}>0.50</MenuItem>
-                <MenuItem value={1.0}>1.0</MenuItem>
-              </Select>
-            </FormControl>
-          </form>
+          <VideoSpeedSlider 
+            value={this.state.videoSpeed}
+            onChange={this.handleSpeedChange} />
           <TextField
             autoFocus
             margin="dense"
