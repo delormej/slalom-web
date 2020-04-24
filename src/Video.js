@@ -17,10 +17,9 @@ import VideoHeader from './VideoHeader';
 import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import InsertChartIcon from '@material-ui/icons/InsertChart';
-import ReactPlayer from 'react-player';
-import { findDOMNode } from 'react-dom';
-import screenfull from 'screenfull';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Drawer from '@material-ui/core/Drawer';
+import VideoNotes from './VideoNotes';
 
 const styles = theme => ({
   root: {
@@ -103,15 +102,15 @@ class Video extends React.Component {
     this.videoRef = React.createRef();
 
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleVideoNotesClose = this.handleVideoNotesClose.bind(this);
     this.saveClick = this.saveClick.bind(this);
     this.deleteClick = this.deleteClick.bind(this);
     this.starClick = this.starClick.bind(this);
     this.DeleteButton = this.DeleteButton.bind(this);
     this.SaveButton = this.SaveButton.bind(this);
-    this.handleClickFullscreen = this.handleClickFullscreen.bind(this);
     this.openChartDrawer = this.openChartDrawer.bind(this);
     this.closeChartDrawer = this.closeChartDrawer.bind(this);
-
+    
     var util = new Util();
     this.baseUrl = util.getBaseUrl();
     this.imageApiUrl = this.baseUrl + '/api/image?jsonUrl=';
@@ -123,7 +122,7 @@ class Video extends React.Component {
     // Using spread operator to promote video object properties to be
     // shallow properties of state.  React doesn't repaint if deep nested
     // properties are changed.
-    this.state = { ...this.props.video, isChartDrawerOpen: false };
+    this.state = { ...this.props.video, isChartDrawerOpen: false, isVideoNotesOpen: false, dirty: false };
   }
 
   handleInputChange(event) {
@@ -136,6 +135,16 @@ class Video extends React.Component {
       dirty: true
     });
   }
+
+  handleVideoNotesClose(notes, cancelled) {
+    if (!cancelled) {
+      this.setState({isVideoNotesOpen: false, dirty: false, notes: notes}, 
+        this.save);
+    }
+    else {
+      this.setState({isVideoNotesOpen: false});
+    }
+  };
 
   saveClick(event) {
     this.save();
@@ -157,15 +166,20 @@ class Video extends React.Component {
   }
 
   save() {
-    var video = this.state;
+    
+    // todo this needs to be refactored
+    var video = { ...this.state };
     delete video.dirty;     // Remove internal dirty flag from the object.
+    delete video.isVideoNotesOpen;
+    delete video.isChartDrawerOpen;
+
     const json = JSON.stringify(video);
     var updateUrl = this.baseUrl + '/api/updatevideo';
     console.log('Saving video' + updateUrl + ':\n' + json);
 
     axios.post(updateUrl, json) 
       .then(res => {
-        console.log('Updated? ' + res);        
+        console.log('Updated');
       })
       .catch((error) => {
         if (this._isMounted) {
@@ -215,14 +229,10 @@ class Video extends React.Component {
       return <button onClick={this.deleteClick}>Delete</button>;
   }
 
-  handleClickFullscreen = () => {
-    if (!screenfull.isFullscreen)
-      screenfull.request(findDOMNode(this.videoRef.current))
-  }
-
   openChartDrawer() {
     this.setState({isChartDrawerOpen: true});
   }
+
   closeChartDrawer() {
     this.setState({isChartDrawerOpen: false});
     console.log("Closed drawer");
@@ -239,13 +249,20 @@ class Video extends React.Component {
       <Grid item xs={12} sm={6} md={4}>
         <Card className={classes.card}>
           <VideoHeader video={video} onDeleteClick={this.deleteClick} />
-          <CardMedia
+          <CardMedia 
               className={classes.cardMedia}
+              image={video.thumbnailUrl}
               title={"Video Thumbnail: " + this.getImageFilename(video.thumbnailUrl)}>
-            <ReactPlayer url={this.getVideoUrl()} controls={true} playing={true} ref={this.videoRef}
-                light={video.thumbnailUrl} onClick={this.handleClickFullscreen}
-                volume={0} muted={true} width="100%" height="100%" playbackRate={0.25} />
-          </CardMedia>
+            <IconButton className={classes.overlay} title="Play Video"
+              onClick={() => this.setState({isVideoNotesOpen: true})}>
+              <PlayArrowIcon />
+            </IconButton>
+            <VideoNotes 
+              notes={this.state.notes} 
+              open={this.state.isVideoNotesOpen} 
+              videoUrl={this.getVideoUrl()}
+              onClose={this.handleVideoNotesClose} /> 
+          </CardMedia> 
           <CardContent className={classes.cardContent}>
               <Grid container spacing={0} className={classes.courseAndSpeed}>
                   <Grid item xs={9}>
@@ -306,7 +323,7 @@ class Video extends React.Component {
               </Grid>
           </CardContent>
           <Drawer anchor='right' open={this.state.isChartDrawerOpen} onClose={this.closeChartDrawer}>
-              <img className={classes.drawer} src={this.getImageUrl()} />
+              <img alt="Chart" className={classes.drawer} src={this.getImageUrl()} />
           </Drawer>          
           <CardActions>
               <this.SaveButton />
