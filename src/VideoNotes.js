@@ -90,6 +90,10 @@ class VideoNotes extends React.Component {
     this.setCaretPosition("videoNotes", notes.length);
   };
 
+  getVttPath() {
+    return "http://localhost/api/vtt/2019-10-26/GP012353_ts.MP4";
+  }
+
   render() {
     const classes = this.classes;
 
@@ -105,8 +109,11 @@ class VideoNotes extends React.Component {
                 volume={0} muted={true} width="100%" height="100%" 
                 controls={true} playing={true} 
                 config={{ file: {
+                  attributes: {
+                    crossOrigin: 'anonymous'
+                  },                  
                   tracks: [
-                    {kind: 'subtitles', src: 'http://localhost:3001/notes.vtt', default:true},
+                    {kind: 'subtitles', src: this.getVttPath(), default:true},
                   ]
                 }}}
            />
