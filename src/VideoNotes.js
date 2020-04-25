@@ -91,11 +91,15 @@ class VideoNotes extends React.Component {
   };
 
   getVttPath() {
-    return "http://localhost/api/vtt/2019-10-26/GP012353_ts.MP4";
+    const url = this.state.videoUrl;
+    let parts = url.split("/");
+    let path = parts.slice(parts.length-2).join("/");
+    return "http://localhost/api/vtt/" +  path; 
   }
 
   render() {
     const classes = this.classes;
+    const vttPath = this.getVttPath();
 
     return (
       <Dialog fullWidth={true} maxWidth='xl' open={this.state.open??false}  
@@ -113,7 +117,7 @@ class VideoNotes extends React.Component {
                     crossOrigin: 'anonymous'
                   },                  
                   tracks: [
-                    {kind: 'subtitles', src: this.getVttPath(), default:true},
+                    {kind: 'subtitles', src: vttPath, default:true},
                   ]
                 }}}
            />
