@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import ReactPlayer from 'react-player';
 import VideoSpeedSlider from './VideoSpeedSlider';
 import {isMobile} from 'react-device-detect';
+import Util from './Util';
 
 const styles = theme => ({
   form: {
@@ -94,7 +95,8 @@ class VideoNotes extends React.Component {
     const url = this.state.videoUrl;
     let parts = url.split("/");
     let path = parts.slice(parts.length-2).join("/");
-    return "http://localhost/api/vtt/" +  path; 
+    var util = new Util();
+    return util.getBaseUrl() + "/api/vtt/" +  path; 
   }
 
   render() {

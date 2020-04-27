@@ -1,5 +1,4 @@
 VERSION=v$(node -p "require('./package.json').version")
-SKIAPI_HOST=ski.jasondel.com
 
 docker build -t skiweb:$VERSION --build-arg skiapi_host=$SKIAPI_HOST -f Dockerfile . 
 
