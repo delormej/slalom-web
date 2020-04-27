@@ -104,7 +104,7 @@ class VideoNotes extends React.Component {
     const vttPath = this.getVttPath();
 
     return (
-      <Dialog fullWidth={true} maxWidth='xl' open={this.state.open??false}  
+      <Dialog fullWidth={true} maxWidth='md' open={this.state.open??false}  
           aria-labelledby="form-dialog-title">
         <DialogContent>
           <ReactPlayer 
