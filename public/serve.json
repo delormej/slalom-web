@@ -10,5 +10,8 @@
            }
           ]
       }
+    ],
+    "redirects": [
+      { "source": "/api/**", "type": 404 }
     ]
   }

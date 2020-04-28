@@ -57,7 +57,7 @@ class VideoNotes extends React.Component {
 
   handleClose(id, event) {
     this.setState( {open: false} );
-    this.state.onClose(this.state.notes, (id == "cancel"));
+    this.state.onClose(this.state.notes, (id === "cancel"));
   };
 
   onVideoProgress(progress) {

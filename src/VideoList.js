@@ -13,6 +13,10 @@ const styles = theme => ({
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
+  error: {
+    paddingTop: theme.spacing(8),
+    paddingLeft: theme.spacing(8)
+  }
 });
 
 const NOT_TAGGED = 'Not Tagged';
@@ -164,14 +168,25 @@ class VideoList extends React.Component {
 
     axios.get(listUrl)
       .then(res => {
-        this.videos = res.data;
-        if (this._isMounted) {
-          this.filterVideos(
-            this.getLatestDate(this.videos), 
-            this.getSkiers(this.videos) 
-        )}
+        if (res.status !== 200) {
+          console.log(listUrl + " error:", res);
+          throw new Error("Error response attempting to load videos.");
+        }
+
+        if (res.data.length > 0 && res.data[0].partitionKey !== undefined) {
+          this.videos = res.data;
+          if (this._isMounted) {
+            this.filterVideos(
+              this.getLatestDate(this.videos), 
+              this.getSkiers(this.videos) 
+          )}
+        }
+        else {
+          throw new Error("Video list not returned.");
+        }
       })
       .catch((error) => {
+        console.log("len", this.videos.length);
         if (this._isMounted) {
           this.setState(
             { 
@@ -208,7 +223,7 @@ class VideoList extends React.Component {
           filteredVideos={this.state.videos != null ? this.state.videos.length : 0}
           loading={this.state.loading}
           />
-        <Typography variant="h5" color="error">{this.state.error}</Typography>
+        <Typography className={classes.error} variant="h5" color="error">{this.state.error}</Typography>
         <Container className={classes.cardGrid} maxWidth="md">
           <Grid container spacing={4}>
             { this.state.videos.map(video => (
