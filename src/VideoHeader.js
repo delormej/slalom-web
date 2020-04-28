@@ -78,7 +78,7 @@ function getTimeString(date) {
   else 
     value = date;
 
-  const formattedDate = format(parseISO(value), 'H:MM a');
+  const formattedDate = format(parseISO(value), 'h:MM a');
   return formattedDate;  
 }
 
