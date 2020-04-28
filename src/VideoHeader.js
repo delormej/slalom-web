@@ -72,7 +72,13 @@ function getDateString(date) {
 }
 
 function getTimeString(date) {
-  const formattedDate = format(parseISO(date), 'h:MM a');
+  var value = "";
+  if (date.endsWith("Z"))
+    value = date.substring(0, date.length - 1)
+  else 
+    value = date;
+
+  const formattedDate = format(parseISO(value), 'H:MM a');
   return formattedDate;  
 }
 
