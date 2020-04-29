@@ -1,15 +1,19 @@
 export default class Util {
 
   getBaseUrl() {
-    // sets the appropriate baseurl based on whether we're called via ssl or not (https:// or http://)
-    const defaultApiHostname = process.env.REACT_APP_SKIAPI_HOST || 'ski.jasondel.com'; 
+    // NOTE: This value only works at build time, it's written statically during the build.
+    const defaultApiHostname = process.env.REACT_APP_SKIAPI_HOST; 
+    // Default if not overide, just returns empty, and app will use relative to current request.
     var baseUrl = '';
     
-    if (typeof window !== 'undefined') {
-      baseUrl = window.location.protocol + '//' + defaultApiHostname;
-    }
-    else {
-      baseUrl = 'http://' + defaultApiHostname;
+    // If a hostname was provided, match the protocol (http/https).
+    if (defaultApiHostname !== undefined && defaultApiHostname !== '') {
+      if (typeof window !== 'undefined') {
+        baseUrl = window.location.protocol + '//' + defaultApiHostname;
+      }
+      else {
+        baseUrl = 'http://' + defaultApiHostname;
+      }
     }
     return baseUrl;
   }

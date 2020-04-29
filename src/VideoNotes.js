@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import ReactPlayer from 'react-player';
 import VideoSpeedSlider from './VideoSpeedSlider';
 import {isMobile} from 'react-device-detect';
+import Util from './Util';
 
 const styles = theme => ({
   form: {
@@ -56,7 +57,7 @@ class VideoNotes extends React.Component {
 
   handleClose(id, event) {
     this.setState( {open: false} );
-    this.state.onClose(this.state.notes, (id == "cancel"));
+    this.state.onClose(this.state.notes, (id === "cancel"));
   };
 
   onVideoProgress(progress) {
@@ -90,11 +91,20 @@ class VideoNotes extends React.Component {
     this.setCaretPosition("videoNotes", notes.length);
   };
 
+  getVttPath() {
+    const url = this.state.videoUrl;
+    let parts = url.split("/");
+    let path = parts.slice(parts.length-2).join("/");
+    var util = new Util();
+    return util.getBaseUrl() + "/api/vtt/" +  path; 
+  }
+
   render() {
     const classes = this.classes;
+    const vttPath = this.getVttPath();
 
     return (
-      <Dialog fullWidth={true} maxWidth='xl' open={this.state.open??false}  
+      <Dialog fullWidth={true} maxWidth='md' open={this.state.open??false}  
           aria-labelledby="form-dialog-title">
         <DialogContent>
           <ReactPlayer 
@@ -105,8 +115,11 @@ class VideoNotes extends React.Component {
                 volume={0} muted={true} width="100%" height="100%" 
                 controls={true} playing={true} 
                 config={{ file: {
+                  attributes: {
+                    crossOrigin: 'anonymous'
+                  },                  
                   tracks: [
-                    {kind: 'subtitles', src: 'http://localhost:3001/notes.vtt', default:true},
+                    {kind: 'subtitles', src: vttPath, default:true},
                   ]
                 }}}
            />
