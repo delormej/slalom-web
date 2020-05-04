@@ -327,7 +327,7 @@ class Video extends React.Component {
           </Drawer>          
           <CardActions>
               <this.SaveButton />
-              <IconButton aria-label="Analysis" title="Analysis" onClick={() => this.openChartDrawer()}>
+              <IconButton disabled={video.courseName === null} aria-label="Analysis" title="Analysis" onClick={() => this.openChartDrawer()}>
                 <InsertChartIcon>
                 </InsertChartIcon>
               </IconButton>
