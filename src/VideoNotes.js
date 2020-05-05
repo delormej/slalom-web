@@ -5,12 +5,26 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
 import ReactPlayer from 'react-player';
 import VideoSpeedSlider from './VideoSpeedSlider';
 import {isMobile} from 'react-device-detect';
 import Util from './Util';
 
-const styles = theme => ({
+const styles = (theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
   form: {
     display: 'flex',
     flexDirection: 'column',
@@ -24,6 +38,20 @@ const styles = theme => ({
   formControlLabel: {
     marginTop: theme.spacing(1),
   },
+});
+
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h7">{children}</Typography>
+      {onClose ? (
+        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
 });
 
 class VideoNotes extends React.Component {
@@ -106,6 +134,9 @@ class VideoNotes extends React.Component {
     return (
       <Dialog fullWidth={true} maxWidth='md' open={this.state.open??false}  
           aria-labelledby="form-dialog-title">
+        <DialogTitle id="customized-dialog-title" onClose={(e) => this.handleClose("cancel", e)}>
+          {this.state.videoFile}
+        </DialogTitle>            
         <DialogContent>
           <ReactPlayer 
                 playbackRate={this.state.videoSpeed}
@@ -144,11 +175,8 @@ class VideoNotes extends React.Component {
           : null }
         </DialogContent>
         <DialogActions>
-          <Button id="cancelButton" onClick={(e) => this.handleClose("cancel", e)} color="primary">
-            { !isMobile ? "Cancel" : "Close" }
-          </Button>
           { !isMobile ? 
-          <Button id="saveButton" onClick={(e) => this.handleClose("save", e)} color="primary" variant="contained">
+          <Button id="saveButton" onClick={(e) => this.handleClose("save", e)} color="primary">
             Save
           </Button>
           : null }
