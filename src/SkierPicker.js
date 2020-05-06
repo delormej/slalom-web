@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Chip from '@material-ui/core/Chip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -17,12 +17,28 @@ const useStyles = makeStyles(theme => ({
     }
 })); 
 
+function skierSelected(skiers) {
+    const match = skiers.find(s => s.selected === true);
+    if (match !== undefined) {
+        console.log("skier?" + match.selected);
+        return true;
+    }
+    else {
+        console.log("no skier selected.");
+        return false;
+    }
+}
+
 export default function SkierPicker(props) {
     const classes = useStyles();
     const [allSkiers, setAllSkiers] = useState(true);
     const filterBySkier = props.filterCallback;
     let i = 0; 
-        
+
+    useEffect(() => {
+        setAllSkiers(!skierSelected(props.skiers));
+    });
+
     function onSkierClick(skier) {
         if (allSkiers)
             setAllSkiers(false);

@@ -52,7 +52,7 @@ function ShowVideoCount(props) {
 export default function VideoFilter(props) {
     const classes = useStyles();
     const [starredFilter] = useState(props.starredFilter);
-  
+
     return (
         <Container maxWidth="md" className={classes.filter}>
             <Paper>

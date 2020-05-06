@@ -71,6 +71,16 @@ class VideoList extends React.Component {
     return latest;
   }
 
+  getSkierInPath() {
+    const field = "skier";
+    var href = window.location.href;
+    var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+    var string = reg.exec(href);
+    let name = string ? string[1] : null;
+    console.log("Found skier filter in URL: " + name);
+    return name;
+  }
+
   getSkiers(videos) {
     const distinctSkiers = [...new Set(videos.map(function(v) {
       let skier = '';
@@ -136,7 +146,6 @@ class VideoList extends React.Component {
       filtered = filtered.filter(function(v) {
         var filterIn = false;
         skiersFilter.forEach(s => {
-          console.log("filter: " + s.skier + ' skier: ' + v.skier);
           if (s.skier === v.skier || 
               (s.skier === NOT_TAGGED && v.skier === '')) {
             filterIn = true;
@@ -176,9 +185,25 @@ class VideoList extends React.Component {
         if (res.data.length > 0 && res.data[0].partitionKey !== undefined) {
           this.videos = res.data;
           if (this._isMounted) {
+
+            var dateFilter = this.getLatestDate(this.videos);
+            var skiersFilter = this.getSkiers(this.videos);
+
+            const filterPathSkier = this.getSkierInPath();
+            if (filterPathSkier !== null) {
+              const skier = skiersFilter.find(function(value, index) {
+                return (value.skier.toLowerCase() === filterPathSkier.toLowerCase())
+              });
+              if (skier !== undefined) {
+                console.log('selected' + skier);
+                skier.selected = true;
+                dateFilter = null;
+              }
+            }
+
             this.filterVideos(
-              this.getLatestDate(this.videos), 
-              this.getSkiers(this.videos) 
+              dateFilter, 
+              skiersFilter
           )}
         }
         else {
