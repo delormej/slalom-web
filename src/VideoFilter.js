@@ -29,7 +29,6 @@ function ShowVideoCount(props) {
     if (props.loading === true) {
       return (
         <div className={classes.videoCount}>
-            <CircularProgress />
             <Typography variant="caption" 
                     color="textSecondary" 
                     className={classes.videoCount}>

@@ -7,6 +7,8 @@ import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
 import VideoFilter from './VideoFilter';
 import { Typography } from '@material-ui/core';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
   
 const styles = theme => ({
   cardGrid: {
@@ -16,7 +18,11 @@ const styles = theme => ({
   error: {
     paddingTop: theme.spacing(8),
     paddingLeft: theme.spacing(8)
-  }
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  }  
 });
 
 const NOT_TAGGED = 'Not Tagged';
@@ -237,6 +243,9 @@ class VideoList extends React.Component {
 
     return (
       <React.Fragment>
+        <Backdrop className={classes.backdrop} open={this.state.loading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>        
         <VideoFilter videos={this.state.videos} 
           date={this.state.dateFilter} 
           skiers={this.state.skiersFilter}
