@@ -19,14 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 function skierSelected(skiers) {
     const match = skiers.find(s => s.selected === true);
-    if (match !== undefined) {
-        console.log("skier?" + match.selected);
-        return true;
-    }
-    else {
-        console.log("no skier selected.");
-        return false;
-    }
+    return (match !== undefined);
 }
 
 export default function SkierPicker(props) {
