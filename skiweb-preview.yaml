@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: skiweb
+  name: skiweb-preview
   labels:
-    app: skiweb
+    app: skiweb-preview
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: skiweb
+      app: skiweb-preview
   template:
     metadata:
       labels:
-        app: skiweb
+        app: skiweb-preview
     spec:
       containers:
-      - name: skiweb
+      - name: skiweb-preview
         image: wthacr.azurecr.io/skiweb:v1.4.11
         env:
         - name: PORT
@@ -26,10 +26,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: skiweb-service
+  name: skiweb-service-preview
 spec:
   selector:
-    app: skiweb
+    app: skiweb-preview
   ports:
     - protocol: TCP
       port: 3000
@@ -39,17 +39,17 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: skiweb-ingress
+  name: skiweb-ingress-preview
 spec:
   tls:
   - hosts:
     - '*.jasondel.com'
     secretName: jasondel-com-tls
   rules:
-  - host: ski.jasondel.com
+  - host: skipreview.jasondel.com
     http:
       paths:
       - backend:
-          serviceName: skiweb-service
+          serviceName: skiweb-service-preview
           servicePort: 3000
         path: /

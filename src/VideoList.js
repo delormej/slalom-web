@@ -7,6 +7,8 @@ import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
 import VideoFilter from './VideoFilter';
 import { Typography } from '@material-ui/core';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
   
 const styles = theme => ({
   cardGrid: {
@@ -16,7 +18,11 @@ const styles = theme => ({
   error: {
     paddingTop: theme.spacing(8),
     paddingLeft: theme.spacing(8)
-  }
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  }  
 });
 
 const NOT_TAGGED = 'Not Tagged';
@@ -69,6 +75,16 @@ class VideoList extends React.Component {
       videos=> new Date(videos.recordedTime))));
     console.log('Latest date: ' + latest);
     return latest;
+  }
+
+  getSkierInPath() {
+    const field = "skier";
+    var href = window.location.href;
+    var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+    var string = reg.exec(href);
+    let name = string ? string[1] : null;
+    console.log("Found skier filter in URL: " + name);
+    return name;
   }
 
   getSkiers(videos) {
@@ -136,7 +152,6 @@ class VideoList extends React.Component {
       filtered = filtered.filter(function(v) {
         var filterIn = false;
         skiersFilter.forEach(s => {
-          console.log("filter: " + s.skier + ' skier: ' + v.skier);
           if (s.skier === v.skier || 
               (s.skier === NOT_TAGGED && v.skier === '')) {
             filterIn = true;
@@ -176,9 +191,25 @@ class VideoList extends React.Component {
         if (res.data.length > 0 && res.data[0].partitionKey !== undefined) {
           this.videos = res.data;
           if (this._isMounted) {
+
+            var dateFilter = this.getLatestDate(this.videos);
+            var skiersFilter = this.getSkiers(this.videos);
+
+            const filterPathSkier = this.getSkierInPath();
+            if (filterPathSkier !== null) {
+              const skier = skiersFilter.find(function(value, index) {
+                return (value.skier.toLowerCase() === filterPathSkier.toLowerCase())
+              });
+              if (skier !== undefined) {
+                console.log('selected' + skier);
+                skier.selected = true;
+                dateFilter = null;
+              }
+            }
+
             this.filterVideos(
-              this.getLatestDate(this.videos), 
-              this.getSkiers(this.videos) 
+              dateFilter, 
+              skiersFilter
           )}
         }
         else {
@@ -212,6 +243,9 @@ class VideoList extends React.Component {
 
     return (
       <React.Fragment>
+        <Backdrop className={classes.backdrop} open={this.state.loading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>        
         <VideoFilter videos={this.state.videos} 
           date={this.state.dateFilter} 
           skiers={this.state.skiersFilter}

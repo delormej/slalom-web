@@ -6,7 +6,6 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import StarIconOutlined from '@material-ui/icons/StarOutlined';
@@ -29,7 +28,6 @@ function ShowVideoCount(props) {
     if (props.loading === true) {
       return (
         <div className={classes.videoCount}>
-            <CircularProgress />
             <Typography variant="caption" 
                     color="textSecondary" 
                     className={classes.videoCount}>
@@ -52,7 +50,7 @@ function ShowVideoCount(props) {
 export default function VideoFilter(props) {
     const classes = useStyles();
     const [starredFilter] = useState(props.starredFilter);
-  
+
     return (
         <Container maxWidth="md" className={classes.filter}>
             <Paper>
