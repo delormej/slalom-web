@@ -68,6 +68,7 @@ class VideoNotes extends React.Component {
     this.setCaretPosition = this.setCaretPosition.bind(this);
     this.onVideoPaused = this.onVideoPaused.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.getHandlePosition = this.getHandlePosition.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -117,6 +118,7 @@ class VideoNotes extends React.Component {
     var notes = this.state.notes + "\n[@" + seconds + " seconds] ";
     this.setState( {notes: notes} );
     this.setCaretPosition("videoNotes", notes.length);
+    this.getHandlePosition();
   };
 
   getVttPath() {
@@ -125,6 +127,11 @@ class VideoNotes extends React.Component {
     let path = parts.slice(parts.length-2).join("/");
     var util = new Util();
     return util.getBaseUrl() + "/api/vtt/" +  path; 
+  }
+
+  getHandlePosition() {
+    //this.state.videoSeconds
+    // Make webapi call
   }
 
   render() {
