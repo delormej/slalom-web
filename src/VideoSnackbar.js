@@ -19,12 +19,11 @@ export default function VideoSnackbar(props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [hubConnection,] = useState(new HubConnectionBuilder()
+    .withUrl('https://skipreview.jasondel.com/api/notification/')
+    .build()); 
 
   useEffect( () => {
-    const hubConnection = new HubConnectionBuilder()
-        .withUrl('https://skipreview.jasondel.com/api/notification/')
-        .build();    
-    
     hubConnection.start()
         .then(() => console.log('Connection started!'))
         .catch(err => console.log('Error while establishing connection :('));
@@ -38,7 +37,7 @@ export default function VideoSnackbar(props) {
             setOpen(true);
         }
     });
-  });
+  }, [hubConnection]);
 
   const handleRefresh = (event, reason) => {
     props.forceRefresh();
