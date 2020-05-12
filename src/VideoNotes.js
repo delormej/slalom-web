@@ -141,7 +141,7 @@ class VideoNotes extends React.Component {
 
   getHandlePosition(seconds) {
     const handleUrl = getBaseUrl() + "/api/handle/" + seconds + "/" +
-      this.state.videoDate + "/" + this.state.videoFile;
+      this.state.video.partitionKey + "/" + this.state.video.rowKey;
     console.log("Requesting: " + handleUrl);
     axios.get(handleUrl)
     .then(res => {
@@ -194,7 +194,8 @@ class VideoNotes extends React.Component {
                   onChange={this.handleSpeedChange} /> 
                 <HandlePosition open={true} 
                   handlePosition={this.state.handlePosition} 
-                  seconds={this.state.handleSeconds} />
+                  seconds={this.state.handleSeconds} 
+                  clOffset={this.state.video.centerLineDegreeOffset} />
             </Grid>
             <Grid item xs={9}>
               <TextField

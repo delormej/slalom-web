@@ -259,8 +259,7 @@ class Video extends React.Component {
             <VideoNotes 
               notes={this.state.notes} 
               open={this.state.isVideoNotesOpen} 
-              videoDate={this.state.partitionKey}
-              videoFile={this.state.rowKey}
+              video={video}
               videoUrl={this.getVideoUrl()}
               onClose={this.handleVideoNotesClose} /> 
           </CardMedia> 
