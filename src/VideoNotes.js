@@ -182,6 +182,14 @@ class VideoNotes extends React.Component {
           { !isMobile ? 
           <div className={classes.notesGrid}>
           <Grid container spacing={2}>
+            <Grid item xs={3}>
+                <VideoSpeedSlider 
+                  value={this.state.videoSpeed}
+                  onChange={this.handleSpeedChange} /> 
+                <HandlePosition open={true} 
+                  handlePosition={this.state.handlePosition} 
+                  seconds={this.state.videoSeconds} />
+            </Grid>
             <Grid item xs={9}>
               <TextField
                 autoFocus
@@ -196,14 +204,6 @@ class VideoNotes extends React.Component {
                 value={this.state.notes}
                 onChange={this.handleNotesChange}
               /> 
-            </Grid>
-            <Grid item xs={3}>
-                <VideoSpeedSlider 
-                  value={this.state.videoSpeed}
-                  onChange={this.handleSpeedChange} /> 
-                <HandlePosition open={true} 
-                  handlePosition={this.state.handlePosition} 
-                  seconds={this.state.videoSeconds} />
             </Grid>
           </Grid>
           </div>
