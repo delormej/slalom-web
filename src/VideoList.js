@@ -9,6 +9,7 @@ import VideoFilter from './VideoFilter';
 import { Typography } from '@material-ui/core';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import VideoSnackbar from './VideoSnackbar';
   
 const styles = theme => ({
   cardGrid: {
@@ -243,6 +244,7 @@ class VideoList extends React.Component {
 
     return (
       <React.Fragment>
+        <VideoSnackbar />        
         <Backdrop className={classes.backdrop} open={this.state.loading}>
           <CircularProgress color="inherit" />
         </Backdrop>        
