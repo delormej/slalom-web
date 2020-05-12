@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,17 +17,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function VideoSnackbar(props) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const [message, setMessage] = React.useState("");
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
-  const connectHub = () => {
+  useEffect( () => {
     const hubConnection = new HubConnectionBuilder()
-      .withUrl('https://skipreview.jasondel.com/api/notification/')
-      .build();    
-
+        .withUrl('https://skipreview.jasondel.com/api/notification/')
+        .build();    
+    
     hubConnection.start()
-    .then(() => console.log('Connection started!'))
-    .catch(err => console.log('Error while establishing connection :('));
+        .then(() => console.log('Connection started!'))
+        .catch(err => console.log('Error while establishing connection :('));
 
     hubConnection.on('sendToAll', (nick, receivedMessage) => {
         console.log('Received message:' + receivedMessage);
@@ -38,7 +38,7 @@ export default function VideoSnackbar(props) {
             setOpen(true);
         }
     });
-  };
+  });
 
   const handleRefresh = (event, reason) => {
     props.forceRefresh();
@@ -52,7 +52,6 @@ export default function VideoSnackbar(props) {
     }
     setOpen(false);
   };
-  connectHub();
 
   return (
     <div className={classes.root}>
