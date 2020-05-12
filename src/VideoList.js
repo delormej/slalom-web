@@ -10,7 +10,7 @@ import { Typography } from '@material-ui/core';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import VideoSnackbar from './VideoSnackbar';
-  
+
 const styles = theme => ({
   cardGrid: {
     paddingTop: theme.spacing(8),
@@ -34,6 +34,7 @@ class VideoList extends React.Component {
     const { classes } = props;
     this.classes = classes;
      
+    this.loadVideos = this.loadVideos.bind(this);
     this.filterVideos = this.filterVideos.bind(this);
     this.filterBySkier = this.filterBySkier.bind(this);
     this.filterByDate = this.filterByDate.bind(this);
@@ -172,7 +173,7 @@ class VideoList extends React.Component {
     } );
   }
 
-  componentDidMount() {
+  loadVideos() {
     // Workaround for this: https://www.robinwieruch.de/react-warning-cant-call-setstate-on-an-unmounted-component/
     this._isMounted = true;
 
@@ -226,7 +227,11 @@ class VideoList extends React.Component {
               loading: false 
             });
         }        
-      });
+      });    
+  }
+  
+  componentDidMount() {
+    this.loadVideos();
   }
 
   componentWillUnmount() {
@@ -244,7 +249,7 @@ class VideoList extends React.Component {
 
     return (
       <React.Fragment>
-        <VideoSnackbar />        
+        <VideoSnackbar forceRefresh={this.loadVideos} />
         <Backdrop className={classes.backdrop} open={this.state.loading}>
           <CircularProgress color="inherit" />
         </Backdrop>        

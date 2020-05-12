@@ -38,6 +38,7 @@ export default function VideoSnackbar(props) {
             const text = 'New video uploaded: ' + messageObj.Video;
             setMessage(text);
             setOpen(true);
+            props.forceRefresh();
         }
     });
   };
