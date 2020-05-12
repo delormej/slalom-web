@@ -23,11 +23,14 @@ export default function HandlePositionPopover(props) {
   return (
       props.handlePosition !== null ? 
         <div>
-          <Typography className={classes.typography}>
-            {props.handlePosition?.RopeAngleDegrees.toFixed(1)}
-          </Typography>
-          <Typography className={classes.typography}>
-            {(props.handlePosition.BoatSpeedMps - props.handlePosition.HandleSpeedMps).toFixed(1)}
+          <Typography variant="caption">
+            Rope Angle: {props.handlePosition?.RopeAngleDegrees.toFixed(1)}
+          </Typography><br/>
+          <Typography variant="caption">
+            Rope Rad/S: {props.handlePosition?.RopeSwingSpeedRadS.toFixed(1)}
+          </Typography><br/>          
+          <Typography variant="caption">
+            Relative Speed (mps): {(props.handlePosition.HandleSpeedMps - props.handlePosition.BoatSpeedMps).toFixed(1)}
           </Typography>
       </div>
       : null
