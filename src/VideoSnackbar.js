@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 import { HubConnectionBuilder } from '@microsoft/signalr';
+import getBaseUrl from './Util';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,7 +21,7 @@ export default function VideoSnackbar(props) {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [hubConnection,] = useState(new HubConnectionBuilder()
-    .withUrl('https://skipreview.jasondel.com/api/notification/')
+    .withUrl(getBaseUrl() + '/api/notification/')
     .build()); 
 
   useEffect( () => {

@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import ReactPlayer from 'react-player';
 import VideoSpeedSlider from './VideoSpeedSlider';
 import {isMobile} from 'react-device-detect';
-import Util from './Util';
+import getBaseUrl from './Util';
 import axios from 'axios';
 import HandlePositionPopover from './HandlePositionPopover';
 import Grid from '@material-ui/core/Grid';
@@ -131,8 +131,7 @@ class VideoNotes extends React.Component {
     const url = this.state.videoUrl;
     let parts = url.split("/");
     let path = parts.slice(parts.length-2).join("/");
-    var util = new Util();
-    return util.getBaseUrl() + "/api/vtt/" +  path; 
+    return getBaseUrl() + "/api/vtt/" +  path; 
   }
 
   getHandlePosition(seconds) {
