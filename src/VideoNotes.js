@@ -66,7 +66,12 @@ class VideoNotes extends React.Component {
     const { classes } = props;
     this.classes = classes;
 
-    this.state = { ...this.props, open: this.props.open, videoSpeed: 0.25, videoSeconds: 0, handlePosition: null };
+    this.state = { ...this.props, 
+      open: this.props.open, 
+      videoSpeed: 0.25, 
+      videoSeconds: 0, 
+      handlePosition: null, 
+      handleSeconds: 0 };
 
     this.handleNotesChange = this.handleNotesChange.bind(this);
     this.handleSpeedChange = this.handleSpeedChange.bind(this);
@@ -135,18 +140,19 @@ class VideoNotes extends React.Component {
   }
 
   getHandlePosition(seconds) {
-    const handleUrl = "http://localhost/api/handle/" + seconds + "/" +
+    const handleUrl = getBaseUrl() + "/api/handle/" + seconds + "/" +
       this.state.videoDate + "/" + this.state.videoFile;
     console.log("Requesting: " + handleUrl);
     axios.get(handleUrl)
     .then(res => {
+      const handleSeconds = seconds;
       if (res.status !== 200) {
         console.log(handleUrl + " error:", res);
         throw new Error("Error response attempting to get handle.");
       }
 
-      console.log("got this: ", res.data);
-      this.setState( { handlePosition: res.data } );
+      console.log("got this: ", res.data, "seconds: ", handleSeconds);
+      this.setState( { handlePosition: res.data, handleSeconds: handleSeconds } );
     })
     .catch((error) => {
     });
@@ -188,7 +194,7 @@ class VideoNotes extends React.Component {
                   onChange={this.handleSpeedChange} /> 
                 <HandlePosition open={true} 
                   handlePosition={this.state.handlePosition} 
-                  seconds={this.state.videoSeconds} />
+                  seconds={this.state.handleSeconds} />
             </Grid>
             <Grid item xs={9}>
               <TextField
