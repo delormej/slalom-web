@@ -27,10 +27,11 @@ export default function VideoSpeedSlider(props) {
           <Slider 
             value={value} 
             min={0.25}
-            max={2.0}
+            max={1.0}
             step={0.25}
+            valueLabelDisplay="auto"
             onChange={handleChange} 
-            aria-labelledby="continuous-slider" />
+            aria-labelledby="range-slider" />
         </Grid>
         <Grid item>
           <SpeedIcon />

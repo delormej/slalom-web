@@ -23,6 +23,9 @@ export default function HandlePositionPopover(props) {
   return (
       props.handlePosition !== null ? 
         <div>
+          <Typography variant="overline">
+            @{props.seconds.toFixed(1)} seconds
+          </Typography><br/>          
           <Typography variant="caption">
             Rope Angle: {props.handlePosition?.RopeAngleDegrees.toFixed(1)}
           </Typography><br/>

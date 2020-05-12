@@ -14,7 +14,7 @@ import VideoSpeedSlider from './VideoSpeedSlider';
 import {isMobile} from 'react-device-detect';
 import getBaseUrl from './Util';
 import axios from 'axios';
-import HandlePositionPopover from './HandlePositionPopover';
+import HandlePosition from './HandlePosition';
 import Grid from '@material-ui/core/Grid';
 
 const styles = (theme) => ({
@@ -179,10 +179,6 @@ class VideoNotes extends React.Component {
                   ]
                 }}}
            />
-           { !isMobile ? 
-          <VideoSpeedSlider 
-            value={this.state.videoSpeed}
-            onChange={this.handleSpeedChange} /> : null }
           { !isMobile ? 
           <div className={classes.notesGrid}>
           <Grid container spacing={2}>
@@ -202,7 +198,12 @@ class VideoNotes extends React.Component {
               /> 
             </Grid>
             <Grid item xs={3}>
-              <HandlePositionPopover open={true} handlePosition={this.state.handlePosition} />
+                <VideoSpeedSlider 
+                  value={this.state.videoSpeed}
+                  onChange={this.handleSpeedChange} /> 
+                <HandlePosition open={true} 
+                  handlePosition={this.state.handlePosition} 
+                  seconds={this.state.videoSeconds} />
             </Grid>
           </Grid>
           </div>
