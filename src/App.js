@@ -8,6 +8,7 @@ import VideoList from './VideoList';
 import AdminConsole from './AdminConsole';
 import Login from './Login';
 import ErrorBoundry from './ErrorBoundry';
+import VideoSnackbar from './VideoSnackbar';
 
 const useStyles = makeStyles(theme => ({
   footer: {
@@ -70,6 +71,7 @@ export default function App() {
       <SkiToolBar navigate={setPage} currentPage={page} userId={userId} />
       <ErrorBoundry>      
         <ShowPage page={page} accessToken={accessToken} />
+        <VideoSnackbar />
         <Footer />  
         {/* <Login OnAuthenticate={OnAuthenticate} /> */}
       </ErrorBoundry>
