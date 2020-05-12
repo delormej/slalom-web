@@ -166,7 +166,7 @@ class VideoNotes extends React.Component {
       <Dialog fullWidth={true} maxWidth='md' open={this.state.open??false}  
           aria-labelledby="form-dialog-title">
         <DialogTitle id="customized-dialog-title" onClose={(e) => this.handleClose("cancel", e)}>
-          {this.state.videoFile}
+          {this.state.video.rowKey}
         </DialogTitle>            
         <DialogContent>
           <ReactPlayer 

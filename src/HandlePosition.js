@@ -6,14 +6,8 @@ import Input from '@material-ui/core/Input';
 import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-    },
-  },
   input: {
-    width: 55,
+    width: 60,
   },    
 }));
 
