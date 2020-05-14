@@ -1,5 +1,5 @@
 import React from 'react';
-import Util from './Util.js';
+import getBaseUrl from './Util.js';
 import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -111,8 +111,7 @@ class Video extends React.Component {
     this.openChartDrawer = this.openChartDrawer.bind(this);
     this.closeChartDrawer = this.closeChartDrawer.bind(this);
     
-    var util = new Util();
-    this.baseUrl = util.getBaseUrl();
+    this.baseUrl = getBaseUrl();
     this.imageApiUrl = this.baseUrl + '/api/image?jsonUrl=';
 
     // Set defaults for text values if null.
@@ -260,7 +259,7 @@ class Video extends React.Component {
             <VideoNotes 
               notes={this.state.notes} 
               open={this.state.isVideoNotesOpen} 
-              videoFile={this.state.rowKey}
+              video={video}
               videoUrl={this.getVideoUrl()}
               onClose={this.handleVideoNotesClose} /> 
           </CardMedia> 

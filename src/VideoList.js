@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Video from './Video.js'
-import Util from './Util.js'
+import getBaseUrl from './Util.js'
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
@@ -177,8 +177,7 @@ class VideoList extends React.Component {
     // Workaround for this: https://www.robinwieruch.de/react-warning-cant-call-setstate-on-an-unmounted-component/
     this._isMounted = true;
 
-    var util = new Util();
-    var listUrl = util.getBaseUrl() + '/api/list';    
+    var listUrl = getBaseUrl() + '/api/list';    
     console.log("Getting videos from: " + listUrl);
 
     this.setState({loading: true});

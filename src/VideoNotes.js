@@ -12,7 +12,10 @@ import Typography from '@material-ui/core/Typography';
 import ReactPlayer from 'react-player';
 import VideoSpeedSlider from './VideoSpeedSlider';
 import {isMobile} from 'react-device-detect';
-import Util from './Util';
+import getBaseUrl from './Util';
+import axios from 'axios';
+import HandlePosition from './HandlePosition';
+import Grid from '@material-ui/core/Grid';
 
 const styles = (theme) => ({
   root: {
@@ -38,13 +41,16 @@ const styles = (theme) => ({
   formControlLabel: {
     marginTop: theme.spacing(1),
   },
+  notesGrid: {
+    flexGrow: 1
+  }
 });
 
 const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h7">{children}</Typography>
+      <Typography variant="subtitle2">{children}</Typography>
       {onClose ? (
         <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
           <CloseIcon />
@@ -60,7 +66,12 @@ class VideoNotes extends React.Component {
     const { classes } = props;
     this.classes = classes;
 
-    this.state = { ...this.props, open: this.props.open, videoSpeed: 0.25, videoSeconds: 0 };
+    this.state = { ...this.props, 
+      open: this.props.open, 
+      videoSpeed: 0.25, 
+      videoSeconds: 0, 
+      handlePosition: null, 
+      handleSeconds: 0 };
 
     this.handleNotesChange = this.handleNotesChange.bind(this);
     this.handleSpeedChange = this.handleSpeedChange.bind(this);
@@ -118,20 +129,33 @@ class VideoNotes extends React.Component {
     var notes = this.state.notes + "\n[@" + seconds + " seconds] ";
     this.setState( {notes: notes} );
     this.setCaretPosition("videoNotes", notes.length);
-    this.getHandlePosition();
+    this.getHandlePosition(seconds);
   };
 
   getVttPath() {
     const url = this.state.videoUrl;
     let parts = url.split("/");
     let path = parts.slice(parts.length-2).join("/");
-    var util = new Util();
-    return util.getBaseUrl() + "/api/vtt/" +  path; 
+    return getBaseUrl() + "/api/vtt/" +  path; 
   }
 
-  getHandlePosition() {
-    //this.state.videoSeconds
-    // Make webapi call
+  getHandlePosition(seconds) {
+    const handleUrl = getBaseUrl() + "/api/handle/" + seconds + "/" +
+      this.state.video.partitionKey + "/" + this.state.video.rowKey;
+    console.log("Requesting: " + handleUrl);
+    axios.get(handleUrl)
+    .then(res => {
+      const handleSeconds = seconds;
+      if (res.status !== 200) {
+        console.log(handleUrl + " error:", res);
+        throw new Error("Error response attempting to get handle.");
+      }
+
+      console.log("got this: ", res.data, "seconds: ", handleSeconds);
+      this.setState( { handlePosition: res.data, handleSeconds: handleSeconds } );
+    })
+    .catch((error) => {
+    });
   }
 
   render() {
@@ -142,7 +166,7 @@ class VideoNotes extends React.Component {
       <Dialog fullWidth={true} maxWidth='md' open={this.state.open??false}  
           aria-labelledby="form-dialog-title">
         <DialogTitle id="customized-dialog-title" onClose={(e) => this.handleClose("cancel", e)}>
-          {this.state.videoFile}
+          {this.state.video.rowKey}
         </DialogTitle>            
         <DialogContent>
           <ReactPlayer 
@@ -161,24 +185,35 @@ class VideoNotes extends React.Component {
                   ]
                 }}}
            />
-           { !isMobile ? 
-          <VideoSpeedSlider 
-            value={this.state.videoSpeed}
-            onChange={this.handleSpeedChange} /> : null }
           { !isMobile ? 
-          <TextField
-            autoFocus
-            margin="dense"
-            id="videoNotes"
-            label="Video Notes"
-            type="text"
-            fullWidth
-            multiline
-            rows="8"            
-            className={classes.textField}
-            value={this.state.notes}
-            onChange={this.handleNotesChange}
-          /> 
+          <div className={classes.notesGrid}>
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+                <VideoSpeedSlider 
+                  value={this.state.videoSpeed}
+                  onChange={this.handleSpeedChange} /> 
+                <HandlePosition open={true} 
+                  handlePosition={this.state.handlePosition} 
+                  seconds={this.state.handleSeconds} 
+                  clOffset={this.state.video.centerLineDegreeOffset} />
+            </Grid>
+            <Grid item xs={9}>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="videoNotes"
+                label="Video Notes"
+                type="text"
+                fullWidth
+                multiline
+                rows="8"            
+                className={classes.textField}
+                value={this.state.notes}
+                onChange={this.handleNotesChange}
+              /> 
+            </Grid>
+          </Grid>
+          </div>
           : null }
         </DialogContent>
         <DialogActions>
