@@ -110,6 +110,7 @@ class Video extends React.Component {
     this.SaveButton = this.SaveButton.bind(this);
     this.openChartDrawer = this.openChartDrawer.bind(this);
     this.closeChartDrawer = this.closeChartDrawer.bind(this);
+    this.handleSetOffset = this.handleSetOffset.bind(this);
     
     this.baseUrl = getBaseUrl();
     this.imageApiUrl = this.baseUrl + '/api/image?jsonUrl=';
@@ -144,6 +145,11 @@ class Video extends React.Component {
       this.setState({isVideoNotesOpen: false});
     }
   };
+
+  handleSetOffset(offset) {
+    this.setState( { centerLineDegreeOffset: offset }, 
+      this.save);
+  }
 
   saveClick(event) {
     this.save();
@@ -261,7 +267,8 @@ class Video extends React.Component {
               open={this.state.isVideoNotesOpen} 
               video={video}
               videoUrl={this.getVideoUrl()}
-              onClose={this.handleVideoNotesClose} /> 
+              onClose={this.handleVideoNotesClose}
+              onSetOffset={this.handleSetOffset} /> 
           </CardMedia> 
           <CardContent className={classes.cardContent}>
               <Grid container spacing={0} className={classes.courseAndSpeed}>

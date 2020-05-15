@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function HandlePositionPopover(props) {
   const classes = useStyles();
-  const [clOffset, setClOffset] = useState();
+  const [clOffset, setClOffset] = useState(props.video.centerLineDegreeOffset);
 
   useEffect( () => {
     setClOffset(props.handlePosition?.RopeAngleDegrees.toFixed(1));
