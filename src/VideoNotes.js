@@ -192,7 +192,7 @@ class VideoNotes extends React.Component {
                 <VideoSpeedSlider 
                   value={this.state.videoSpeed}
                   onChange={this.handleSpeedChange} /> 
-                <HandlePosition open={true} {...this.props} />
+                <HandlePosition open={true} {...this.state} />
             </Grid>
             <Grid item xs={9}>
               <TextField

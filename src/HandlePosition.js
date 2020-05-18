@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Input from '@material-ui/core/Input';
 import Grid from '@material-ui/core/Grid';
+import { TextField } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -13,11 +13,24 @@ const useStyles = makeStyles((theme) => ({
 
 export default function HandlePositionPopover(props) {
   const classes = useStyles();
-  const [clOffset, setClOffset] = useState(props.video.centerLineDegreeOffset);
-
+  const [clOffset, setClOffset] = useState(0);
+  
   useEffect( () => {
-    setClOffset(props.handlePosition?.RopeAngleDegrees.toFixed(1));
-  });
+    if (props.handlePosition !== undefined && props.handlePosition !== null &&
+        !isNaN(props.handlePosition.RopeAngleDegrees)) {
+      console.log("useEffect:", props.handlePosition.RopeAngleDegrees.toFixed(1) * -1);
+      setClOffset(props.handlePosition.RopeAngleDegrees.toFixed(1) * -1);
+    }
+  }, [props.handlePosition] );
+
+  const handleInputChange = (e) => {
+    console.log("input is: " + e.target.value);
+    setClOffset(e.target.value);
+  };
+
+  const onSetOffset = () => {
+    props.onSetOffset(clOffset);
+  };
 
   return (
       props.handlePosition !== null ? 
@@ -32,20 +45,21 @@ export default function HandlePositionPopover(props) {
             Rope Rad/S: {props.handlePosition?.RopeSwingSpeedRadS.toFixed(1)}
           </Typography><br/>          
           <Typography variant="caption">
-            Relative Speed (mps): {(props.handlePosition.HandleSpeedMps - props.handlePosition.BoatSpeedMps).toFixed(1)}
+            Relative Speed (mps): {(props.handlePosition?.HandleSpeedMps - props.handlePosition?.BoatSpeedMps).toFixed(1)}
           </Typography><br/>
           <Typography variant="caption">
-            Center Line Offset: {props.clOffset}&deg;
+            Center Line Offset: {props.video.centerLineDegreeOffset}&deg;
           </Typography>
           <p/>
           <Grid container spacing={2} alignItems="center">
             <Grid item>
-              <Input
+              <TextField
+                id="clOffset"
+                type="number"
                 className={classes.input}
                 value={clOffset}
                 margin="dense"
-                /*onChange={handleInputChange}
-                onBlur={handleBlur}*/
+                onChange={handleInputChange}
                 inputProps={{
                   step: 0.1,
                   min: -90,
@@ -55,7 +69,7 @@ export default function HandlePositionPopover(props) {
               />
             </Grid>
             <Grid item xs>
-              <Button color="secondary" size="small" disabled={true} /*onClick={handleSetOffset}*/>
+              <Button color="secondary" size="small" disabled={false} onClick={onSetOffset}>
                 SET OFFSET
               </Button>              
             </Grid>

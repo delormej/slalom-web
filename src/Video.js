@@ -147,8 +147,9 @@ class Video extends React.Component {
   };
 
   handleSetOffset(offset) {
-    this.setState( { centerLineDegreeOffset: offset }, 
-      this.save);
+    console.log("Setting offset to: " + offset);
+    // this.setState( { centerLineDegreeOffset: offset }, 
+    //   this.save);
   }
 
   saveClick(event) {
