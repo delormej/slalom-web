@@ -18,13 +18,11 @@ export default function HandlePositionPopover(props) {
   useEffect( () => {
     if (props.handlePosition !== undefined && props.handlePosition !== null &&
         !isNaN(props.handlePosition.RopeAngleDegrees)) {
-      console.log("useEffect:", props.handlePosition.RopeAngleDegrees.toFixed(1) * -1);
       setClOffset(props.handlePosition.RopeAngleDegrees.toFixed(1) * -1);
     }
   }, [props.handlePosition] );
 
   const handleInputChange = (e) => {
-    console.log("input is: " + e.target.value);
     setClOffset(e.target.value);
   };
 
