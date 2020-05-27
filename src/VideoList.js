@@ -89,6 +89,16 @@ class VideoList extends React.Component {
     return name;
   }
 
+  getKeyInPath() {
+    const field = "key";
+    var href = window.location.href;
+    var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+    var string = reg.exec(href);
+    let name = string ? string[1] : null;
+    console.log("Found key in URL: " + name);
+    return name;
+  }
+
   getSkiers(videos) {
     const distinctSkiers = [...new Set(videos.map(function(v) {
       let skier = '';
@@ -205,6 +215,11 @@ class VideoList extends React.Component {
                 console.log('selected' + skier);
                 skier.selected = true;
                 dateFilter = null;
+
+                // If a skier is defined, check to see if a specific video was requested.
+                var key = this.getKeyInPath();
+                if (key !== undefined && key !== null)
+                  this.autoPlayKey = key;
               }
             }
 
@@ -246,6 +261,10 @@ class VideoList extends React.Component {
     console.log('skiers count... ' + this.state.skiersFilter.length);
     console.log('starredFilter... ' + this.state.starredFilter);
 
+    function getKey(video) { 
+      return video.partitionKey + "/" + video.rowKey; 
+    }
+
     return (
       <React.Fragment>
         <VideoSnackbar forceRefresh={this.loadVideos} />
@@ -267,7 +286,7 @@ class VideoList extends React.Component {
         <Container className={classes.cardGrid} maxWidth="md">
           <Grid container spacing={4}>
             { this.state.videos.map(video => (
-                <Video video={video} key={video.eTag+video.rowKey} />
+                <Video video={video} key={getKey(video)} autoPlay={getKey(video) === this.autoPlayKey} />
             ))}
           </Grid>
         </Container>

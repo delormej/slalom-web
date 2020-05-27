@@ -18,8 +18,10 @@ import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import InsertChartIcon from '@material-ui/icons/InsertChart';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import ShareIcon from '@material-ui/icons/Share';
 import Drawer from '@material-ui/core/Drawer';
 import VideoNotes from './VideoNotes';
+import ShareVideoUrl from './ShareVideoUrl';
 
 const styles = theme => ({
   root: {
@@ -111,6 +113,7 @@ class Video extends React.Component {
     this.openChartDrawer = this.openChartDrawer.bind(this);
     this.closeChartDrawer = this.closeChartDrawer.bind(this);
     this.handleSetOffset = this.handleSetOffset.bind(this);
+    this.handleShareClick = this.handleShareClick.bind(this);
     
     this.baseUrl = getBaseUrl();
     this.imageApiUrl = this.baseUrl + '/api/image?jsonUrl=';
@@ -122,7 +125,11 @@ class Video extends React.Component {
     // Using spread operator to promote video object properties to be
     // shallow properties of state.  React doesn't repaint if deep nested
     // properties are changed.
-    this.state = { ...this.props.video, isChartDrawerOpen: false, isVideoNotesOpen: false, dirty: false };
+    this.state = { ...this.props.video, 
+      isChartDrawerOpen: false, 
+      isVideoNotesOpen: this.props.autoPlay, 
+      isShareVideoUrlOpen: false, 
+      dirty: false };
   }
 
   handleInputChange(event) {
@@ -150,6 +157,11 @@ class Video extends React.Component {
     console.log("Setting offset to: " + offset);
     this.setState( { centerLineDegreeOffset: offset }, 
       this.save);
+  }
+
+  handleShareClick() {
+    console.log("Sharing...");
+    this.setState( { isShareVideoUrlOpen: true } );
   }
 
   saveClick(event) {
@@ -332,7 +344,8 @@ class Video extends React.Component {
           </CardContent>
           <Drawer anchor='right' open={this.state.isChartDrawerOpen} onClose={this.closeChartDrawer}>
               <img alt="Chart" className={classes.drawer} src={this.getImageUrl()} />
-          </Drawer>          
+          </Drawer>  
+          <ShareVideoUrl open={this.state.isShareVideoUrlOpen} videoUrl="http://localhost:3000/?skier=John&key=2020-05-18/GOPR2449_ts.MP4" />
           <CardActions>
               <this.SaveButton />
               <IconButton disabled={video.courseName === null} aria-label="Analysis" title="Analysis" onClick={() => this.openChartDrawer()}>
@@ -341,7 +354,10 @@ class Video extends React.Component {
               </IconButton>
               <IconButton aria-label="Starred" title="Starred" onClick={() => this.starClick()}>
                 <StarIcon className={this.state.starred ? classes.starredVideo : classes.unStarredVideo} />
-              </IconButton>
+              </IconButton> 
+              <IconButton aria-label="Share" title="Share" onClick={this.handleShareClick}>
+                <ShareIcon />
+              </IconButton> 
           </CardActions>
       </Card>
     </Grid>
