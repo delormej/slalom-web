@@ -39,6 +39,7 @@ class VideoList extends React.Component {
     this.filterBySkier = this.filterBySkier.bind(this);
     this.filterByDate = this.filterByDate.bind(this);
     this.filterByStarred = this.filterByStarred.bind(this);
+    this.onSelected = this.onSelected.bind(this);
 
     // State which does not force render()
     this._isMounted = false;
@@ -51,8 +52,14 @@ class VideoList extends React.Component {
       skiersFilter: [],
       starredFilter: false,
       loading: false,
+      selected: null,
       error: ''
     }
+  }
+
+  onSelected(key) {
+    console.log("Selected: ", key);
+    this.setState( {selected: key} );
   }
   
   getDateString(dateToFormat) {
@@ -87,6 +94,27 @@ class VideoList extends React.Component {
     let name = string ? string[1] : null;
     console.log("Found skier filter in URL: " + name);
     return name;
+  }
+
+  getKeyInPath() {
+    const field = "key";
+    var href = window.location.href;
+    var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
+    var string = reg.exec(href);
+    let name = string ? string[1] : null;
+    console.log("Found key in URL: " + name);
+    return name;
+  }
+
+  getDateFromKey(key) {
+    const n = key.indexOf('/');
+    if (n > 0) {
+      let date = key.slice(0, n) + "T12:00:00Z";
+      console.log("Date key: ", date);
+      return new Date(date);
+    }
+    else
+      return null;
   }
 
   getSkiers(videos) {
@@ -134,7 +162,8 @@ class VideoList extends React.Component {
   filterVideos(date, skiers, starred) {
     var filtered = [];
     
-    console.log("Filtering... starredFilter:" + this.state.starredFilter);
+    console.log("Filtering... date, skiers, starred:",
+      date, skiers, this.state.starredFilter);
 
     // Filter by starred.
     if (starred)
@@ -205,6 +234,15 @@ class VideoList extends React.Component {
                 console.log('selected' + skier);
                 skier.selected = true;
                 dateFilter = null;
+
+                // If a skier is defined, check to see if a specific video was requested.
+                var key = this.getKeyInPath();
+                if (key !== undefined && key !== null) {
+                  this.autoPlayKey = key;
+                  const autoPlayDate = this.getDateFromKey(key);
+                  if (autoPlayDate) 
+                    dateFilter = autoPlayDate;
+                }
               }
             }
 
@@ -246,6 +284,10 @@ class VideoList extends React.Component {
     console.log('skiers count... ' + this.state.skiersFilter.length);
     console.log('starredFilter... ' + this.state.starredFilter);
 
+    function getKey(video) { 
+      return video.partitionKey + "/" + video.rowKey; 
+    }
+
     return (
       <React.Fragment>
         <VideoSnackbar forceRefresh={this.loadVideos} />
@@ -267,7 +309,13 @@ class VideoList extends React.Component {
         <Container className={classes.cardGrid} maxWidth="md">
           <Grid container spacing={4}>
             { this.state.videos.map(video => (
-                <Video video={video} key={video.eTag+video.rowKey} />
+                <Video video={video} 
+                  key={getKey(video)} 
+                  id={getKey(video)}
+                  autoPlay={getKey(video) === this.autoPlayKey} 
+                  isSelected={getKey(video) === this.autoPlayKey || getKey(video) === this.state.selected}
+                  onSelected={this.onSelected}
+                  />
             ))}
           </Grid>
         </Container>

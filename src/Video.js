@@ -18,8 +18,10 @@ import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import InsertChartIcon from '@material-ui/icons/InsertChart';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import ShareIcon from '@material-ui/icons/Share';
 import Drawer from '@material-ui/core/Drawer';
 import VideoNotes from './VideoNotes';
+import ShareVideoUrl from './ShareVideoUrl';
 
 const styles = theme => ({
   root: {
@@ -110,6 +112,12 @@ class Video extends React.Component {
     this.SaveButton = this.SaveButton.bind(this);
     this.openChartDrawer = this.openChartDrawer.bind(this);
     this.closeChartDrawer = this.closeChartDrawer.bind(this);
+    this.handleSetOffset = this.handleSetOffset.bind(this);
+    this.handleShareClick = this.handleShareClick.bind(this);
+    this.handlePlayClick = this.handlePlayClick.bind(this);
+    this.closeShare = this.closeShare.bind(this);
+    this.getShareUrl = this.getShareUrl.bind(this);
+    this.handleSelected = this.handleSelected.bind(this);
     
     this.baseUrl = getBaseUrl();
     this.imageApiUrl = this.baseUrl + '/api/image?jsonUrl=';
@@ -121,7 +129,15 @@ class Video extends React.Component {
     // Using spread operator to promote video object properties to be
     // shallow properties of state.  React doesn't repaint if deep nested
     // properties are changed.
-    this.state = { ...this.props.video, isChartDrawerOpen: false, isVideoNotesOpen: false, dirty: false };
+    this.state = { ...this.props.video, 
+      isChartDrawerOpen: false, 
+      isVideoNotesOpen: this.props.autoPlay, 
+      isShareVideoUrlOpen: false, 
+      dirty: false };
+  }
+
+  handleSelected() {
+    this.props.onSelected(this.props.id);    
   }
 
   handleInputChange(event) {
@@ -145,6 +161,26 @@ class Video extends React.Component {
     }
   };
 
+  handleSetOffset(offset) {
+    console.log("Setting offset to: " + offset);
+    this.setState( { centerLineDegreeOffset: offset }, 
+      this.save);
+  }
+
+  handleShareClick() {
+    this.setState({ isShareVideoUrlOpen: true },
+      this.handleSelected());
+  }
+
+  handlePlayClick() {
+    this.setState({isVideoNotesOpen: true},
+      this.handleSelected());
+  }
+  
+  closeShare() {
+    this.setState({ isShareVideoUrlOpen: false });
+  }
+
   saveClick(event) {
     this.save();
     this.setState({dirty: false});
@@ -165,7 +201,6 @@ class Video extends React.Component {
   }
 
   save() {
-    
     // todo this needs to be refactored
     var video = { ...this.state };
     delete video.dirty;     // Remove internal dirty flag from the object.
@@ -204,6 +239,15 @@ class Video extends React.Component {
       return this.state.thumbnailUrl;
   }
 
+  getShareUrl() {
+    //"http://localhost:3000/?skier=John&key=2020-05-18/GOPR2449_ts.MP4";
+    const host = window.location.origin;
+    const skier = this.state.skier;
+    const key = this.state.partitionKey;
+    const video = this.state.rowKey;
+    return `${host}?skier=${skier}&key=${key}/${video}`;
+  }
+
   getImageFilename(url) {
     var lastSlash = url.lastIndexOf('/') + 1;
     return url.substring(lastSlash);
@@ -229,7 +273,8 @@ class Video extends React.Component {
   }
 
   openChartDrawer() {
-    this.setState({isChartDrawerOpen: true});
+    this.setState({isChartDrawerOpen: true},
+      this.handleSelected());
   }
 
   closeChartDrawer() {
@@ -246,14 +291,14 @@ class Video extends React.Component {
 
     return (
       <Grid item xs={12} sm={6} md={4}>
-        <Card className={classes.card}>
+        <Card className={classes.card} raised={this.props.isSelected}>
           <VideoHeader video={video} onDeleteClick={this.deleteClick} />
           <CardMedia 
               className={classes.cardMedia}
               image={video.thumbnailUrl}
               title={"Video Thumbnail: " + this.getImageFilename(video.thumbnailUrl)}>
             <IconButton className={classes.overlay} title="Play Video"
-              onClick={() => this.setState({isVideoNotesOpen: true})}>
+              onClick={this.handlePlayClick}>
               <PlayArrowIcon />
             </IconButton>
             <VideoNotes 
@@ -261,7 +306,8 @@ class Video extends React.Component {
               open={this.state.isVideoNotesOpen} 
               video={video}
               videoUrl={this.getVideoUrl()}
-              onClose={this.handleVideoNotesClose} /> 
+              onClose={this.handleVideoNotesClose}
+              onSetOffset={this.handleSetOffset} /> 
           </CardMedia> 
           <CardContent className={classes.cardContent}>
               <Grid container spacing={0} className={classes.courseAndSpeed}>
@@ -324,7 +370,7 @@ class Video extends React.Component {
           </CardContent>
           <Drawer anchor='right' open={this.state.isChartDrawerOpen} onClose={this.closeChartDrawer}>
               <img alt="Chart" className={classes.drawer} src={this.getImageUrl()} />
-          </Drawer>          
+          </Drawer> 
           <CardActions>
               <this.SaveButton />
               <IconButton disabled={video.courseName === null} aria-label="Analysis" title="Analysis" onClick={() => this.openChartDrawer()}>
@@ -333,8 +379,14 @@ class Video extends React.Component {
               </IconButton>
               <IconButton aria-label="Starred" title="Starred" onClick={() => this.starClick()}>
                 <StarIcon className={this.state.starred ? classes.starredVideo : classes.unStarredVideo} />
-              </IconButton>
+              </IconButton> 
+              <IconButton aria-label="Share" title="Share" onClick={this.handleShareClick}>
+                <ShareIcon />
+              </IconButton> 
           </CardActions>
+          <ShareVideoUrl open={this.state.isShareVideoUrlOpen} 
+            onClose={this.closeShare} 
+            videoUrl={this.getShareUrl()} />
       </Card>
     </Grid>
     );
