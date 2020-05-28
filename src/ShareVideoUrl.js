@@ -7,11 +7,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function ShareVideoUrl(props) {
-  const [open, setOpen] = React.useState(props.open);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClose = props.onClose;
+  const open = props.open;
+  const videoUrl = props.videoUrl;
 
   return (
     <div>
@@ -24,7 +22,7 @@ export default function ShareVideoUrl(props) {
         <DialogTitle id="alert-dialog-title">{"Video URL"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {props.videoUrl}
+            {videoUrl}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -114,6 +114,7 @@ class Video extends React.Component {
     this.closeChartDrawer = this.closeChartDrawer.bind(this);
     this.handleSetOffset = this.handleSetOffset.bind(this);
     this.handleShareClick = this.handleShareClick.bind(this);
+    this.closeShare = this.closeShare.bind(this);
     
     this.baseUrl = getBaseUrl();
     this.imageApiUrl = this.baseUrl + '/api/image?jsonUrl=';
@@ -160,8 +161,11 @@ class Video extends React.Component {
   }
 
   handleShareClick() {
-    console.log("Sharing...");
-    this.setState( { isShareVideoUrlOpen: true } );
+    this.setState({ isShareVideoUrlOpen: true });
+  }
+  
+  closeShare() {
+    this.setState({ isShareVideoUrlOpen: false });
   }
 
   saveClick(event) {
@@ -184,7 +188,6 @@ class Video extends React.Component {
   }
 
   save() {
-    
     // todo this needs to be refactored
     var video = { ...this.state };
     delete video.dirty;     // Remove internal dirty flag from the object.
@@ -344,8 +347,7 @@ class Video extends React.Component {
           </CardContent>
           <Drawer anchor='right' open={this.state.isChartDrawerOpen} onClose={this.closeChartDrawer}>
               <img alt="Chart" className={classes.drawer} src={this.getImageUrl()} />
-          </Drawer>  
-          <ShareVideoUrl open={this.state.isShareVideoUrlOpen} videoUrl="http://localhost:3000/?skier=John&key=2020-05-18/GOPR2449_ts.MP4" />
+          </Drawer> 
           <CardActions>
               <this.SaveButton />
               <IconButton disabled={video.courseName === null} aria-label="Analysis" title="Analysis" onClick={() => this.openChartDrawer()}>
@@ -359,6 +361,7 @@ class Video extends React.Component {
                 <ShareIcon />
               </IconButton> 
           </CardActions>
+          <ShareVideoUrl open={this.state.isShareVideoUrlOpen} onClose={this.closeShare} videoUrl="http://localhost:3000/?skier=John&key=2020-05-18/GOPR2449_ts.MP4" />          
       </Card>
     </Grid>
     );
