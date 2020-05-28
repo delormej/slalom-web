@@ -39,6 +39,7 @@ class VideoList extends React.Component {
     this.filterBySkier = this.filterBySkier.bind(this);
     this.filterByDate = this.filterByDate.bind(this);
     this.filterByStarred = this.filterByStarred.bind(this);
+    this.onSelected = this.onSelected.bind(this);
 
     // State which does not force render()
     this._isMounted = false;
@@ -51,8 +52,14 @@ class VideoList extends React.Component {
       skiersFilter: [],
       starredFilter: false,
       loading: false,
+      selected: null,
       error: ''
     }
+  }
+
+  onSelected(key) {
+    console.log("Selected: ", key);
+    this.setState( {selected: key} );
   }
   
   getDateString(dateToFormat) {
@@ -302,7 +309,13 @@ class VideoList extends React.Component {
         <Container className={classes.cardGrid} maxWidth="md">
           <Grid container spacing={4}>
             { this.state.videos.map(video => (
-                <Video video={video} key={getKey(video)} autoPlay={getKey(video) === this.autoPlayKey} />
+                <Video video={video} 
+                  key={getKey(video)} 
+                  id={getKey(video)}
+                  autoPlay={getKey(video) === this.autoPlayKey} 
+                  isSelected={getKey(video) === this.autoPlayKey || getKey(video) === this.state.selected}
+                  onSelected={this.onSelected}
+                  />
             ))}
           </Grid>
         </Container>

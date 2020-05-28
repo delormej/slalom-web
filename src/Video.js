@@ -114,8 +114,10 @@ class Video extends React.Component {
     this.closeChartDrawer = this.closeChartDrawer.bind(this);
     this.handleSetOffset = this.handleSetOffset.bind(this);
     this.handleShareClick = this.handleShareClick.bind(this);
+    this.handlePlayClick = this.handlePlayClick.bind(this);
     this.closeShare = this.closeShare.bind(this);
     this.getShareUrl = this.getShareUrl.bind(this);
+    this.handleSelected = this.handleSelected.bind(this);
     
     this.baseUrl = getBaseUrl();
     this.imageApiUrl = this.baseUrl + '/api/image?jsonUrl=';
@@ -132,6 +134,10 @@ class Video extends React.Component {
       isVideoNotesOpen: this.props.autoPlay, 
       isShareVideoUrlOpen: false, 
       dirty: false };
+  }
+
+  handleSelected() {
+    this.props.onSelected(this.props.id);    
   }
 
   handleInputChange(event) {
@@ -162,7 +168,13 @@ class Video extends React.Component {
   }
 
   handleShareClick() {
-    this.setState({ isShareVideoUrlOpen: true });
+    this.setState({ isShareVideoUrlOpen: true },
+      this.handleSelected());
+  }
+
+  handlePlayClick() {
+    this.setState({isVideoNotesOpen: true},
+      this.handleSelected());
   }
   
   closeShare() {
@@ -261,7 +273,8 @@ class Video extends React.Component {
   }
 
   openChartDrawer() {
-    this.setState({isChartDrawerOpen: true});
+    this.setState({isChartDrawerOpen: true},
+      this.handleSelected());
   }
 
   closeChartDrawer() {
@@ -278,14 +291,14 @@ class Video extends React.Component {
 
     return (
       <Grid item xs={12} sm={6} md={4}>
-        <Card className={classes.card}>
+        <Card className={classes.card} raised={this.props.isSelected}>
           <VideoHeader video={video} onDeleteClick={this.deleteClick} />
           <CardMedia 
               className={classes.cardMedia}
               image={video.thumbnailUrl}
               title={"Video Thumbnail: " + this.getImageFilename(video.thumbnailUrl)}>
             <IconButton className={classes.overlay} title="Play Video"
-              onClick={() => this.setState({isVideoNotesOpen: true})}>
+              onClick={this.handlePlayClick}>
               <PlayArrowIcon />
             </IconButton>
             <VideoNotes 
