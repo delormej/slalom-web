@@ -99,6 +99,17 @@ class VideoList extends React.Component {
     return name;
   }
 
+  getDateFromKey(key) {
+    const n = key.indexOf('/');
+    if (n > 0) {
+      let date = key.slice(0, n) + "T12:00:00Z";
+      console.log("Date key: ", date);
+      return new Date(date);
+    }
+    else
+      return null;
+  }
+
   getSkiers(videos) {
     const distinctSkiers = [...new Set(videos.map(function(v) {
       let skier = '';
@@ -144,7 +155,8 @@ class VideoList extends React.Component {
   filterVideos(date, skiers, starred) {
     var filtered = [];
     
-    console.log("Filtering... starredFilter:" + this.state.starredFilter);
+    console.log("Filtering... date, skiers, starred:",
+      date, skiers, this.state.starredFilter);
 
     // Filter by starred.
     if (starred)
@@ -218,8 +230,12 @@ class VideoList extends React.Component {
 
                 // If a skier is defined, check to see if a specific video was requested.
                 var key = this.getKeyInPath();
-                if (key !== undefined && key !== null)
+                if (key !== undefined && key !== null) {
                   this.autoPlayKey = key;
+                  const autoPlayDate = this.getDateFromKey(key);
+                  if (autoPlayDate) 
+                    dateFilter = autoPlayDate;
+                }
               }
             }
 
