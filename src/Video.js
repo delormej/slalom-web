@@ -115,6 +115,7 @@ class Video extends React.Component {
     this.handleSetOffset = this.handleSetOffset.bind(this);
     this.handleShareClick = this.handleShareClick.bind(this);
     this.closeShare = this.closeShare.bind(this);
+    this.getShareUrl = this.getShareUrl.bind(this);
     
     this.baseUrl = getBaseUrl();
     this.imageApiUrl = this.baseUrl + '/api/image?jsonUrl=';
@@ -224,6 +225,15 @@ class Video extends React.Component {
 
   getThumnailUrl() {
       return this.state.thumbnailUrl;
+  }
+
+  getShareUrl() {
+    //"http://localhost:3000/?skier=John&key=2020-05-18/GOPR2449_ts.MP4";
+    const host = window.location.origin;
+    const skier = this.state.skier;
+    const key = this.state.partitionKey;
+    const video = this.state.rowKey;
+    return `${host}?skier=${skier}&key=${key}/${video}`;
   }
 
   getImageFilename(url) {
@@ -361,7 +371,9 @@ class Video extends React.Component {
                 <ShareIcon />
               </IconButton> 
           </CardActions>
-          <ShareVideoUrl open={this.state.isShareVideoUrlOpen} onClose={this.closeShare} videoUrl="http://localhost:3000/?skier=John&key=2020-05-18/GOPR2449_ts.MP4" />          
+          <ShareVideoUrl open={this.state.isShareVideoUrlOpen} 
+            onClose={this.closeShare} 
+            videoUrl={this.getShareUrl()} />
       </Card>
     </Grid>
     );

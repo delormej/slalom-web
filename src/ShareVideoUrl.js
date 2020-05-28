@@ -19,18 +19,15 @@ export default function ShareVideoUrl(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Video URL"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Video Link"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {videoUrl}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Disagree
-          </Button>
           <Button onClick={handleClose} color="primary" autoFocus>
-            Agree
+            OK
           </Button>
         </DialogActions>
       </Dialog>
