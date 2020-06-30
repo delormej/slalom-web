@@ -120,7 +120,7 @@ class Video extends React.Component {
     this.handleSelected = this.handleSelected.bind(this);
     
     this.baseUrl = getBaseUrl();
-    this.imageApiUrl = this.baseUrl + '/api/image?jsonUrl=';
+    this.imageApiUrl = this.baseUrl + '/api/image';
 
     // Set defaults for text values if null.
     this.props.video.skier = this.props.video.skier || '';
@@ -223,11 +223,10 @@ class Video extends React.Component {
   }
 
   getImageUrl() {
-    var imageUrl = this.imageApiUrl + this.state.jsonUrl;
-    if (this.state.ropeLengthM != null && this.state.ropeLengthM !== "0.0") {
-        imageUrl += '&rope=' + this.state.ropeLengthM;
-        imageUrl += '&cl=' + this.state.centerLineDegreeOffset;
-    }
+    var imageUrl = this.imageApiUrl 
+      + '/' + this.state.partitionKey + '/' + this.state.rowKey 
+      + '?cl=' + this.state.centerLineDegreeOffset;
+    
     return imageUrl;
   }
 
