@@ -25,42 +25,156 @@
       // This example creates a simple polygon representing the Bermuda Triangle.
       let map;
 
+      function getJsonUrl() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('jsonUrl'))
+          return params.get('jsonUrl');
+        else
+          return '';
+      }
+
+      function getTime() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('time'))
+          return params.get('time');
+        else
+          return '';
+      }
+
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 17,
+          zoom: 16,
           center: {lat: 42.2862329922264, lng: -71.3595652772975},
           mapTypeId: 'terrain'
         });
 
-        // Define the LatLng coordinates for the polygon's path.
-        var triangleCoords = [
-          {lat: 42.2862329922264, lng: -71.3595652772975},
-          {lat: 42.2862253717931, lng: -71.3594442870426},
-          {lat: 42.2895762717885, lng: -71.359058643825},
-          {lat: 42.2895838922218, lng: -71.3591796405161}
+
+        // cove
+        // 42.289592, -71.359054
+        // 42.286282, -71.359481
+
+        // outside
+        // 42.287272, -71.365577
+        // 42.2854369, -71.361843
+
+         var outsideCoords = [
+          {lat: 42.287249, lng: -71.365505, time: 0.02},
+          {lat: 42.285402, lng: -71.361781, time: 0.04},
         ];
 
+        var coveCoords = [
+          {lat: 42.289592, lng: -71.359054},
+          {lat: 42.286282, lng: -71.359481},
+        ];
+
+        var outsideReverseEntryCoords = [
+          {lat: 42.285315999999995, lng: -71.361859},
+          {lat: 42.285488, lng: -71.36170299999999},
+          {lat: 42.285493, lng: -71.361713},
+          {lat: 42.285320999999996, lng: -71.361869}
+        ];
+
+        // // Construct the polygon.
+        // var bermudaTriangle = new google.maps.Polygon({
+        //   paths: triangleCoords,
+        //   strokeColor: '#FF0000',
+        //   strokeOpacity: 0.8,
+        //   strokeWeight: 2,
+        //   fillColor: '#FF0000',
+        //   fillOpacity: 0.35
+        // });
+        // bermudaTriangle.setMap(map);
+
+        //var videoCoordinates = getVideoCoords();
+        // jsonUrl = "https://skivideostorage.blob.core.windows.net/ski/2020-06-28/GOPR3360_ts.json"
+        const url = "https://skipreview.jasondel.com/api/latlng?jsonUrl=" + getJsonUrl();
+        
+        const request = async () => {
+          const response = await fetch(url);
+          const json = await response.json();
+          console.log(json);
+
+          var videoCoordinates = json;
+          var videoLine = new google.maps.Polyline({
+            path: videoCoordinates,
+            geodesic: true,
+            strokeColor: '#FFFF00',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+          });
+
+          videoLine.setMap(map);       
+          const time = getTime();
+          console.log("Time", time);
+          if (time != null)
+          {
+            for (var i in videoCoordinates)
+            {
+              if (videoCoordinates[i].time == time) {
+                addMarker(videoCoordinates[i], 'pink', time);
+                console.log('found', videoCoordinates[i]);
+              }
+            }
+          }
+        }
+
+        request();        
+
         // Construct the polygon.
-        var bermudaTriangle = new google.maps.Polygon({
-          paths: triangleCoords,
+        var outsidePolygon = new google.maps.Polygon({
+          paths: outsideCoords,
           strokeColor: '#FF0000',
           strokeOpacity: 0.8,
           strokeWeight: 2,
           fillColor: '#FF0000',
           fillOpacity: 0.35
         });
-        bermudaTriangle.setMap(map);
+        outsidePolygon.setMap(map);
+
+        // Construct the polygon.
+        var covePolygon = new google.maps.Polygon({
+          paths: coveCoords,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35
+        });
+        covePolygon.setMap(map);        
+
+
+        var outsideReverseEntryPolygon = new google.maps.Polygon({
+          paths: outsideReverseEntryCoords,
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35
+        });
+        outsideReverseEntryPolygon.setMap(map);
+
+
+        //var entryCoord = { lat: 42.2856125, lng: -71.3587453};
+        // var entryCoord = { lat: 42.2959612, lng: -71.3665308};
+        // addMarker(entryCoord, 'purple');
 
         
-        var entryCoord = { lat: 42.286229, lng: -71.359497 };
-        addMarker(entryCoord, 'green');
 
-        //var exitCoord = { lat: 42.28622924, lng: -71.35950488 };
-        var exitCoord = { lat: 42.28958014, lng: -71.35911924 };
-        addMarker(exitCoord, 'yellow');
+        // var exitCoord = { lat: 42.2868817, lng: -71.3586397};
+        // addMarker(exitCoord, 'yellow');
+
+
+        // var coord2 = { lat: 42.2875254, lng: -71.3586092};
+        // addMarker(coord2, 'red');
+
+        // var coord3 = { lat: 42.2881422, lng: -71.3586042};
+        // addMarker(coord3, 'blue');
+
+        // var coord4 = { lat: 42.288935, lng: -71.3586542};
+        // addMarker(coord4, 'pink', 'last');
       }
 
-      function addMarker(latLng, color) {
+      function addMarker(latLng, color, title) {
           let url = "http://maps.google.com/mapfiles/ms/icons/";
           url += color + "-dot.png";
 
@@ -69,12 +183,13 @@
             position: latLng,
             icon: {
               url: url
-            }
+            },
+            title: title
           });
       }
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5IFOAShUwTHtyFfb-2Apdp_Z37nwEmgY&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKX7EHOxYvcuTTOHsiCaEneHPyyi6JCpA&callback=initMap">
     </script>
   </body>
 </html>
