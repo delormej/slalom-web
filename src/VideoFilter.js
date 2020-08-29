@@ -72,7 +72,7 @@ export default function VideoFilter(props) {
                                 labelPlacement="start"
                         />                                    
                         <DatePicker date={props.date} 
-                            videos={props.videos} 
+                            videoDates={props.videoDates} 
                             filterCallback={props.filterDateCallback} 
                         />                        
                     </Grid>

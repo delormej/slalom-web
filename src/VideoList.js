@@ -10,6 +10,7 @@ import { Typography } from '@material-ui/core';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import VideoSnackbar from './VideoSnackbar';
+import moment from 'moment';
 
 const styles = theme => ({
   cardGrid: {
@@ -130,6 +131,10 @@ class VideoList extends React.Component {
     const skiersFilter = distinctSkiers.map(s => ({ skier: s, selected: false }));
     console.log("skiers: " + skiersFilter.length);
     return skiersFilter;
+  }
+
+  getDates(videos) {
+    return [...new Set(videos.map(v => moment(v.recordedTime).format('YYYY-MM-DD'))) ];
   }
 
   filterByStarred() {
@@ -277,6 +282,7 @@ class VideoList extends React.Component {
 
   render() {
     const classes = this.classes;
+    var videoDates = this.getDates(this.videos);
     var filteredCount = this.state.videos != null ? this.state.videos.length : 0;
     var totalCount = this.videos != null ? this.videos.length : 0;
     var countString = 'Showing: ' + filteredCount + ' of ' + totalCount;
@@ -304,6 +310,7 @@ class VideoList extends React.Component {
           totalVideos={this.videos != null ? this.videos.length : 0}
           filteredVideos={this.state.videos != null ? this.state.videos.length : 0}
           loading={this.state.loading}
+          videoDates={videoDates}
           />
         <Typography className={classes.error} variant="h5" color="error">{this.state.error}</Typography>
         <Container className={classes.cardGrid} maxWidth="md">
