@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: skiweb
-        image: wthacr.azurecr.io/skiweb:v1.6.2
+        image: gcr.io/gke-ski/skiweb:v1.7.0
         env:
         - name: PORT
           value: "3000"        
@@ -34,22 +34,4 @@ spec:
     - protocol: TCP
       port: 3000
       targetPort: 3000
-  type: ClusterIP        
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: skiweb-ingress
-spec:
-  tls:
-  - hosts:
-    - '*.jasondel.com'
-    secretName: jasondel-com-tls
-  rules:
-  - host: ski.jasondel.com
-    http:
-      paths:
-      - backend:
-          serviceName: skiweb-service
-          servicePort: 3000
-        path: /
+  type: NodePort        
