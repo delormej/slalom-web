@@ -5,7 +5,7 @@ metadata:
   labels:
     app: skiweb
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: skiweb
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: skiweb
-        image: gcr.io/gke-ski/skiweb:v1.7.0
+        image: gcr.io/jasondel-test-project/skiweb:v1.7.2
         env:
         - name: PORT
           value: "3000"        
@@ -32,6 +32,6 @@ spec:
     app: skiweb
   ports:
     - protocol: TCP
-      port: 3000
+      port: 80
       targetPort: 3000
   type: NodePort        
