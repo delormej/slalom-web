@@ -5,6 +5,9 @@ export default function getBaseUrl() {
   // Default if not overide, just returns empty, and app will use relative to current request.
   var baseUrl = '';
   
+  if (defaultApiHostname.startsWith('http'))
+    return defaultApiHostname;
+
   // If a hostname was provided, match the protocol (http/https).
   if (defaultApiHostname !== undefined && defaultApiHostname !== '') {
     if (typeof window !== 'undefined') {
